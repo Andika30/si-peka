@@ -1,0 +1,15 @@
+{
+  "catatan": "System Usability Scale (Brooke). Urutan pernyataan positif dan negatif berselang-seling; kalau urutannya diubah, rumus penilaian SUS tidak lagi berlaku.",
+  "pernyataan": [
+    { "teks": "Saya rasa saya akan sering menggunakan aplikasi ini.", "positif": true },
+    { "teks": "Saya merasa aplikasi ini terlalu rumit.", "positif": false },
+    { "teks": "Saya rasa aplikasi ini mudah digunakan.", "positif": true },
+    { "teks": "Saya rasa saya butuh bantuan orang lain untuk bisa memakai aplikasi ini.", "positif": false },
+    { "teks": "Saya rasa fitur-fitur aplikasi ini berjalan sebagaimana mestinya.", "positif": true },
+    { "teks": "Saya rasa terlalu banyak hal yang tidak konsisten dalam aplikasi ini.", "positif": false },
+    { "teks": "Saya rasa kebanyakan orang akan cepat memahami cara memakai aplikasi ini.", "positif": true },
+    { "teks": "Saya rasa aplikasi ini membingungkan saat digunakan.", "positif": false },
+    { "teks": "Saya merasa yakin saat menggunakan aplikasi ini.", "positif": true },
+    { "teks": "Saya perlu belajar banyak hal dulu sebelum bisa memakai aplikasi ini.", "positif": false }
+  ]
+}

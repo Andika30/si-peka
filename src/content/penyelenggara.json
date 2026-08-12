@@ -1,0 +1,22 @@
+{
+  "catatan": "Daftar contoh. Isi dengan daftar PJP berizin Bank Indonesia setelah disetujui pembimbing. Kolom diverifikasi wajib diperbarui berkala — nomor dan tautan kanal resmi berubah.",
+  "layanan": [
+    { "id": "qris", "nama": "QRIS", "ringkas": "Bayar dengan memindai kode", "ikon": "qr" },
+    { "id": "transfer", "nama": "Transfer", "ringkas": "BI-FAST, antarbank, atau sesama bank", "ikon": "transfer" },
+    { "id": "uang-elektronik", "nama": "Uang elektronik", "ringkas": "Saldo di aplikasi dompet digital", "ikon": "dompet" },
+    { "id": "kartu", "nama": "Kartu debit atau kredit", "ringkas": "Gesek, tempel, atau bayar daring", "ikon": "kartu" }
+  ],
+  "daftar": [
+    { "id": "a", "nama": "Penyelenggara A", "jenis": "Bank umum", "telepon": "Call center resmi", "aplikasi": "Aplikasi resmi", "situs": "Situs resmi", "diverifikasi": "12 Agu 2026" },
+    { "id": "b", "nama": "Penyelenggara B", "jenis": "Bank umum", "telepon": "Call center resmi", "aplikasi": "Aplikasi resmi", "situs": "Situs resmi", "diverifikasi": "12 Agu 2026" },
+    { "id": "c", "nama": "Penyelenggara C", "jenis": "Uang elektronik", "telepon": "Call center resmi", "aplikasi": "Aplikasi resmi", "situs": "Situs resmi", "diverifikasi": "12 Agu 2026" },
+    { "id": "d", "nama": "Penyelenggara D", "jenis": "Uang elektronik", "telepon": "Call center resmi", "aplikasi": "Aplikasi resmi", "situs": "Situs resmi", "diverifikasi": "12 Agu 2026" }
+  ],
+  "bankIndonesia": {
+    "nama": "BICARA — Contact Center Bank Indonesia",
+    "telepon": "131",
+    "situs": "https://www.bi.go.id/id/perlindungan-konsumen/default.aspx",
+    "situsLabel": "Halaman Pelindungan Konsumen BI",
+    "diverifikasi": "12 Agu 2026"
+  }
+}

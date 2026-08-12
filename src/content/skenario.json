@@ -1,0 +1,64 @@
+[
+  {
+    "id": "qris-nama-beda",
+    "konteks": [
+      { "label": "NAMA TOKO", "nilai": "Toko Berkah" },
+      { "label": "NAMA PENERIMA HASIL PEMINDAIAN", "nilai": "Payment Gateway XYZ" },
+      { "label": "NOMINAL", "nilai": "Rp 50.000" }
+    ],
+    "situasi": "Kamu sedang membayar menggunakan QRIS. Setelah scan, nama merchant yang muncul berbeda dengan nama toko. Apa yang kamu lakukan?",
+    "opsi": [
+      { "teks": "Tetap bayar", "aman": false, "konsekuensi": "Dana masuk ke penerima yang bukan pemilik toko. Toko menyatakan tidak menerima pembayaranmu, dan penelusuran dana harus lewat penyelenggara." },
+      { "teks": "Bayar sedikit dulu", "aman": false, "konsekuensi": "Nominal kecil tetap masuk ke penerima yang salah, dan kamu belum tahu apakah penerimanya sah." },
+      { "teks": "Periksa dan konfirmasi kepada merchant", "aman": true },
+      { "teks": "Minta orang lain membayar", "aman": false, "konsekuensi": "Risikonya berpindah ke orang lain, bukan hilang. Nama penerima tetap belum diperiksa." }
+    ],
+    "alasan": "Pilihan kamu lebih aman. Nama merchant perlu diperiksa sebelum transaksi dilakukan."
+  },
+  {
+    "id": "otp-petugas",
+    "konteks": [
+      { "label": "PANGGILAN MASUK", "nilai": "Nomor tidak dikenal" },
+      { "label": "ISI PEMBICARAAN", "nilai": "\"Saya petugas bank. Sebutkan kode OTP untuk membatalkan transaksi mencurigakan.\"" }
+    ],
+    "situasi": "Seseorang menelepon dan mengaku petugas bank. Dia bilang ada transaksi mencurigakan dan meminta kode OTP yang baru masuk ke ponselmu. Apa yang kamu lakukan?",
+    "opsi": [
+      { "teks": "Sebutkan OTP-nya agar transaksi cepat dibatalkan", "aman": false, "konsekuensi": "Kode OTP adalah izin untuk memindahkan dana. Setelah disebutkan, transaksi justru diteruskan, bukan dibatalkan." },
+      { "teks": "Tutup telepon dan hubungi call center resmi sendiri", "aman": true },
+      { "teks": "Kirim tangkapan layar OTP-nya saja", "aman": false, "konsekuensi": "Tangkapan layar berisi kode yang sama. Bentuk pengirimannya tidak mengurangi risikonya." },
+      { "teks": "Minta dia menyebutkan nomor rekeningmu dulu sebagai bukti", "aman": false, "konsekuensi": "Data rekening bisa didapat dari sumber lain, jadi itu bukan bukti keaslian. Kamu tetap tidak boleh menyebut OTP." }
+    ],
+    "alasan": "Pilihan kamu lebih aman. Petugas resmi tidak pernah meminta OTP. Menghubungi sendiri lewat nomor resmi memastikan kamu bicara dengan pihak yang benar."
+  },
+  {
+    "id": "nama-penerima-beda",
+    "konteks": [
+      { "label": "TUJUAN KAMU", "nilai": "Ibu Sari — penjual" },
+      { "label": "NAMA PENERIMA MUNCUL", "nilai": "A. Hidayat" },
+      { "label": "NOMINAL", "nilai": "Rp 250.000" }
+    ],
+    "situasi": "Kamu hendak transfer ke penjual. Setelah nomor rekening dimasukkan, nama penerima yang muncul berbeda dengan nama penjual. Penjual bilang itu rekening saudaranya. Apa yang kamu lakukan?",
+    "opsi": [
+      { "teks": "Lanjutkan, karena penjual sudah menjelaskan", "aman": false, "konsekuensi": "Penjelasan lewat pesan mudah dipalsukan. Kalau dana tidak sampai, kamu mentransfer ke nama yang memang bukan tujuanmu." },
+      { "teks": "Konfirmasi lewat saluran lain sebelum melanjutkan", "aman": true },
+      { "teks": "Transfer setengah dulu sebagai uji coba", "aman": false, "konsekuensi": "Setengah dana tetap masuk ke rekening yang belum terverifikasi." },
+      { "teks": "Batalkan dan cari penjual lain tanpa bertanya", "aman": false, "konsekuensi": "Tidak berisiko, tapi kamu kehilangan transaksi yang mungkin sah. Konfirmasi lebih dulu jauh lebih berguna." }
+    ],
+    "alasan": "Pilihan kamu lebih aman. Nama penerima adalah pemeriksaan terakhir sebelum dana keluar, dan konfirmasi lewat saluran lain menyulitkan penipu."
+  },
+  {
+    "id": "tautan-pembayaran",
+    "konteks": [
+      { "label": "PESAN MASUK", "nilai": "Transaksi kamu gagal. Klik untuk pengembalian dana." },
+      { "label": "TAUTAN", "nilai": "bit.ly/refund-cepat" }
+    ],
+    "situasi": "Kamu menerima pesan berisi tautan untuk mengurus pengembalian dana atas transaksi yang gagal. Kamu memang baru mengalami transaksi gagal. Apa yang kamu lakukan?",
+    "opsi": [
+      { "teks": "Klik tautannya karena transaksinya memang gagal", "aman": false, "konsekuensi": "Penipu sering mengirim pesan tepat saat orang sedang menunggu. Halaman itu meminta data rekening dan PIN, lalu dananya justru diambil." },
+      { "teks": "Buka aplikasi resmi dan cek statusnya di sana", "aman": true },
+      { "teks": "Balas pesannya untuk menanyakan kejelasan", "aman": false, "konsekuensi": "Membalas menandakan nomormu aktif, dan kamu akan menerima lebih banyak percobaan penipuan." },
+      { "teks": "Teruskan tautannya ke teman untuk minta pendapat", "aman": false, "konsekuensi": "Tautan berbahaya jadi menyebar. Statusnya tetap bisa dicek sendiri lewat aplikasi resmi." }
+    ],
+    "alasan": "Pilihan kamu lebih aman. Status transaksi selalu bisa diperiksa di aplikasi resmi, jadi kamu tidak perlu tautan dari pesan masuk."
+  }
+]

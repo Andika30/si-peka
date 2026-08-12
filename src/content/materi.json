@@ -1,0 +1,53 @@
+[
+  {
+    "id": "qris",
+    "judul": "Apa itu QRIS",
+    "isi": "QRIS adalah standar kode QR pembayaran nasional dari Bank Indonesia. Satu kode bisa dipindai oleh aplikasi pembayaran mana pun yang sudah mendukung QRIS, jadi kamu tidak perlu kode berbeda untuk tiap aplikasi.",
+    "poin": [
+      "Kode QRIS yang sah selalu menampilkan nama merchant di layar ponselmu",
+      "Nominal muncul sebelum kamu menekan bayar, bukan sesudah"
+    ],
+    "ikon": "qr"
+  },
+  {
+    "id": "periksa-merchant",
+    "judul": "Periksa merchant sebelum memindai",
+    "isi": "Sebelum memindai, pastikan stiker QRIS dalam kondisi baik dan tidak tertempel stiker lain di atasnya. Merchant yang sah akan menampilkan nama toko yang sesuai di layar ponselmu.",
+    "poin": [
+      "Stiker yang tertempel di atas stiker lain adalah tanda bahaya",
+      "Kalau nama yang muncul berbeda dengan nama toko, hentikan dan tanyakan"
+    ],
+    "ikon": "pindai"
+  },
+  {
+    "id": "bifast",
+    "judul": "Apa itu BI-FAST",
+    "isi": "BI-FAST adalah infrastruktur transfer dana Bank Indonesia yang berjalan cepat dan tersedia 24 jam sehari, 7 hari seminggu. Kamu memakainya lewat aplikasi bank, bukan lewat aplikasi terpisah.",
+    "poin": [
+      "Nama penerima selalu ditampilkan sebelum transfer diteruskan",
+      "Cocokkan nama itu dengan orang yang kamu tuju, bukan hanya nomor rekeningnya"
+    ],
+    "ikon": "transfer"
+  },
+  {
+    "id": "data-pribadi",
+    "judul": "Data yang tidak boleh kamu bagikan",
+    "isi": "PIN, password, dan kode OTP adalah kunci rekeningmu. Tidak ada petugas resmi, dari bank mana pun maupun dari Bank Indonesia, yang berhak memintanya — lewat telepon, pesan, atau tautan.",
+    "poin": [
+      "OTP hanya kamu masukkan di aplikasi resmi, bukan kamu bacakan kepada siapa pun",
+      "Permintaan OTP yang datang saat kamu tidak sedang bertransaksi adalah penipuan"
+    ],
+    "ikon": "kunci",
+    "peringatan": "Tidak ada petugas resmi yang berhak meminta PIN, password, atau OTP kamu."
+  },
+  {
+    "id": "penyelenggara",
+    "judul": "Kenali penyelenggara berizin",
+    "isi": "Penyelenggara jasa pembayaran yang sah terdaftar dan berizin di Bank Indonesia. Daftarnya terbuka dan bisa kamu periksa sendiri sebelum menaruh uang atau data di sana.",
+    "poin": [
+      "Penyelenggara berizin punya kanal pengaduan resmi yang jelas",
+      "Kalau tidak ada di daftar berizin, jangan dipakai"
+    ],
+    "ikon": "berizin"
+  }
+]
