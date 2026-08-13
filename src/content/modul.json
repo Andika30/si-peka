@@ -1,0 +1,283 @@
+[
+  {
+    "id": "dasar-keamanan",
+    "nomor": "01",
+    "judul": "Dasar Keamanan Pembayaran Digital",
+    "ringkas": "Cara kerja pembayaran digital dan titik-titik rawannya",
+    "ikon": "kartu",
+    "warna": "adukan",
+    "dimensi": "peduli",
+    "materi": {
+      "paragraf": [
+        "Pembayaran digital memindahkan uang lewat penyelenggara jasa pembayaran yang berizin di Bank Indonesia. Uangmu tidak berpindah begitu saja — ada catatan, ada pihak yang bertanggung jawab, dan ada jalur penyelesaian kalau bermasalah.",
+        "Titik paling rawan justru bukan teknologinya, melainkan detik terakhir sebelum kamu menekan tombol bayar. Di situlah kesalahan paling sering terjadi dan paling sulit dibatalkan."
+      ],
+      "poin": [
+        "Setiap transaksi meninggalkan jejak yang bisa ditelusuri penyelenggara",
+        "Nama penerima dan nominal selalu ditampilkan sebelum dana keluar",
+        "Transaksi yang sudah berhasil tidak bisa dibatalkan sendiri"
+      ]
+    },
+    "soal": [
+      {
+        "pertanyaan": "Siapa yang bisa menelusuri dana kalau transaksimu bermasalah?",
+        "opsi": ["Penyelenggara jasa pembayaran yang kamu gunakan", "Bank Indonesia secara langsung", "Merchant tempat kamu belanja saja", "Tidak ada, dana otomatis kembali"],
+        "kunci": 0,
+        "pembahasan": "Penyelenggara memegang catatan transaksimu, jadi merekalah yang bisa menelusurinya."
+      },
+      {
+        "pertanyaan": "Kapan kesalahan pembayaran paling sering terjadi?",
+        "opsi": ["Pada detik terakhir sebelum menekan bayar", "Saat membuka aplikasi", "Saat mengisi saldo", "Saat memeriksa mutasi"],
+        "kunci": 0,
+        "pembahasan": "Detik terakhir adalah saat nama penerima dan nominal masih bisa diperiksa — dan paling sering dilewatkan."
+      },
+      {
+        "pertanyaan": "Apa yang membuat sebuah penyelenggara pembayaran sah?",
+        "opsi": ["Terdaftar dan berizin di Bank Indonesia", "Punya banyak pengguna", "Aplikasinya ada di toko aplikasi", "Menawarkan promo besar"],
+        "kunci": 0,
+        "pembahasan": "Izin penyelenggara terdaftar resmi dan bisa diperiksa publik. Popularitas bukan bukti keabsahan."
+      },
+      {
+        "pertanyaan": "Transaksi yang sudah berhasil dikirim…",
+        "opsi": ["Tidak bisa kamu batalkan sendiri", "Bisa dibatalkan dalam 5 menit", "Otomatis kembali kalau salah", "Bisa ditarik lewat aplikasi"],
+        "kunci": 0,
+        "pembahasan": "Karena itu pemeriksaan sebelum membayar jauh lebih berguna daripada penyesalan sesudahnya."
+      }
+    ]
+  },
+  {
+    "id": "data-pribadi",
+    "nomor": "02",
+    "judul": "Perlindungan Data Pribadi",
+    "ringkas": "Data mana yang boleh dibagikan dan mana yang tidak",
+    "ikon": "perisai",
+    "warna": "peduli",
+    "dimensi": "peduli",
+    "materi": {
+      "paragraf": [
+        "Tidak semua data pribadi punya bobot yang sama. Nama dan nomor telepon relatif mudah didapat siapa pun. Yang benar-benar berbahaya adalah data yang bisa dipakai mengakses akunmu.",
+        "Penipu sering mengumpulkan potongan data dari berbagai tempat, lalu memakainya untuk terdengar meyakinkan. Kalau seseorang menyebutkan namamu dengan benar, itu bukan bukti dia petugas resmi."
+      ],
+      "poin": [
+        "Nama dan nomor rekening bisa diketahui orang lain — itu bukan rahasia",
+        "PIN, password, dan OTP adalah kunci akun, bukan sekadar data",
+        "Menyebut data pribadimu dengan benar bukan bukti keaslian seseorang"
+      ]
+    },
+    "soal": [
+      {
+        "pertanyaan": "Penelepon menyebut namamu dan nomor rekeningmu dengan benar. Artinya…",
+        "opsi": ["Belum tentu dia petugas resmi", "Dia pasti dari bank", "Dia berhak meminta OTP", "Panggilan itu aman dilanjutkan"],
+        "kunci": 0,
+        "pembahasan": "Data seperti itu bisa didapat dari sumber lain. Keaslian dibuktikan dengan kamu menghubungi balik lewat nomor resmi."
+      },
+      {
+        "pertanyaan": "Mana yang termasuk kunci akun, bukan sekadar data pribadi?",
+        "opsi": ["Kode OTP", "Nama lengkap", "Nomor rekening", "Alamat rumah"],
+        "kunci": 0,
+        "pembahasan": "OTP adalah izin untuk memindahkan dana. Menyebutkannya sama dengan menyerahkan akses."
+      },
+      {
+        "pertanyaan": "Kamu diminta mengirim foto kartu debit bolak-balik. Sebaiknya…",
+        "opsi": ["Tolak — nomor kartu dan CVV cukup untuk bertransaksi", "Kirim, asal ke petugas bank", "Kirim bagian depan saja", "Kirim tapi tutupi nama"],
+        "kunci": 0,
+        "pembahasan": "Nomor kartu, masa berlaku, dan CVV sudah cukup untuk melakukan transaksi daring."
+      },
+      {
+        "pertanyaan": "Cara paling aman memastikan kamu bicara dengan pihak resmi adalah…",
+        "opsi": ["Menutup telepon dan menghubungi nomor resmi sendiri", "Meminta dia menyebutkan saldomu", "Memeriksa nomor peneleponnya", "Meminta dia mengirim surat"],
+        "kunci": 0,
+        "pembahasan": "Kamu yang memulai kontak lewat nomor resmi — itu satu-satunya cara yang tidak bisa dipalsukan penipu."
+      }
+    ]
+  },
+  {
+    "id": "pin-otp",
+    "nomor": "03",
+    "judul": "PIN, Password & OTP",
+    "ringkas": "Tiga kunci yang tidak boleh berpindah tangan",
+    "ikon": "kunci",
+    "warna": "kenali",
+    "dimensi": "peduli",
+    "materi": {
+      "paragraf": [
+        "PIN, password, dan OTP adalah informasi rahasia yang hanya boleh kamu ketahui sendiri. Jangan pernah membagikannya kepada siapa pun, termasuk pihak yang mengaku dari bank atau penyedia layanan.",
+        "OTP punya sifat khusus: dia adalah izin sekali pakai untuk menyelesaikan sebuah transaksi. Kalau kamu menerima OTP padahal tidak sedang bertransaksi, artinya ada orang lain yang sedang mencoba memakai akunmu."
+      ],
+      "poin": [
+        "OTP hanya kamu masukkan sendiri di aplikasi resmi, bukan kamu bacakan",
+        "OTP yang datang tanpa kamu minta adalah tanda percobaan pengambilalihan akun",
+        "Tidak ada petugas resmi yang berhak meminta PIN, password, atau OTP",
+        "Ganti PIN kalau kamu merasa pernah menyebutkannya"
+      ],
+      "peringatan": "Tidak ada petugas resmi mana pun — termasuk Bank Indonesia — yang berhak meminta PIN, password, atau OTP kamu."
+    },
+    "soal": [
+      {
+        "pertanyaan": "Jika kamu menerima pesan yang meminta kode OTP dengan alasan membatalkan transaksi, apa yang sebaiknya kamu lakukan?",
+        "opsi": ["Memberikan kode OTP agar transaksi cepat dibatalkan", "Mengabaikan pesan tersebut dan tidak membagikan OTP", "Membalas pesan dan menanyakan identitas pengirim", "Mengirim tangkapan layar kode OTP"],
+        "kunci": 1,
+        "pembahasan": "OTP adalah informasi rahasia. Jangan pernah membagikannya kepada siapa pun, termasuk pihak yang mengaku dari bank atau layanan resmi."
+      },
+      {
+        "pertanyaan": "Kamu menerima OTP padahal tidak sedang bertransaksi. Itu tanda…",
+        "opsi": ["Ada orang lain yang sedang mencoba memakai akunmu", "Aplikasi sedang bermasalah", "Promo dari penyelenggara", "Verifikasi rutin bulanan"],
+        "kunci": 0,
+        "pembahasan": "OTP hanya terbit ketika ada transaksi yang sedang diproses. Kalau bukan kamu, berarti ada pihak lain."
+      },
+      {
+        "pertanyaan": "Mengapa OTP disebut izin sekali pakai?",
+        "opsi": ["Karena hanya berlaku untuk satu transaksi dalam waktu singkat", "Karena hanya bisa dipakai sekali seumur hidup", "Karena diberikan sekali saat mendaftar", "Karena hanya berlaku di satu perangkat"],
+        "kunci": 0,
+        "pembahasan": "Justru karena masa berlakunya pendek, penipu selalu mendesak korban agar cepat menyebutkannya."
+      },
+      {
+        "pertanyaan": "Kamu terlanjur menyebutkan PIN kepada orang tak dikenal. Langkah pertama?",
+        "opsi": ["Segera ganti PIN dan hubungi penyelenggara lewat kanal resmi", "Menunggu apakah ada transaksi mencurigakan", "Menonaktifkan ponsel sementara", "Mengumumkannya di media sosial"],
+        "kunci": 0,
+        "pembahasan": "Mengganti kunci dan memberi tahu penyelenggara adalah dua hal yang menghentikan akses secepat mungkin."
+      }
+    ]
+  },
+  {
+    "id": "modus-penipuan",
+    "nomor": "04",
+    "judul": "Modus Penipuan Digital",
+    "ringkas": "Pola yang berulang pada hampir semua penipuan",
+    "ikon": "waspada",
+    "warna": "waspada",
+    "dimensi": "kenali",
+    "materi": {
+      "paragraf": [
+        "Modus penipuan berganti-ganti bentuk, tapi polanya jarang berubah: menciptakan tekanan waktu, memakai nama pihak yang kamu percaya, lalu meminta sesuatu yang seharusnya rahasia.",
+        "Kalau kamu mengenali polanya, kamu tidak perlu menghafal setiap modus baru. Yang perlu diwaspadai bukan ceritanya, melainkan permintaannya."
+      ],
+      "poin": [
+        "Tekanan waktu dipakai supaya kamu tidak sempat berpikir",
+        "Nama bank, kurir, atau instansi dipakai untuk meminjam kepercayaan",
+        "Tautan pendek menyembunyikan alamat aslinya",
+        "Hadiah atau denda mendadak adalah umpan yang paling sering dipakai"
+      ]
+    },
+    "soal": [
+      {
+        "pertanyaan": "Ciri yang paling konsisten muncul pada penipuan digital adalah…",
+        "opsi": ["Desakan agar kamu bertindak cepat", "Bahasa yang berantakan", "Nomor telepon luar negeri", "Waktu pengiriman malam hari"],
+        "kunci": 0,
+        "pembahasan": "Tekanan waktu menghalangi korban memverifikasi. Itu polanya, bukan kebetulan."
+      },
+      {
+        "pertanyaan": "Kamu menerima tautan pendek yang mengaku dari bank. Sebaiknya…",
+        "opsi": ["Abaikan tautannya dan buka aplikasi resmi sendiri", "Klik untuk memastikan isinya", "Balas untuk menanyakan kejelasan", "Teruskan ke teman untuk minta pendapat"],
+        "kunci": 0,
+        "pembahasan": "Tautan pendek menyembunyikan alamat asli. Semua informasi resmi selalu bisa dicek di aplikasi resmi."
+      },
+      {
+        "pertanyaan": "Pesan mengabarkan kamu menang hadiah tapi harus bayar pajak dulu. Ini…",
+        "opsi": ["Modus penipuan — hadiah sah tidak meminta uang di muka", "Wajar, pajak hadiah memang ada", "Aman kalau nominalnya kecil", "Aman kalau ada nomor resmi"],
+        "kunci": 0,
+        "pembahasan": "Permintaan uang di muka adalah penanda paling khas dari penipuan berhadiah."
+      },
+      {
+        "pertanyaan": "Yang paling perlu kamu waspadai dari sebuah pesan adalah…",
+        "opsi": ["Apa yang diminta darimu", "Siapa nama pengirimnya", "Panjang pesannya", "Jam pengirimannya"],
+        "kunci": 0,
+        "pembahasan": "Cerita bisa dikarang serapi apa pun. Permintaan atas data rahasia atau uang adalah yang tidak bisa disamarkan."
+      }
+    ]
+  },
+  {
+    "id": "keamanan-qris",
+    "nomor": "05",
+    "judul": "Keamanan QRIS",
+    "ringkas": "Memindai dengan aman dan membaca layar konfirmasi",
+    "ikon": "qr",
+    "warna": "adukan",
+    "dimensi": "kenali",
+    "materi": {
+      "paragraf": [
+        "QRIS adalah standar kode QR pembayaran nasional dari Bank Indonesia. Satu kode bisa dipindai aplikasi pembayaran mana pun yang sudah mendukung QRIS.",
+        "Karena kodenya berupa stiker fisik, risiko terbesarnya sederhana: stiker bisa ditempel orang lain di atas stiker asli. Pertahanan terbaiknya juga sederhana — membaca nama penerima di layar sebelum membayar."
+      ],
+      "poin": [
+        "Kode QRIS yang sah selalu menampilkan nama merchant di layar ponselmu",
+        "Stiker yang tertempel di atas stiker lain adalah tanda bahaya",
+        "Nominal muncul sebelum kamu menekan bayar, bukan sesudah",
+        "Kalau nama tidak cocok dengan nama toko, hentikan dan tanyakan"
+      ]
+    },
+    "soal": [
+      {
+        "pertanyaan": "Setelah memindai QRIS, nama yang muncul berbeda dengan nama toko. Artinya…",
+        "opsi": ["Ada kemungkinan kode itu bukan milik toko tersebut", "Hal biasa pada semua transaksi QRIS", "Jaringan sedang lambat", "Saldomu tidak mencukupi"],
+        "kunci": 0,
+        "pembahasan": "Ketidakcocokan nama adalah tanda paling umum dari kode QR yang ditempel pihak lain."
+      },
+      {
+        "pertanyaan": "Apa yang perlu diperiksa pada stiker QRIS sebelum memindai?",
+        "opsi": ["Apakah ada stiker lain yang tertempel di atasnya", "Warna stikernya", "Ukuran kodenya", "Posisi stiker di meja"],
+        "kunci": 0,
+        "pembahasan": "Penempelan stiker di atas stiker asli adalah cara paling murah dan paling sering dipakai."
+      },
+      {
+        "pertanyaan": "Nominal pada QRIS statis kamu isi sendiri. Yang perlu kamu lakukan…",
+        "opsi": ["Periksa ulang nominal sebelum menekan bayar", "Percayakan pada kasir", "Isi lebih dulu baru cek nama", "Bayar cepat agar antrean lancar"],
+        "kunci": 0,
+        "pembahasan": "Nominal yang salah ketik tidak bisa ditarik kembali setelah transaksi berhasil."
+      },
+      {
+        "pertanyaan": "Keunggulan QRIS sebagai standar nasional adalah…",
+        "opsi": ["Satu kode bisa dipindai berbagai aplikasi pembayaran", "Transaksinya tidak dikenai biaya sama sekali", "Tidak memerlukan koneksi internet", "Dana langsung masuk tanpa perantara"],
+        "kunci": 0,
+        "pembahasan": "Itulah tujuan standardisasi: merchant cukup memasang satu kode untuk semua aplikasi."
+      }
+    ]
+  },
+  {
+    "id": "transaksi-mencurigakan",
+    "nomor": "06",
+    "judul": "Transaksi Mencurigakan",
+    "ringkas": "Apa yang dilakukan saat ada yang tidak beres",
+    "ikon": "lonceng",
+    "warna": "ungu",
+    "dimensi": "adukan",
+    "materi": {
+      "paragraf": [
+        "Menemukan transaksi yang tidak kamu lakukan adalah situasi mendesak. Semakin cepat dilaporkan, semakin besar peluang akses yang tidak sah dihentikan sebelum kerugian bertambah.",
+        "Urutan penanganannya penting. Amankan akses lebih dulu, baru laporkan — dan laporkan ke penyelenggara yang kamu pakai, bukan langsung ke Bank Indonesia."
+      ],
+      "poin": [
+        "Periksa mutasi secara berkala, jangan menunggu ada masalah",
+        "Amankan akun lebih dulu sebelum menyusun laporan",
+        "Siapkan bukti: waktu, nominal, dan nama penerima",
+        "Bank Indonesia adalah jalur lanjutan, bukan pintu pertama"
+      ]
+    },
+    "soal": [
+      {
+        "pertanyaan": "Muncul transaksi yang tidak kamu lakukan. Tindakan pertama?",
+        "opsi": ["Segera hubungi penyelenggara dan minta akun diamankan", "Menunggu beberapa hari sambil mengamati", "Menutup aplikasi dan mengabaikannya", "Mengumumkannya di media sosial"],
+        "kunci": 0,
+        "pembahasan": "Kecepatan menentukan. Mengamankan akses lebih dulu mencegah kerugian bertambah."
+      },
+      {
+        "pertanyaan": "Apa yang perlu disiapkan sebelum menghubungi kanal pengaduan?",
+        "opsi": ["Bukti transaksi: waktu, nominal, dan nama penerima", "PIN dan password akunmu", "Foto kartu identitas dan kartu debit", "Kode OTP terakhir yang kamu terima"],
+        "kunci": 0,
+        "pembahasan": "Aduan yang bisa ditelusuri butuh data transaksi — bukan data rahasia. Kanal resmi tidak pernah memintanya."
+      },
+      {
+        "pertanyaan": "Kapan jalur Bank Indonesia terbuka untuk kasusmu?",
+        "opsi": ["Setelah melapor ke penyelenggara dan tenggatnya lewat", "Segera setelah transaksi bermasalah", "Sebelum menghubungi penyelenggara", "Hanya kalau nominalnya besar"],
+        "kunci": 0,
+        "pembahasan": "Bank Indonesia adalah jalur lanjutan, bukan pintu pertama pengaduan transaksi."
+      },
+      {
+        "pertanyaan": "Kebiasaan yang paling membantu mendeteksi masalah lebih awal adalah…",
+        "opsi": ["Memeriksa mutasi rekening secara berkala", "Mengganti aplikasi secara berkala", "Menyimpan struk fisik", "Membatasi saldo di bawah sejuta"],
+        "kunci": 0,
+        "pembahasan": "Transaksi tak dikenal sering baru ketahuan berminggu-minggu kemudian kalau mutasi tidak pernah dibuka."
+      }
+    ]
+  }
+]

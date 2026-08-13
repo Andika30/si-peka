@@ -2,8 +2,8 @@
 
 import { useSyncExternalStore } from "react";
 import { AlertTriangle } from "lucide-react";
-import Nav from "@/components/Nav";
-import { Eyebrow, Halaman, Tombol } from "@/components/dasar";
+import AppShell from "@/components/AppShell";
+import { Eyebrow, Halaman, Tombol } from "@/components/ui";
 import { checklist } from "@/lib/konten";
 import { langgan, simpanChecklist, snapshot, snapshotServer } from "@/lib/skor";
 
@@ -19,8 +19,7 @@ export default function Checklist() {
     );
 
   return (
-    <>
-      <Nav />
+    <AppShell>
       <Halaman>
         <div className="mb-2">
           <Eyebrow warna="peduli">Peduli &middot; Checklist</Eyebrow>
@@ -57,11 +56,11 @@ export default function Checklist() {
         </p>
 
         <div className="mt-6 max-w-sm">
-          <Tombol href="/belajar" jenis="garis">
+          <Tombol href="/materi" jenis="garis">
             Kembali ke modul
           </Tombol>
         </div>
       </Halaman>
-    </>
+    </AppShell>
   );
 }

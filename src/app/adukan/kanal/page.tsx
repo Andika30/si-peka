@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
-import Nav from "@/components/Nav";
-import { Eyebrow, Halaman, Judul, Kartu, Peringatan, Tombol } from "@/components/dasar";
+import AppShell from "@/components/AppShell";
+import { Eyebrow, Halaman, Judul, Kartu, Peringatan, Tombol } from "@/components/ui";
 import { bankIndonesia } from "@/lib/konten";
 
 const LANGKAH_PENYELENGGARA = [
@@ -11,8 +11,7 @@ const LANGKAH_PENYELENGGARA = [
 
 export default function KanalResmi() {
   return (
-    <>
-      <Nav />
+    <AppShell>
       <Halaman>
         <div className="mb-2">
           <Eyebrow warna="adukan">Adukan &middot; Kanal resmi</Eyebrow>
@@ -86,6 +85,6 @@ export default function KanalResmi() {
           langsung.
         </p>
       </Halaman>
-    </>
+    </AppShell>
   );
 }

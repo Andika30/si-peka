@@ -1,77 +1,96 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────────────────
-   PeKA Institutional Framework
-   Satu-satunya sumber kebenaran token. Tailwind v4 memakai konfigurasi CSS,
-   jadi tidak ada tailwind.config.js.
+   PeKA — sistem desain
+   Tailwind v4: konfigurasi lewat CSS, tidak ada tailwind.config.js.
+
+   Arah rupa: institusional tapi hangat. Navy Bank Indonesia dipertahankan
+   sebagai jangkar merek; sisanya dibuat lebih lapang, bulat, dan berwarna
+   supaya terasa seperti aplikasi belajar, bukan formulir.
    ───────────────────────────────────────────────────────────────────────── */
 
 @theme {
-  /* Palet resmi */
-  --color-institusi: #0e2f6b;   /* Biru Institusi */
-  --color-adukan: #1d6fe0;      /* Biru Adukan — warna aksi utama */
-  --color-peduli: #0f8a6a;      /* Hijau Peduli */
-  --color-kenali: #d98a0b;      /* Ambar Kenali */
-  --color-waspada: #c1362f;     /* Merah Waspada — khusus peringatan */
-  --color-kertas: #f6f8fc;      /* Latar, off-white kebiruan */
-  --color-tinta: #0b1b33;       /* Teks utama */
+  /* Merek */
+  --color-institusi: #0e2f6b;
+  --color-institusi-tua: #0a2350;
+  --color-adukan: #1d6fe0;      /* aksi utama */
+  --color-adukan-tua: #1558b8;
 
-  /* Permukaan lembut per modul */
-  --color-peduli-lembut: #e7f5f0;
-  --color-kenali-lembut: #fbf1e0;
+  /* Warna modul & semantik */
+  --color-peduli: #0f8a6a;
+  --color-kenali: #d98a0b;
+  --color-waspada: #c1362f;
+  --color-ungu: #7c5cf0;        /* feedback */
+  --color-emas: #eab308;        /* pencapaian */
+
+  /* Permukaan lembut — dipakai untuk chip ikon dan latar kartu bertanda */
   --color-adukan-lembut: #e8f1fd;
+  --color-peduli-lembut: #e6f5f0;
+  --color-kenali-lembut: #fdf2e0;
   --color-waspada-lembut: #fbeae9;
+  --color-ungu-lembut: #efeafe;
+  --color-emas-lembut: #fef6dd;
 
-  /* Turunan Tinta */
+  /* Kertas & tinta */
+  --color-kertas: #f4f7fc;
+  --color-kertas-tua: #e8edf7;
+  --color-tinta: #0b1b33;
   --color-tinta-70: #4a5568;
   --color-tinta-55: #6b7688;
-  --color-garis: rgb(11 27 51 / 0.12);
+  --color-garis: rgb(11 27 51 / 0.08);
 
-  /* Tipografi — variabel berasal dari next/font (di-host sendiri, bukan CDN) */
+  /* Tipografi */
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
-  --text-display: 2rem;
-  --text-display--line-height: 2.5rem;
+  --text-display: 1.75rem;
+  --text-display--line-height: 2.25rem;
   --text-display--letter-spacing: -0.02em;
   --text-display--font-weight: 800;
 
-  --text-judul: 1.5rem;
-  --text-judul--line-height: 2rem;
-  --text-judul--letter-spacing: -0.02em;
+  --text-judul: 1.375rem;
+  --text-judul--line-height: 1.875rem;
+  --text-judul--letter-spacing: -0.01em;
   --text-judul--font-weight: 800;
 
-  --text-subjudul: 1.25rem;
-  --text-subjudul--line-height: 1.75rem;
+  --text-subjudul: 1.0625rem;
+  --text-subjudul--line-height: 1.5rem;
   --text-subjudul--font-weight: 700;
 
-  --text-isi: 1rem;
+  --text-isi: 0.9375rem;
   --text-isi--line-height: 1.6;
 
-  --text-kecil: 0.875rem;
+  --text-kecil: 0.8125rem;
   --text-kecil--line-height: 1.25rem;
 
-  --text-data: 0.75rem;
+  --text-data: 0.6875rem;
   --text-data--line-height: 1rem;
   --text-data--letter-spacing: 0.08em;
   --text-data--font-weight: 600;
 
-  --radius-kartu: 0.875rem;
-  --radius-tombol: 0.75rem;
+  /* Bentuk — lebih bulat dari sebelumnya, sesuai arah rupa yang diminta */
+  --radius-kartu: 1.25rem;
+  --radius-dalam: 0.875rem;
+  --radius-tombol: 0.875rem;
+  --radius-chip: 0.75rem;
 
-  --shadow-kartu: 0 4px 20px rgb(11 27 51 / 0.05);
+  --shadow-kartu: 0 2px 8px rgb(11 27 51 / 0.04), 0 8px 24px rgb(11 27 51 / 0.04);
+  --shadow-angkat: 0 4px 12px rgb(11 27 51 / 0.06), 0 16px 40px rgb(11 27 51 / 0.08);
 }
 
-/* Skala tipografi naik di layar lebar */
+/* Tipografi naik bertahap. Ukuran ponsel sengaja tidak besar-besar supaya
+   satu layar memuat lebih banyak; ruang baru dipakai saat layar melebar. */
 @media (width >= 48rem) {
   :root {
-    --text-display: 2.5rem;
-    --text-judul: 1.75rem;
+    --text-display: 2rem;
+    --text-judul: 1.5rem;
+    --text-isi: 1rem;
+    --text-kecil: 0.875rem;
   }
 }
-@media (width >= 64rem) {
+@media (width >= 80rem) {
   :root {
-    --text-display: 2.75rem;
+    --text-display: 2.25rem;
   }
 }
 
@@ -83,17 +102,21 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  :where(a, button, input, select, [tabindex]):focus-visible {
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
     outline: 2px solid var(--color-adukan);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 }
 
+@utility gradien-merek {
+  background-image: linear-gradient(150deg, #1d6fe0 0%, #0e2f6b 62%, #0a2350 100%);
+}
+
 /* ── Finder pattern ───────────────────────────────────────────────────────
-   Signature PeKA: kotak bersudut TAJAM di tengah UI yang serba membulat.
-   Kode QR punya tepat tiga kotak sudut; PeKA punya tepat tiga pilar.
-   Cincin luar tidak pernah dihilangkan — tanpa itu bentuknya cuma kotak. */
+   Tetap dipertahankan sebagai tanda pengenal PeKA. Kode QR punya tepat tiga
+   kotak sudut; PeKA punya tepat tiga pilar. Dipakai hemat: logo, penanda
+   progres pengukuran, dan tanda hasil akhir. */
 
 .finder {
   --finder-color: var(--color-tinta);
@@ -107,8 +130,6 @@
   border: 1.5px solid var(--finder-color);
   border-radius: 0;
 }
-/* Abu hanya untuk penanda tanpa modul. Kalau modulnya sudah ditentukan,
-   cincinnya tetap berwarna meski isinya masih kosong. */
 .finder[data-status="kosong"]:not([data-warna]) { border-color: rgb(11 27 51 / 0.2); }
 .finder[data-status="berjalan"],
 .finder[data-status="selesai"] { padding: 2px; }
@@ -125,29 +146,30 @@
 .finder[data-warna="kenali"] { --finder-color: var(--color-kenali); }
 .finder[data-warna="adukan"] { --finder-color: var(--color-adukan); }
 .finder[data-warna="institusi"] { --finder-color: var(--color-institusi); }
+.finder[data-warna="putih"] { --finder-color: #fff; }
 
-/* ── Tanda hasil: tiga finder pattern pada posisi aslinya di kode QR ─────── */
+/* ── Tanda hasil ──────────────────────────────────────────────────────────
+   Tiga finder pattern pada posisi aslinya di kode QR. Sel kanan-bawah
+   sengaja kosong, seperti kode QR sungguhan. */
 
 .peka-mark {
   display: grid;
-  grid-template-columns: repeat(2, 72px);
-  grid-template-rows: repeat(2, 72px);
-  gap: 16px;
+  grid-template-columns: repeat(2, 64px);
+  grid-template-rows: repeat(2, 64px);
+  gap: 14px;
   width: max-content;
   margin-inline: auto;
 }
 @media (width >= 48rem) {
-  .peka-mark { grid-template-columns: repeat(2, 96px); grid-template-rows: repeat(2, 96px); gap: 20px; }
+  .peka-mark { grid-template-columns: repeat(2, 84px); grid-template-rows: repeat(2, 84px); gap: 18px; }
 }
 
 .peka-mark__sel {
   position: relative;
   box-sizing: border-box;
   border: 3px solid var(--sel-warna);
-  border-radius: 0;
   overflow: hidden;
 }
-/* Sel kanan-bawah sengaja kosong — begitulah kode QR sungguhan. */
 .peka-mark__sel[data-kosong="true"] { border: none; }
 
 .peka-mark__isi {
@@ -160,7 +182,7 @@
   animation-delay: var(--tunda, 0ms);
 }
 
-/* Inti harus DI ATAS isian dan dipisahkan cincin sewarna latar; kalau tidak,
+/* Inti harus di ATAS isian dan dipisahkan cincin sewarna latar; kalau tidak,
    isian menelannya dan bentuknya terbaca sebagai ember, bukan finder pattern. */
 .peka-mark__inti {
   position: absolute;
@@ -170,16 +192,32 @@
   box-shadow: 0 0 0 5px var(--color-kertas);
 }
 
-@keyframes peka-isi {
-  from { height: 0; }
-  to { height: var(--skor, 0%); }
+@keyframes peka-isi { from { height: 0; } to { height: var(--skor, 0%); } }
+
+/* ── Bar progres ─────────────────────────────────────────────────────────── */
+
+.progres {
+  position: relative;
+  height: 6px;
+  border-radius: 9999px;
+  background: rgb(11 27 51 / 0.07);
+  overflow: hidden;
 }
+.progres__isi {
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--progres-warna, var(--color-adukan));
+  transform-origin: left;
+  animation: peka-tumbuh 700ms cubic-bezier(0.2, 0, 0, 1) forwards;
+  /* Bukan cuma tumbuh saat muncul: lebarnya juga bergerak ketika nilainya
+     berubah, misalnya sesudah kuis modul diselesaikan. */
+  transition: width 600ms cubic-bezier(0.2, 0, 0, 1);
+}
+@keyframes peka-tumbuh { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* ── Bar skor ─────────────────────────────────────────────────────────────
-   Skor akhir selalu lebih besar dari skor awal, jadi dua bar bertumpuk akan
-   selalu saling menutupi. Skor awal digambar sebagai garis penanda. */
-
-.bar-skor { position: relative; height: 10px; border-radius: 9999px; background: rgb(11 27 51 / 0.08); }
+/* Bar perbandingan skor: skor awal jadi garis penanda, karena skor akhir yang
+   selalu lebih besar akan selalu menutupi bar kedua. */
+.bar-skor { position: relative; height: 10px; border-radius: 9999px; background: rgb(11 27 51 / 0.07); }
 .bar-skor__sesudah {
   position: absolute; inset-block: 0; left: 0;
   border-radius: 9999px; background: var(--bar-warna);
@@ -188,17 +226,16 @@
 }
 .bar-skor__sebelum {
   position: absolute; top: -3px; bottom: -3px; width: 2px; z-index: 2;
-  border-radius: 9999px; background: rgb(11 27 51 / 0.55);
+  border-radius: 9999px; background: rgb(11 27 51 / 0.5);
 }
-@keyframes peka-tumbuh { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* ── Kotak centang: tajam, bukan membulat ─────────────────────────────────── */
+/* ── Kotak centang: tajam, mengikuti motif finder ─────────────────────────── */
 
 .peka-check {
   appearance: none;
   box-sizing: border-box;
   width: 24px; height: 24px; flex: none;
-  border: 2px solid rgb(11 27 51 / 0.3);
+  border: 2px solid rgb(11 27 51 / 0.25);
   border-radius: 0;
   background: #fff;
   cursor: pointer;
@@ -213,7 +250,15 @@
   clip-path: polygon(14% 44%, 0 60%, 39% 100%, 100% 18%, 84% 4%, 39% 68%);
   transition: transform 120ms ease;
 }
-.peka-check:checked { background: var(--color-peduli); border-color: var(--color-peduli); }
+.peka-check:checked {
+  background: var(--color-peduli);
+  border-color: var(--color-peduli);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .peka-check:active { transform: scale(0.9); }
+  .likert label:active { transform: scale(0.92); }
+  .likert input:checked + label { transform: scale(1.06); }
+}
 .peka-check:checked::after { transform: scale(1); }
 
 /* ── Skala Likert ─────────────────────────────────────────────────────────── */
@@ -235,5 +280,5 @@
     transition-duration: 0.01ms !important;
   }
   .peka-mark__isi { height: var(--skor, 0%); }
-  .bar-skor__sesudah { transform: scaleX(1); }
+  .progres__isi, .bar-skor__sesudah { transform: scaleX(1); }
 }

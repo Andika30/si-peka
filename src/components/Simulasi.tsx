@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AlertCircle, CheckCircle2, X } from "lucide-react";
-import { Finder, Halaman, KartuPilihan } from "@/components/dasar";
+import { Getar, PanelBawah } from "@/components/gerak";
+import { Finder, Halaman, KartuPilihan } from "@/components/ui";
 import type { Skenario } from "@/lib/konten";
+import { tandaiSimulasi } from "@/lib/skor";
 
 type Tahap = { jenis: "soal" } | { jenis: "konsekuensi"; opsi: number } | { jenis: "alasan" };
 
@@ -25,6 +27,9 @@ export default function Simulasi({
     // Pilihan keliru tidak langsung divonis. Akibatnya diperlihatkan lebih
     // dulu — itu yang membuatnya terasa simulasi, bukan kuis bersampul.
     setTahap(skenario.opsi[i].aman ? { jenis: "alasan" } : { jenis: "konsekuensi", opsi: i });
+    // Skenario dihitung selesai begitu dijawab — benar atau keliru sama saja,
+    // karena yang dinilai di sini adalah berlatihnya, bukan skornya.
+    tandaiSimulasi(nomor);
   }
 
   const berikutnya = nomor < total ? `/simulasi/${nomor + 1}` : "/cek/akhir";
@@ -84,16 +89,17 @@ export default function Simulasi({
                       : "salah"
                     : "redup";
               return (
-                <KartuPilihan
-                  disabled={dipilih !== null}
-                  keadaan={keadaan}
-                  key={o.teks}
-                  onClick={() => jawab(i)}
-                >
-                  <span className={`text-isi text-tinta ${dipilih === i ? "font-bold" : ""}`}>
-                    {o.teks}
-                  </span>
-                </KartuPilihan>
+                <Getar aktif={dipilih === i && !o.aman} key={o.teks}>
+                  <KartuPilihan
+                    disabled={dipilih !== null}
+                    keadaan={keadaan}
+                    onClick={() => jawab(i)}
+                  >
+                    <span className={`text-isi text-tinta ${dipilih === i ? "font-bold" : ""}`}>
+                      {o.teks}
+                    </span>
+                  </KartuPilihan>
+                </Getar>
               );
             })}
           </div>
@@ -101,7 +107,7 @@ export default function Simulasi({
       </Halaman>
 
       {tahap.jenis !== "soal" ? (
-        <div className="fixed inset-x-0 bottom-0 z-50 rounded-t-kartu border-t border-garis bg-white px-5 pt-4 pb-6 shadow-[0_-4px_20px_rgb(11_27_51_/_0.08)] md:px-8">
+        <PanelBawah kunci={tahap.jenis}>
           <div className="mx-auto max-w-3xl">
             <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-black/10" />
 
@@ -115,7 +121,7 @@ export default function Simulasi({
                 </div>
                 <p className="mb-5 text-judul text-tinta">{skenario.opsi[tahap.opsi].konsekuensi}</p>
                 <button
-                  className="flex h-[52px] w-full items-center justify-center rounded-tombol bg-adukan px-6 text-base font-bold text-white transition-opacity hover:opacity-90"
+                  className="flex h-13 w-full items-center justify-center rounded-tombol bg-adukan px-6 text-base font-bold text-white transition-opacity hover:opacity-90"
                   onClick={() => setTahap({ jenis: "alasan" })}
                   type="button"
                 >
@@ -134,7 +140,7 @@ export default function Simulasi({
                     "benar/salah" tidak mengajarkan apa pun. */}
                 <p className="mb-5 text-judul text-tinta">{skenario.alasan}</p>
                 <Link
-                  className="flex h-[52px] w-full items-center justify-center rounded-tombol bg-adukan px-6 text-base font-bold text-white transition-opacity hover:opacity-90"
+                  className="flex h-13 w-full items-center justify-center rounded-tombol bg-adukan px-6 text-base font-bold text-white transition-opacity hover:opacity-90"
                   href={berikutnya}
                 >
                   {labelBerikutnya}
@@ -142,7 +148,7 @@ export default function Simulasi({
               </>
             )}
           </div>
-        </div>
+        </PanelBawah>
       ) : null}
     </>
   );

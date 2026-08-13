@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Clock, Globe, Phone, Smartphone } from "lucide-react";
-import Nav from "@/components/Nav";
-import { Eyebrow, Halaman, Kartu, Peringatan, Tombol } from "@/components/dasar";
+import AppShell from "@/components/AppShell";
+import { Eyebrow, Halaman, Kartu, Peringatan, Tombol } from "@/components/ui";
 import { cariKasus, kasus, penyelenggara } from "@/lib/konten";
 
 export function generateStaticParams() {
@@ -16,8 +16,7 @@ export default async function HasilAdukan({ params }: { params: Promise<{ kasus:
   const pjp = penyelenggara[0];
 
   return (
-    <>
-      <Nav />
+    <AppShell>
       <Halaman>
         <div className="mb-2">
           <Eyebrow warna="adukan">Adukan &middot; Hasil</Eyebrow>
@@ -125,6 +124,6 @@ export default async function HasilAdukan({ params }: { params: Promise<{ kasus:
           kamu harus pergi.
         </p>
       </Halaman>
-    </>
+    </AppShell>
   );
 }

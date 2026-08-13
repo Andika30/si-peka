@@ -47,13 +47,14 @@ selesai — tidak ada komponen yang perlu disunting.
 
 | Berkas | Isi |
 |---|---|
-| `materi.json` | Materi modul Peduli. Menambah objek = menambah halaman materi |
+| `modul.json` | Enam modul: materi + kuis masing-masing. Menambah objek = menambah modul, kartu, rute, dan progresnya |
 | `skenario.json` | Skenario simulasi Kenali, termasuk teks konsekuensi tiap pilihan keliru |
 | `kasus.json` | Lima jenis masalah Adukan beserta langkah dan aturan eskalasinya |
 | `soal.json` | Bank soal cek awal & akhir, berpasangan per indikator |
 | `checklist.json` | Butir Checklist Sebelum Bayar |
 | `penyelenggara.json` | Daftar penyelenggara, jenis layanan, dan kanal Bank Indonesia |
 | `sus.json` | Sepuluh pernyataan System Usability Scale |
+| `lencana.json` | Nilai poin dan syarat tiap lencana |
 
 Komponen tidak pernah mengimpor JSON langsung — semuanya lewat `src/lib/konten.ts`.
 Kalau nanti sumbernya pindah (misalnya ke Google Sheets), hanya berkas itu yang
@@ -82,28 +83,43 @@ orang yang sedang panik ke tempat yang salah.
 ```
 src/
   app/
-    page.tsx                     Beranda — dua pintu masuk
-    persetujuan/                 Persetujuan sebelum pengukuran
-    cek/[fase]/                  Cek awal & cek akhir
-    belajar/                     Modul, materi, checklist
-    simulasi/[n]/                Skenario Kenali
+    page.tsx                     Landing — halaman merek, satu-satunya tanpa shell
+    beranda/                     Dashboard: progres, lanjutkan materi, menu
+    materi/                      Daftar modul → materi/[id]
+    kuis/[id]/                   Kuis modul → kuis/[id]/hasil
+    simulasi/                    Daftar skenario → simulasi/[n]
     adukan/                      Langkah 1 → layanan → penyelenggara → hasil
       hasil/[kasus]/             Hasil berbeda untuk tiap jenis masalah
       eskalasi/                  Satu-satunya layar dengan kanal BI menonjol
       kanal/                     Urutan: penyelenggara dulu, BI terakhir
-    kuesioner/                   SUS
-    hasil/                       Skor, N-Gain, rekomendasi
+    riwayat/ pencapaian/ profil/ Bagian akun (tab bawah di ponsel)
+    feedback/ checklist/ tentang/
+    persetujuan/ cek/[fase]/     Instrumen penelitian
+    kuesioner/ hasil/            SUS, lalu skor & N-Gain
   components/
-    dasar.tsx                    Finder, Halaman, Kartu, Tombol, KartuPilihan…
-    Nav.tsx                      Bawah di ponsel, atas di desktop
+    AppShell.tsx                 Sidebar desktop · rail tablet · bilah bawah ponsel
+    ui.tsx                       Chip, Kartu, Tombol, KartuPilihan, BarProgres…
+    ikon.tsx                     Nama ikon di JSON → komponen
+    IsiModul.tsx KuisModul.tsx HasilKuis.tsx
     Simulasi.tsx                 Mesin keadaan soal → konsekuensi → penjelasan
-    Kuis.tsx                     Cek awal & akhir
+    Kuis.tsx                     Cek awal & cek akhir
     Hasil.tsx                    PekaMark, BarSkor
   content/                       Seluruh isi aplikasi
   lib/
     konten.ts                    Pemuat bertipe
-    skor.ts                      Penyimpanan, N-Gain, skor SUS
+    skor.ts                      Progres, poin, lencana, N-Gain, skor SUS
 ```
+
+### Navigasi menyesuaikan alat
+
+| Lebar | Navigasi | Alasan |
+|---|---|---|
+| < 768px | Bilah bawah 4 tab | Jangkauan ibu jari; fitur dicapai lewat kisi di Beranda |
+| ≥ 768px | Rail kiri ikon | Layar cukup lebar, tapi belum cukup untuk label |
+| ≥ 1280px | Sidebar penuh, dua kelompok | Tidak ada alasan menyembunyikan menu di layar selebar ini |
+
+Bilah navigasi bawah pada layar 1440px adalah pola yang salah tempat — karena
+itu shell-nya berganti bentuk, bukan sekadar melar.
 
 ---
 
@@ -127,9 +143,52 @@ medianya. Pembahasan baru dibuka di cek akhir.
 tidak merasa mengulang soal identik, tapi secara statistik tetap setara sehingga
 N-Gain tetap sahih.
 
+**Alur pengukuran menunjukkan posisinya.** `AlurPengukuran` muncul di
+persetujuan, cek awal, cek akhir, penilaian, dan hasil. Rangkaian ini memakan
+waktu, dan orang berhenti di tengah bukan karena malas — tapi karena tidak tahu
+tinggal berapa langkah lagi. Peserta yang berhenti di tengah berarti data
+penelitian tidak lengkap, jadi ini bukan sekadar urusan rupa. Halaman
+persetujuan juga menuliskan lebih dulu apa saja yang akan dilalui beserta
+jumlah soal dan modulnya.
+
 **Alur linear tidak punya navigasi.** Persetujuan, kuis, simulasi, dan kuesioner
 sengaja tanpa bilah navigasi: memberi jalan keluar di tengah pengukuran merusak
 datanya.
+
+**Ilustrasi digambar sendiri.** Dua belas adegan di `src/components/Ilustrasi.tsx`
+adalah SVG inline buatan sendiri, bukan dari pustaka ilustrasi luar. Aplikasi ini
+berlabel Bank Indonesia, jadi seluruh aset harus jelas asal-usulnya. Keuntungan
+lainnya: warnanya ikut palet tiap modul lewat prop `warna`, tajam di resolusi apa
+pun, dan tidak menambah satu pun berkas gambar maupun permintaan jaringan.
+
+Kosakata bentuknya dibatasi — ponsel, kartu, gelembung pesan, perisai, dan kotak
+sudut kode QR — supaya dua belas adegan terbaca sebagai satu keluarga. Tidak ada
+wajah manusia: sulit digambar rapi dengan SVG datar, dan menghindari kesan
+menggambarkan orang tertentu. Menambah adegan berarti menambah satu `case` di
+`Adegan` dan satu nama di `NamaIlustrasi`.
+
+**Gerak melayani orientasi, bukan hiasan.** Primitif di
+`src/components/gerak.tsx` (motion) dipakai dengan tiga aturan: hanya
+menyentuh `transform` dan `opacity` karena audiensnya memakai ponsel kelas
+menengah; setiap animasi harus menjelaskan sesuatu — kemunculan berurutan
+mengarahkan mata dari modul 01 ke bawah, angka berhitung membuat skor terbaca
+sebagai capaian, panel yang naik menandai umpan balik atas pilihan barusan; dan
+perayaan hanya ada satu, di layar hasil kuis.
+
+Dua jebakan yang sudah ditemui dan diperbaiki — jangan diulang:
+
+1. **Jangan mengganti jenis elemen** berdasarkan `useReducedMotion()`. Nilai
+   hook itu berbeda antara server dan klien, jadi `motion.div` yang berubah
+   menjadi `div` akan memecah hidrasi dan menghilangkan isi halaman.
+2. **Jangan memakai `initial={false}`** untuk mematikan animasi. Motion memang
+   melewati animasinya, tapi `opacity: 0` hasil render server tetap menempel dan
+   kontennya tidak pernah terlihat. Saat mode hemat, keadaan awal harus langsung
+   sama dengan keadaan akhir.
+
+**Gamifikasi sengaja dibatasi.** Poin dan lencana hanya menghitung modul,
+simulasi, dan checklist. Cek awal dan cek akhir tidak berpoin dan tidak bisa
+diulang — kalau bisa, orang akan mengulangnya demi poin dan N-Gain penelitian
+jadi tidak sahih. Keterlibatan tidak boleh dibayar dengan validitas data.
 
 ---
 

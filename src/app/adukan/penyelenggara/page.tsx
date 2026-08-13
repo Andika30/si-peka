@@ -1,6 +1,6 @@
 import { ChevronRight, HelpCircle, Info } from "lucide-react";
-import Nav from "@/components/Nav";
-import { Eyebrow, Halaman, KartuPilihan } from "@/components/dasar";
+import AppShell from "@/components/AppShell";
+import { Eyebrow, Halaman, KartuPilihan } from "@/components/ui";
 import { cariKasus, penyelenggara } from "@/lib/konten";
 
 export default async function AdukanLangkah3({
@@ -12,8 +12,7 @@ export default async function AdukanLangkah3({
   const k = cariKasus(idKasus ?? "") ?? { id: "qris" };
 
   return (
-    <>
-      <Nav />
+    <AppShell>
       <Halaman>
         <div className="mb-2">
           <Eyebrow warna="adukan">Adukan &middot; Langkah 3 dari 3</Eyebrow>
@@ -71,6 +70,6 @@ export default async function AdukanLangkah3({
           </p>
         </div>
       </Halaman>
-    </>
+    </AppShell>
   );
 }

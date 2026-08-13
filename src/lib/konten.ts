@@ -3,35 +3,47 @@
  * Komponen tidak pernah mengimpor JSON langsung — supaya kalau sumbernya
  * nanti pindah (mis. ke Google Sheets), hanya berkas ini yang berubah.
  */
-import materiJson from "@/content/materi.json";
+import modulJson from "@/content/modul.json";
 import skenarioJson from "@/content/skenario.json";
 import kasusJson from "@/content/kasus.json";
 import soalJson from "@/content/soal.json";
 import checklistJson from "@/content/checklist.json";
 import penyelenggaraJson from "@/content/penyelenggara.json";
 import susJson from "@/content/sus.json";
+import lencanaJson from "@/content/lencana.json";
 
 export type Dimensi = "peduli" | "kenali" | "adukan";
+export type Warna = "institusi" | "adukan" | "peduli" | "kenali" | "waspada" | "ungu" | "emas";
 
-export const DIMENSI: { id: Dimensi; label: string; warna: string }[] = [
-  { id: "peduli", label: "Peduli", warna: "var(--color-peduli)" },
-  { id: "kenali", label: "Kenali", warna: "var(--color-kenali)" },
-  { id: "adukan", label: "Adukan", warna: "var(--color-adukan)" },
+export const DIMENSI: { id: Dimensi; label: string }[] = [
+  { id: "peduli", label: "Peduli" },
+  { id: "kenali", label: "Kenali" },
+  { id: "adukan", label: "Adukan" },
 ];
 
-export type Materi = {
+export type SoalModul = {
+  pertanyaan: string;
+  opsi: string[];
+  kunci: number;
+  pembahasan: string;
+};
+
+export type Modul = {
   id: string;
+  nomor: string;
   judul: string;
-  isi: string;
-  poin: string[];
+  ringkas: string;
   ikon: string;
-  peringatan?: string;
+  warna: Warna;
+  dimensi: Dimensi;
+  materi: { paragraf: string[]; poin: string[]; peringatan?: string };
+  soal: SoalModul[];
 };
 
 export type OpsiSkenario = {
   teks: string;
   aman: boolean;
-  /** Hanya ada pada pilihan yang keliru: akibat yang diperlihatkan lebih dulu. */
+  /** Hanya ada pada pilihan keliru: akibat yang diperlihatkan lebih dulu. */
   konsekuensi?: string;
 };
 
@@ -49,9 +61,7 @@ export type Kasus = {
   ringkas: string;
   judul: string;
   pembuka: string;
-  /** Kasus mendesak menampilkan penanda waktu di paling atas. */
   segera?: string;
-  /** Kasus penipuan menaruh peringatan keamanan SEBELUM langkah. */
   peringatanUtama?: string;
   langkah: string[];
   /** Hanya kasus yang sudah melewati penyelenggara yang membuka jalur BI. */
@@ -82,7 +92,17 @@ export type Penyelenggara = {
   diverifikasi: string;
 };
 
-export const materi = materiJson as Materi[];
+export type Lencana = {
+  id: string;
+  nama: string;
+  syarat: string;
+  ikon: string;
+  warna: Warna;
+  jenis: "modul" | "simulasi" | "skor" | "checklist" | "kasus";
+  ambang: number;
+};
+
+export const modul = modulJson as Modul[];
 export const skenario = skenarioJson as Skenario[];
 export const kasus = kasusJson as Kasus[];
 export const soal = soalJson as Soal[];
@@ -91,8 +111,9 @@ export const layanan = penyelenggaraJson.layanan;
 export const penyelenggara = penyelenggaraJson.daftar as Penyelenggara[];
 export const bankIndonesia = penyelenggaraJson.bankIndonesia;
 export const sus = susJson.pernyataan;
+export const lencana = lencanaJson.daftar as Lencana[];
+export const nilaiPoin = lencanaJson.poin;
 
-export const cariMateri = (id: string) => materi.find((m) => m.id === id);
+export const cariModul = (id: string) => modul.find((m) => m.id === id);
 export const cariKasus = (id: string) => kasus.find((k) => k.id === id);
-export const indeksMateri = (id: string) => materi.findIndex((m) => m.id === id);
-export const soalPerDimensi = (d: Dimensi) => soal.filter((s) => s.dimensi === d);
+export const indeksModul = (id: string) => modul.findIndex((m) => m.id === id);

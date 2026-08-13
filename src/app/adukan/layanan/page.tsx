@@ -1,6 +1,6 @@
 import { ArrowLeftRight, ChevronRight, CreditCard, QrCode, Wallet } from "lucide-react";
-import Nav from "@/components/Nav";
-import { Eyebrow, Halaman, KartuPilihan, Peringatan } from "@/components/dasar";
+import AppShell from "@/components/AppShell";
+import { Eyebrow, Halaman, KartuPilihan, Peringatan } from "@/components/ui";
 import { cariKasus, layanan } from "@/lib/konten";
 
 const IKON = {
@@ -22,8 +22,7 @@ export default async function AdukanLangkah2({
     `/adukan/penyelenggara?kasus=${k?.id ?? "qris"}&layanan=${idLayanan}`;
 
   return (
-    <>
-      <Nav />
+    <AppShell>
       <Halaman>
         <div className="mb-2">
           <Eyebrow warna="adukan">Adukan &middot; Langkah 2 dari 3</Eyebrow>
@@ -56,6 +55,6 @@ export default async function AdukanLangkah2({
           Jangan pernah memberikan PIN, password, atau OTP kepada siapa pun.
         </Peringatan>
       </Halaman>
-    </>
+    </AppShell>
   );
 }

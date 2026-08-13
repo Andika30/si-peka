@@ -1,6 +1,6 @@
 import { Globe, Phone } from "lucide-react";
-import Nav from "@/components/Nav";
-import { Eyebrow, Finder, Halaman, Judul, Kartu, Peringatan, Tombol } from "@/components/dasar";
+import AppShell from "@/components/AppShell";
+import { Eyebrow, Finder, Halaman, Judul, Kartu, Peringatan, Tombol } from "@/components/ui";
 import { bankIndonesia } from "@/lib/konten";
 
 // Eskalasi dilakukan pengguna sendiri lewat kanal resmi. PeKA tidak menerima,
@@ -23,8 +23,7 @@ const PRASYARAT = [
 
 export default function Eskalasi() {
   return (
-    <>
-      <Nav />
+    <AppShell>
       <Halaman>
         <div className="mb-2">
           <Eyebrow warna="institusi">Adukan &middot; Eskalasi</Eyebrow>
@@ -108,6 +107,6 @@ export default function Eskalasi() {
           Semua langkah di atas kamu lakukan langsung ke kanal resmi.
         </p>
       </Halaman>
-    </>
+    </AppShell>
   );
 }

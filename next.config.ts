@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Lencana devtools Next ikut muncul di tangkapan layar. Aplikasi ini dipakai
+  // untuk dokumentasi laporan dan demo ke pembimbing, jadi dimatikan.
+  devIndicators: false,
 };
 
 export default nextConfig;
