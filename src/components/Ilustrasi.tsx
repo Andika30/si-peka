@@ -1,4 +1,4 @@
-import type { Warna } from "@/lib/konten";
+import type { Warna } from "@/lib/tipe";
 
 /**
  * Ilustrasi PeKA — SVG inline, digambar sendiri.
@@ -307,7 +307,9 @@ export default function Ilustrasi({
 
 export { TINTA as warnaTintaIlustrasi };
 
-/** Nama ikon di modul.json memakai kosakata ikon; ini menjembatani ke adegan. */
+/** Nama ikon di materi.json memakai kosakata ikon; ini menjembatani ke adegan.
+    Adegan sengaja lebih sedikit daripada ikon — beberapa topik berbagi gambar
+    yang sama daripada dipaksakan punya ilustrasi sendiri. */
 export function ilustrasiModul(ikon: string): NamaIlustrasi {
   const peta: Record<string, NamaIlustrasi> = {
     kartu: "kartu",
@@ -315,7 +317,13 @@ export function ilustrasiModul(ikon: string): NamaIlustrasi {
     kunci: "kunci",
     waspada: "waspada",
     qr: "qris",
+    pindai: "qris",
     lonceng: "lonceng",
+    transfer: "kartu",
+    dompet: "kartu",
+    ponsel: "kartu",
+    tautan: "waspada",
+    peka: "adukan",
   };
   return peta[ikon] ?? "kartu";
 }

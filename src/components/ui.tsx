@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { TriangleAlert, type LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import type { Warna } from "@/lib/konten";
+import type { Warna } from "@/lib/tipe";
 
 type Status = "kosong" | "berjalan" | "selesai";
 

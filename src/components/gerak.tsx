@@ -16,90 +16,60 @@ import { useEffect, useRef, type ReactNode } from "react";
  */
 
 const HALUS = [0.2, 0, 0, 1] as const;
-const TERLIHAT = { opacity: 1, y: 0 };
 
 /**
- * Catatan penting soal mode hemat gerak.
+ * Pembagian tugas: animasi KEMUNCULAN ditangani CSS, animasi INTERAKSI
+ * ditangani pustaka gerak.
  *
- * Jangan memakai `initial={false}` untuk mematikan animasi: motion memang
- * melewati animasinya, tapi gaya `opacity: 0` hasil render server tetap
- * menempel — dan kontennya tidak pernah terlihat. Yang benar adalah membuat
- * keadaan awal langsung sama dengan keadaan akhir.
+ * Alasannya keterbacaan, bukan ukuran bundel. Elemen yang keadaan awalnya
+ * `opacity: 0` lewat JavaScript akan tetap tak terlihat sampai bundel selesai
+ * diunduh dan dihidrasi — di ponsel kelas menengah dengan sinyal seadanya itu
+ * berarti halaman kosong selama beberapa detik. CSS berjalan pada cat pertama,
+ * jadi isinya tidak pernah bergantung pada JavaScript untuk menjadi terlihat.
  *
- * Jenis elemennya juga tidak boleh berubah mengikuti `useReducedMotion`,
- * karena nilai hook itu berbeda antara server dan klien.
+ * Konsekuensinya `Muncul`, `Berurutan`, `Anak`, dan `Rayakan` cuma pembungkus
+ * dengan kelas CSS — tanpa hook, jadi aman dipakai di komponen server juga.
+ * Mode hemat gerak ditangani `@media (prefers-reduced-motion)` di globals.css.
  */
 
-/** Muncul sekali saat masuk layar: naik sedikit sambil memudar masuk. */
+/** Naik sedikit sambil memudar masuk. Murni CSS — lihat catatan di atas. */
 export function Muncul({
   children,
   tunda = 0,
-  jarak = 12,
   className = "",
 }: {
   children: ReactNode;
   tunda?: number;
-  jarak?: number;
   className?: string;
 }) {
-  const hemat = useReducedMotion();
-
   return (
-    <motion.div
-      className={className}
-      initial={hemat ? TERLIHAT : { opacity: 0, y: jarak }}
-      transition={{ duration: hemat ? 0 : 0.4, delay: hemat ? 0 : tunda, ease: HALUS }}
-      viewport={{ once: true, margin: "-40px" }}
-      whileInView={TERLIHAT}
+    <div
+      className={`gerak-muncul ${className}`}
+      style={tunda ? { animationDelay: `${tunda}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
 /**
  * Wadah daftar: anak-anaknya muncul berurutan, bukan serentak.
- * Jeda sengaja pendek (60 ms) — cukup untuk mengarahkan mata dari atas ke
- * bawah, tidak sampai membuat orang menunggu.
+ * Jeda 60 ms — cukup untuk mengarahkan mata dari atas ke bawah tanpa
+ * membuat orang menunggu. Jedanya diatur `:nth-child` di globals.css.
  */
 export function Berurutan({
   children,
   className = "",
-  jeda = 0.06,
 }: {
   children: ReactNode;
   className?: string;
-  jeda?: number;
 }) {
-  const hemat = useReducedMotion();
-
-  return (
-    <motion.div
-      className={className}
-      initial="sembunyi"
-      variants={{ tampil: { transition: { staggerChildren: hemat ? 0 : jeda } } }}
-      viewport={{ once: true, margin: "-40px" }}
-      whileInView="tampil"
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={`gerak-berurutan ${className}`}>{children}</div>;
 }
 
+/** Satu butir di dalam `Berurutan`. Jedanya ditentukan urutannya di CSS. */
 export function Anak({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const hemat = useReducedMotion();
-
-  return (
-    <motion.div
-      className={className}
-      variants={{
-        sembunyi: hemat ? TERLIHAT : { opacity: 0, y: 14 },
-        tampil: { ...TERLIHAT, transition: { duration: hemat ? 0 : 0.38, ease: HALUS } },
-      }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={className}>{children}</div>;
 }
 
 /**
@@ -176,23 +146,6 @@ export function Angka({
   );
 }
 
-/** Panel yang naik dari bawah layar — umpan balik kuis dan simulasi. */
-export function PanelBawah({ children, kunci }: { children: ReactNode; kunci: string }) {
-  const hemat = useReducedMotion();
-
-  return (
-    <motion.div
-      animate={{ y: 0, opacity: 1 }}
-      className="fixed inset-x-0 bottom-0 z-50 rounded-t-kartu border-t border-garis bg-white px-5 pt-4 pb-6 shadow-[0_-4px_20px_rgb(11_27_51/0.08)] md:px-8"
-      initial={hemat ? { y: 0, opacity: 1 } : { y: 40, opacity: 0 }}
-      key={kunci}
-      transition={{ type: "spring", stiffness: 320, damping: 32 }}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
 /**
  * Konten yang bertukar di tempat — soal kuis, hasil saringan daftar.
  * Yang lama keluar dulu (`mode="wait"`) supaya tidak ada dua isi bertumpuk;
@@ -260,18 +213,7 @@ export function Getar({
 
 /** Momen perayaan: sekali, pada hasil kuis. Tidak dipakai di tempat lain. */
 export function Rayakan({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const hemat = useReducedMotion();
-
-  return (
-    <motion.div
-      animate={{ scale: 1, opacity: 1 }}
-      className={className}
-      initial={hemat ? { scale: 1, opacity: 1 } : { scale: 0.72, opacity: 0 }}
-      transition={{ type: "spring", stiffness: 220, damping: 16, delay: 0.05 }}
-    >
-      {children}
-    </motion.div>
-  );
+  return <div className={`gerak-rayakan ${className}`}>{children}</div>;
 }
 
 export { motion };

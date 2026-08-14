@@ -1,25 +1,27 @@
 import { notFound } from "next/navigation";
 import AppShell from "@/components/AppShell";
-import IsiModul from "@/components/IsiModul";
-import { modul } from "@/lib/konten";
+import IsiTopik from "@/components/IsiTopik";
+import { ambilMasalah, ambilTopik, cariKategori } from "@/lib/konten";
 
-export function generateStaticParams() {
-  return modul.map((m) => ({ id: m.id }));
-}
-
-export default async function HalamanModul({ params }: { params: Promise<{ id: string }> }) {
+export default async function HalamanMateri({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const i = modul.findIndex((m) => m.id === id);
+  const [topik, masalah] = await Promise.all([ambilTopik(), ambilMasalah()]);
+
+  const i = topik.findIndex((t) => t.id === id);
   if (i === -1) notFound();
+
+  const t = topik[i];
+  const panduan = masalah.find((m) => m.materiTerkait === t.id);
+  const kategori = await cariKategori(t.kategori);
 
   return (
     <AppShell>
-      <IsiModul
-        m={modul[i]}
-        nomorUrut={i + 1}
-        sebelum={modul[i - 1] && { id: modul[i - 1].id, judul: modul[i - 1].judul }}
-        sesudah={modul[i + 1] && { id: modul[i + 1].id, judul: modul[i + 1].judul }}
-        total={modul.length}
+      <IsiTopik
+        kategori={kategori?.nama}
+        panduan={panduan && { id: panduan.id, label: panduan.label }}
+        sebelum={topik[i - 1] && { id: topik[i - 1].id, judul: topik[i - 1].judul }}
+        sesudah={topik[i + 1] && { id: topik[i + 1].id, judul: topik[i + 1].judul }}
+        t={t}
       />
     </AppShell>
   );

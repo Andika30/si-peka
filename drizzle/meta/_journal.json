@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1786639993834,
+      "tag": "0000_parched_hairball",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1786641641882,
+      "tag": "0001_sloppy_fabian_cortez",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1786643878652,
+      "tag": "0002_illegal_lord_tyger",
+      "breakpoints": true
+    }
+  ]
+}

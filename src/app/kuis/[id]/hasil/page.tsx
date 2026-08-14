@@ -1,15 +1,17 @@
 import { notFound } from "next/navigation";
+import AppShell from "@/components/AppShell";
 import HasilKuis from "@/components/HasilKuis";
-import { cariModul, modul } from "@/lib/konten";
-
-export function generateStaticParams() {
-  return modul.map((m) => ({ id: m.id }));
-}
+import { cariKuis, cariTopik } from "@/lib/konten";
 
 export default async function HalamanHasilKuis({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const m = cariModul(id);
-  if (!m) notFound();
+  const k = await cariKuis(id);
+  const t = k && (await cariTopik(k.materiTerkait));
+  if (!k || !t) notFound();
 
-  return <HasilKuis m={m} />;
+  return (
+    <AppShell>
+      <HasilKuis k={k} t={t} />
+    </AppShell>
+  );
 }

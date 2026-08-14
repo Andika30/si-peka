@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useState } from "react";
 import { BookOpen, Gamepad2, Gavel, LayoutGrid, MessageSquare } from "lucide-react";
 import AppShell from "@/components/AppShell";
 import Ilustrasi from "@/components/Ilustrasi";
 import { Chip, Halaman, Judul, Kartu, Tombol } from "@/components/ui";
-import type { Warna } from "@/lib/konten";
+import type { Warna } from "@/lib/tipe";
+import { kirimFeedback, type HasilKirimFeedback } from "@/app/aksi-peserta";
+
+const AWAL: HasilKirimFeedback = {};
 
 const JENIS: { id: string; label: string; Ikon: typeof BookOpen; warna: Warna }[] = [
   { id: "materi", label: "Materi", Ikon: BookOpen, warna: "adukan" },
@@ -20,9 +23,9 @@ const BATAS = 500;
 export default function Feedback() {
   const [pilih, setPilih] = useState("materi");
   const [komentar, setKomentar] = useState("");
-  const [terkirim, setTerkirim] = useState(false);
+  const [hasil, kirim, sedang] = useActionState(kirimFeedback, AWAL);
 
-  if (terkirim) {
+  if (hasil.berhasil) {
     return (
       <AppShell>
         <Halaman sempit>
@@ -30,17 +33,12 @@ export default function Feedback() {
             <Ilustrasi className="mx-auto mb-4 w-48" nama="feedback" warna="peduli" />
             <h1 className="text-display text-tinta">Terima kasih</h1>
             <p className="mt-2 text-isi text-tinta-70">
-              Masukanmu tersimpan di perangkat ini dan akan dibaca saat evaluasi media.
+Masukanmu terkirim dan akan dibaca saat evaluasi media. Yang tersimpan hanya
+              tulisanmu — tanpa nama, tanpa kontak, tanpa penanda perangkat.
             </p>
             <div className="mt-8 flex flex-col gap-2">
               <Tombol href="/beranda">Kembali ke beranda</Tombol>
-              <Tombol
-                jenis="teks"
-                onClick={() => {
-                  setTerkirim(false);
-                  setKomentar("");
-                }}
-              >
+<Tombol href="/feedback" jenis="teks">
                 Tulis masukan lain
               </Tombol>
             </div>
@@ -53,6 +51,8 @@ export default function Feedback() {
   return (
     <AppShell>
       <Halaman sempit>
+        <form action={kirim}>
+        <input name="jenis" type="hidden" value={pilih} />
         <Judul sub="Masukan kamu membantu kami memperbaiki media ini sebelum dipakai lebih luas.">
           Kirim masukan
         </Judul>
@@ -96,6 +96,7 @@ export default function Feedback() {
             className="min-h-40 w-full resize-y rounded-dalam border border-garis bg-kertas p-4 text-isi text-tinta placeholder:text-tinta-55"
             id="komentar"
             maxLength={BATAS}
+            name="komentar"
             onChange={(e) => setKomentar(e.target.value)}
             placeholder="Tuliskan komentar atau saran kamu di sini…"
             value={komentar}
@@ -110,13 +111,20 @@ export default function Feedback() {
           </div>
         </Kartu>
 
+        {hasil.galat ? (
+          <p className="mb-4 rounded-dalam border border-waspada/30 bg-waspada-lembut p-3 text-kecil font-bold text-waspada">
+            {hasil.galat}
+          </p>
+        ) : null}
+
         <Tombol
           className="w-full sm:w-auto"
-          disabled={komentar.trim().length === 0}
-          onClick={() => setTerkirim(true)}
+          disabled={sedang || komentar.trim().length === 0}
+          type="submit"
         >
-          Kirim masukan
+          {sedang ? "Mengirim…" : "Kirim masukan"}
         </Tombol>
+        </form>
       </Halaman>
     </AppShell>
   );

@@ -1,0 +1,118 @@
+/**
+ * Bentuk isi aplikasi.
+ *
+ * Sengaja dipisah dari `konten.ts`. Berkas itu menyentuh basis data dan
+ * ditandai `server-only`; komponen klien tetap perlu bentuk datanya untuk
+ * menerima props. Dengan memisahkannya, tipe bisa diimpor dari mana saja
+ * tanpa ikut menarik koneksi MySQL ke dalam berkas klien.
+ *
+ * Bentuk di sini mengikuti kebutuhan tampilan, bukan bentuk tabel. Pemetaan
+ * dari baris tabel ke bentuk ini dikerjakan di `konten.ts`.
+ */
+
+export type Warna = "institusi" | "adukan" | "peduli" | "kenali" | "waspada" | "ungu" | "emas";
+
+export type Kategori = {
+  id: string;
+  nama: string;
+  ringkas: string;
+  warna: Warna;
+  ikon: string;
+};
+
+export type Topik = {
+  id: string;
+  kategori: string;
+  judul: string;
+  ringkas: string;
+  ikon: string;
+  warna: Warna;
+  isi: { paragraf: string[]; poin: string[]; peringatan?: string };
+  sumber: string;
+  /** Menghubungkan materi ke kuisnya: dasar rekomendasi setelah kuis. */
+  kuisTerkait: string;
+};
+
+export type SoalKuis = {
+  pertanyaan: string;
+  opsi: string[];
+  kunci: number;
+  pembahasan: string;
+};
+
+export type Kuis = {
+  id: string;
+  judul: string;
+  materiTerkait: string;
+  soal: SoalKuis[];
+};
+
+export type OpsiSkenario = {
+  teks: string;
+  aman: boolean;
+  /** Hanya ada pada pilihan keliru: akibat yang diperlihatkan lebih dulu. */
+  konsekuensi?: string;
+};
+
+export type Skenario = {
+  id: string;
+  konteks: { label: string; nilai: string }[];
+  situasi: string;
+  opsi: OpsiSkenario[];
+  alasan: string;
+};
+
+export type Masalah = {
+  id: string;
+  aktif: boolean;
+  label: string;
+  ringkas: string;
+  judul: string;
+  pembuka: string;
+  segera?: string;
+  peringatanUtama?: string;
+  langkah: string[];
+  pihak: string;
+  /** Hanya masalah yang sudah melewati penyelenggara yang membuka jalur BI. */
+  eskalasiBI: boolean;
+  materiTerkait: string;
+  sumber: string;
+};
+
+export type Layanan = {
+  id: string;
+  nama: string;
+  ringkas: string;
+  ikon: string;
+};
+
+export type Penyelenggara = {
+  id: string;
+  nama: string;
+  jenis: string;
+  telepon: string;
+  aplikasi: string;
+  situs: string;
+  diverifikasi: string;
+};
+
+export type BankIndonesia = {
+  nama: string;
+  telepon: string;
+  situs: string;
+  situsLabel: string;
+  diverifikasi: string;
+};
+
+export type ButirSus = { teks: string; positif: boolean };
+
+/**
+ * Ringkasan isi yang dibutuhkan komponen klien untuk menghitung progres dan
+ * menyusun riwayat. Dikirim dari halaman server sebagai props — supaya
+ * `skor.ts`, yang hidup di peramban, tidak perlu tahu apa pun soal basis data.
+ */
+export type RingkasKonten = {
+  topik: Pick<Topik, "id" | "judul" | "ringkas" | "warna" | "kuisTerkait">[];
+  kuis: Pick<Kuis, "id" | "judul" | "materiTerkait">[];
+  jumlahSkenario: number;
+};

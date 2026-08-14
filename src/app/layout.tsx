@@ -29,9 +29,26 @@ export const viewport: Viewport = {
   themeColor: "#0e2f6b",
 };
 
+/**
+ * Pilihan buka-tutup sidebar dipasang sebelum halaman digambar.
+ *
+ * Kalau menunggu React hidrasi, sidebar sempat tampil lebar lalu menguncup —
+ * satu lompatan tata letak di setiap perpindahan halaman. Skrip sekecil ini
+ * berjalan lebih dulu, jadi lebarnya sudah benar sejak gambar pertama.
+ *
+ * Kunjungan pertama belum punya pilihan tersimpan, jadi bawaannya ditentukan
+ * di sini: sidebar penuh kalau layarnya memang lapang, rail kalau tidak.
+ */
+const PILIHAN_SIDEBAR = `try{var r=document.documentElement,s=localStorage.getItem("peka.sisi");r.dataset.sisi=s==="lebar"||s==="kuncup"?s:matchMedia("(min-width:80rem)").matches?"lebar":"kuncup"}catch(e){}`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="id">
+    // suppressHydrationWarning: skrip di atas mengubah atribut <html> sebelum
+    // React hidrasi, jadi markup server dan klien memang sengaja berbeda.
+    <html lang="id" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: PILIHAN_SIDEBAR }} />
+      </head>
       <body className={`${jakarta.variable} ${plexMono.variable}`}>{children}</body>
     </html>
   );

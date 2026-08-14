@@ -94,6 +94,67 @@
   }
 }
 
+/* ── Sidebar yang bisa dibuka-tutup ─────────────────────────────────────────
+   Keadaannya ditulis sebagai atribut di <html> — "lebar" atau "kuncup" — dan
+   CSS-lah yang menerjemahkannya. Dua alasan:
+
+   1. Markup sidebar tidak ikut berubah, jadi tidak ada ketidakcocokan hidrasi
+      dan keadaannya selamat saat berpindah halaman (tiap halaman merender
+      AppShell-nya sendiri, jadi state React akan hilang).
+   2. Skrip kecil di <head> memasang atributnya sebelum halaman digambar, jadi
+      tidak ada kedipan lebar saat dimuat.
+
+   Skrip itu selalu mengisi atributnya — memilih sendiri bawaan yang pantas
+   untuk ukuran layar saat kunjungan pertama. Karena itu CSS di bawah cukup
+   mengenal dua keadaan, bukan menduplikasi tiap aturan ke breakpoint. */
+:root {
+  --lebar-sisi: 0px;
+}
+
+@media (width >= 48rem) {
+  /* Tanpa skrip (JS mati), rail yang berlaku — bukan sidebar berlebar nol. */
+  :root {
+    --lebar-sisi: 5rem;
+  }
+  :root[data-sisi="lebar"] {
+    --lebar-sisi: 16rem;
+  }
+}
+
+.sisi {
+  width: var(--lebar-sisi);
+}
+.isi-sisi {
+  margin-left: var(--lebar-sisi);
+}
+
+/* Bagian yang hanya berarti saat sidebarnya lebar: label menu, wordmark,
+   dan kartu keterangan di kaki. `revert` dipakai, bukan `block` atau
+   `inline`, supaya tiap elemen kembali ke tampilan aslinya. */
+.label-sisi {
+  display: none;
+}
+:root[data-sisi="lebar"] .label-sisi {
+  display: revert;
+}
+
+/* Saat menguncup semuanya rata tengah di dalam rail; saat lebar rata kiri.
+   Tanpa ini ikon-ikonnya melenceng dari sumbu rail dan terlihat asal. */
+.baris-sisi {
+  justify-content: center;
+}
+:root[data-sisi="lebar"] .baris-sisi {
+  justify-content: flex-start;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sisi,
+  .isi-sisi {
+    transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1),
+      margin-left 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
 @layer base {
   body {
     background: var(--color-kertas);
@@ -111,6 +172,29 @@
 
 @utility gradien-merek {
   background-image: linear-gradient(150deg, #1d6fe0 0%, #0e2f6b 62%, #0a2350 100%);
+}
+
+/* Tekstur latar dari motif finder pattern kode QR — bahan milik merek sendiri,
+   bukan pola hias generik. Sengaja sangat samar: tugasnya memberi kedalaman
+   pada bidang gelap, bukan menarik perhatian. */
+@utility pola-finder {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Crect x='10' y='10' width='16' height='16' fill='none' stroke='%23ffffff' stroke-opacity='0.13' stroke-width='2'/%3E%3Crect x='15' y='15' width='6' height='6' fill='%23ffffff' fill-opacity='0.13'/%3E%3C/svg%3E");
+  background-size: 56px 56px;
+}
+
+/* Huruf raksasa di latar kartu pilar. Dipotong wadahnya, jadi ia terbaca
+   sebagai tekstur — bukan teks yang ikut dibaca. */
+@utility huruf-hantu {
+  position: absolute;
+  right: -0.5rem;
+  bottom: -2.5rem;
+  font-size: 11rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  opacity: 0.07;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* ── Finder pattern ───────────────────────────────────────────────────────
@@ -193,6 +277,55 @@
 }
 
 @keyframes peka-isi { from { height: 0; } to { height: var(--skor, 0%); } }
+
+/* ── Kemunculan: CSS, bukan JavaScript ────────────────────────────────────
+   Animasi masuk sengaja ditulis sebagai CSS, bukan lewat pustaka gerak.
+   Alasannya bukan soal ukuran bundel, tapi keterbacaan: elemen yang keadaan
+   awalnya `opacity: 0` lewat JavaScript akan tetap tak terlihat sampai bundel
+   selesai diunduh dan dihidrasi. Di ponsel kelas menengah dengan sinyal
+   seadanya, itu berarti halaman kosong selama beberapa detik.
+
+   CSS berjalan pada cat pertama. Isinya bergerak masuk, tapi tidak pernah
+   bergantung pada JavaScript untuk menjadi terlihat. */
+
+@keyframes peka-masuk {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.gerak-muncul {
+  animation: peka-masuk 400ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+
+/* Pembungkus seluruh halaman. Hanya memudar, tanpa geser — kalau ikut
+   bergeser, ia akan bertabrakan dengan gerak elemen di dalamnya. */
+@keyframes peka-halaman { from { opacity: 0; } to { opacity: 1; } }
+.gerak-halaman { animation: peka-halaman 260ms ease-out both; }
+
+/* Anak-anak wadah berurutan muncul satu per satu. Jeda 60 ms cukup untuk
+   mengarahkan mata dari atas ke bawah tanpa membuat orang menunggu. */
+.gerak-berurutan > * {
+  animation: peka-masuk 380ms cubic-bezier(0.2, 0, 0, 1) both;
+}
+.gerak-berurutan > *:nth-child(1)  { animation-delay: 0ms; }
+.gerak-berurutan > *:nth-child(2)  { animation-delay: 60ms; }
+.gerak-berurutan > *:nth-child(3)  { animation-delay: 120ms; }
+.gerak-berurutan > *:nth-child(4)  { animation-delay: 180ms; }
+.gerak-berurutan > *:nth-child(5)  { animation-delay: 240ms; }
+.gerak-berurutan > *:nth-child(6)  { animation-delay: 300ms; }
+.gerak-berurutan > *:nth-child(7)  { animation-delay: 340ms; }
+.gerak-berurutan > *:nth-child(8)  { animation-delay: 380ms; }
+.gerak-berurutan > *:nth-child(9)  { animation-delay: 420ms; }
+.gerak-berurutan > *:nth-child(n + 10) { animation-delay: 460ms; }
+
+@keyframes peka-rayakan {
+  from { opacity: 0; transform: scale(0.72); }
+  60%  { transform: scale(1.04); }
+  to   { opacity: 1; transform: none; }
+}
+.gerak-rayakan {
+  animation: peka-rayakan 620ms cubic-bezier(0.2, 0, 0, 1) both;
+}
 
 /* ── Bar progres ─────────────────────────────────────────────────────────── */
 
@@ -279,6 +412,10 @@
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  .gerak-muncul,
+  .gerak-halaman,
+  .gerak-berurutan > *,
+  .gerak-rayakan { animation: none; opacity: 1; transform: none; }
   .peka-mark__isi { height: var(--skor, 0%); }
   .progres__isi, .bar-skor__sesudah { transform: scaleX(1); }
 }

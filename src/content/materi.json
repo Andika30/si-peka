@@ -1,0 +1,261 @@
+{
+  "catatan": "Materi dikelompokkan menurut JENIS LAYANAN dan TOPIK KEAMANAN — bukan menurut PeKA. PeKA ditempatkan sebagai salah satu materi acuan yang relevan, bukan sebagai struktur utama sistem.",
+  "kategori": [
+    {
+      "id": "pembayaran-digital",
+      "nama": "Pembayaran Digital",
+      "ringkas": "Mengenal layanan pembayaran dan cara memakainya dengan aman",
+      "warna": "adukan",
+      "ikon": "kartu"
+    },
+    {
+      "id": "keamanan-transaksi",
+      "nama": "Keamanan Transaksi",
+      "ringkas": "Menjaga data, mengenali penipuan, dan bertindak saat ada yang janggal",
+      "warna": "waspada",
+      "ikon": "perisai"
+    }
+  ],
+  "topik": [
+    {
+      "id": "mengenal-qris",
+      "kategori": "pembayaran-digital",
+      "judul": "Mengenal QRIS",
+      "ringkas": "Standar kode QR pembayaran nasional dan cara kerjanya",
+      "ikon": "qr",
+      "warna": "adukan",
+      "isi": {
+        "paragraf": [
+          "QRIS adalah standar kode QR pembayaran nasional yang ditetapkan Bank Indonesia. Satu kode bisa dipindai oleh aplikasi pembayaran mana pun yang sudah mendukung QRIS, sehingga merchant cukup memasang satu kode untuk semua aplikasi.",
+          "Ada dua bentuk yang umum kamu temui. QRIS statis berupa stiker tetap dan nominalnya kamu isi sendiri. QRIS dinamis muncul di layar kasir dengan nominal yang sudah terisi."
+        ],
+        "poin": [
+          "Satu kode berlaku untuk semua aplikasi pembayaran yang mendukung QRIS",
+          "Nama merchant selalu muncul di layar ponselmu sebelum pembayaran diteruskan",
+          "Pada QRIS statis, nominal kamu isi sendiri — periksa ulang sebelum menekan bayar"
+        ]
+      },
+      "sumber": "Bank Indonesia — Sistem Pembayaran",
+      "kuisTerkait": "kuis-qris"
+    },
+    {
+      "id": "keamanan-qris",
+      "kategori": "keamanan-transaksi",
+      "judul": "Keamanan QRIS",
+      "ringkas": "Memeriksa stiker dan membaca layar konfirmasi sebelum membayar",
+      "ikon": "pindai",
+      "warna": "waspada",
+      "isi": {
+        "paragraf": [
+          "Karena kodenya berupa stiker fisik, risiko terbesar QRIS sederhana: stiker bisa ditempel orang lain di atas stiker asli. Pertahanan terbaiknya juga sederhana — membaca nama penerima di layar sebelum membayar.",
+          "Nama merchant yang tidak cocok dengan nama toko adalah tanda paling umum bahwa kode itu bukan milik toko tersebut."
+        ],
+        "poin": [
+          "Periksa apakah ada stiker lain yang tertempel di atas stiker QRIS",
+          "Cocokkan nama penerima di layar dengan nama toko sebelum membayar",
+          "Kalau nama tidak cocok, hentikan dan tanyakan kepada kasir",
+          "Simpan bukti transaksi setelah pembayaran berhasil"
+        ]
+      },
+      "sumber": "Bank Indonesia — Pelindungan Konsumen",
+      "kuisTerkait": "kuis-keamanan-qris"
+    },
+    {
+      "id": "mengenal-bifast",
+      "kategori": "pembayaran-digital",
+      "judul": "Mengenal BI-FAST",
+      "ringkas": "Infrastruktur transfer dana cepat milik Bank Indonesia",
+      "ikon": "transfer",
+      "warna": "adukan",
+      "isi": {
+        "paragraf": [
+          "BI-FAST adalah infrastruktur transfer dana Bank Indonesia yang berjalan cepat dan tersedia 24 jam sehari, tujuh hari seminggu. Kamu memakainya lewat aplikasi bank yang sudah kamu punya, bukan lewat aplikasi terpisah.",
+          "Sebelum dana diteruskan, aplikasi menampilkan nama penerima. Layar itu adalah kesempatan terakhirmu memeriksa sebelum transaksi berhasil."
+        ],
+        "poin": [
+          "Diakses lewat aplikasi bank, bukan aplikasi tersendiri",
+          "Tersedia setiap saat, termasuk di luar jam kerja",
+          "Nama penerima selalu ditampilkan sebelum transfer diteruskan"
+        ]
+      },
+      "sumber": "Bank Indonesia — BI-FAST",
+      "kuisTerkait": "kuis-bifast"
+    },
+    {
+      "id": "uang-elektronik",
+      "kategori": "pembayaran-digital",
+      "judul": "Uang Elektronik & Dompet Digital",
+      "ringkas": "Saldo tersimpan di aplikasi dan cara mengamankannya",
+      "ikon": "dompet",
+      "warna": "adukan",
+      "isi": {
+        "paragraf": [
+          "Uang elektronik menyimpan saldomu di aplikasi penyelenggara, terpisah dari rekening bank. Karena saldonya melekat pada akun aplikasi, keamanan akun itulah yang menentukan keamanan dananya.",
+          "Penyelenggara uang elektronik yang sah terdaftar dan berizin di Bank Indonesia. Daftarnya terbuka dan bisa kamu periksa sendiri."
+        ],
+        "poin": [
+          "Pakai hanya aplikasi dari penyelenggara berizin Bank Indonesia",
+          "Unduh aplikasi dari toko aplikasi resmi, bukan dari tautan yang dikirim orang",
+          "Aktifkan kunci layar dan kunci aplikasi bila tersedia",
+          "Periksa mutasi saldo secara berkala"
+        ]
+      },
+      "sumber": "Bank Indonesia — Penyelenggara Jasa Pembayaran",
+      "kuisTerkait": "kuis-uang-elektronik"
+    },
+    {
+      "id": "mobile-banking",
+      "kategori": "pembayaran-digital",
+      "judul": "Mobile & Internet Banking",
+      "ringkas": "Mengakses rekening dari ponsel dengan aman",
+      "ikon": "ponsel",
+      "warna": "adukan",
+      "isi": {
+        "paragraf": [
+          "Mobile banking memberi akses penuh ke rekeningmu dari ponsel. Karena itu, perangkat dan akunnya perlu dijaga seperti kamu menjaga kartu dan PIN di dunia nyata.",
+          "Jaringan wifi publik dan perangkat pinjaman adalah dua tempat paling rawan untuk membuka aplikasi perbankan."
+        ],
+        "poin": [
+          "Hindari membuka aplikasi perbankan di wifi publik atau perangkat orang lain",
+          "Keluar dari aplikasi setelah selesai, jangan hanya menutup layar",
+          "Perbarui aplikasi ke versi terbaru dari toko aplikasi resmi",
+          "Segera hubungi bank kalau ponselmu hilang"
+        ]
+      },
+      "sumber": "Bank Indonesia — Pelindungan Konsumen",
+      "kuisTerkait": "kuis-mobile-banking"
+    },
+    {
+      "id": "pin-otp",
+      "kategori": "keamanan-transaksi",
+      "judul": "Perlindungan PIN, Password & OTP",
+      "ringkas": "Tiga kunci yang tidak boleh berpindah tangan",
+      "ikon": "kunci",
+      "warna": "waspada",
+      "isi": {
+        "paragraf": [
+          "PIN, password, dan OTP adalah informasi rahasia yang hanya boleh kamu ketahui sendiri. Jangan pernah membagikannya kepada siapa pun, termasuk pihak yang mengaku dari bank atau penyedia layanan.",
+          "OTP punya sifat khusus: ia adalah izin sekali pakai untuk menyelesaikan sebuah transaksi. Kalau kamu menerima OTP padahal tidak sedang bertransaksi, artinya ada orang lain yang sedang mencoba memakai akunmu."
+        ],
+        "poin": [
+          "OTP kamu masukkan sendiri di aplikasi resmi, bukan kamu bacakan kepada siapa pun",
+          "OTP yang datang tanpa kamu minta adalah tanda percobaan pengambilalihan akun",
+          "Tidak ada petugas resmi yang berhak meminta PIN, password, atau OTP",
+          "Ganti PIN kalau kamu merasa pernah menyebutkannya"
+        ],
+        "peringatan": "Tidak ada petugas resmi mana pun — termasuk Bank Indonesia — yang berhak meminta PIN, password, atau OTP kamu."
+      },
+      "sumber": "Bank Indonesia — Pelindungan Konsumen",
+      "kuisTerkait": "kuis-pin-otp"
+    },
+    {
+      "id": "penipuan-digital",
+      "kategori": "keamanan-transaksi",
+      "judul": "Mengenali Penipuan Digital",
+      "ringkas": "Pola yang berulang pada hampir semua modus penipuan",
+      "ikon": "waspada",
+      "warna": "waspada",
+      "isi": {
+        "paragraf": [
+          "Modus penipuan berganti-ganti bentuk, tapi polanya jarang berubah: menciptakan tekanan waktu, memakai nama pihak yang kamu percaya, lalu meminta sesuatu yang seharusnya rahasia.",
+          "Kalau kamu mengenali polanya, kamu tidak perlu menghafal setiap modus baru. Yang perlu diwaspadai bukan ceritanya, melainkan permintaannya."
+        ],
+        "poin": [
+          "Tekanan waktu dipakai supaya kamu tidak sempat memeriksa",
+          "Nama bank, kurir, atau instansi dipakai untuk meminjam kepercayaan",
+          "Hadiah atau denda mendadak adalah umpan yang paling sering dipakai",
+          "Yang perlu diwaspadai adalah apa yang diminta darimu, bukan siapa yang mengaku"
+        ]
+      },
+      "sumber": "Bank Indonesia — Modul Edukasi Keuangan Digital",
+      "kuisTerkait": "kuis-penipuan"
+    },
+    {
+      "id": "tautan-mencurigakan",
+      "kategori": "keamanan-transaksi",
+      "judul": "QR & Tautan Mencurigakan",
+      "ringkas": "Memeriksa sebelum memindai atau mengetuk",
+      "ikon": "tautan",
+      "warna": "waspada",
+      "isi": {
+        "paragraf": [
+          "Kode QR dan tautan pendek sama-sama menyembunyikan tujuan aslinya. Keduanya cuma pintu — yang menentukan aman atau tidak adalah ke mana pintu itu membawamu.",
+          "Halaman palsu biasanya meniru tampilan aplikasi resmi lalu meminta data yang tidak pernah diminta aplikasi asli, seperti PIN atau OTP."
+        ],
+        "poin": [
+          "Tautan pendek menyembunyikan alamat asli — jangan ketuk dari pesan tak dikenal",
+          "Semua status transaksi selalu bisa diperiksa sendiri lewat aplikasi resmi",
+          "Halaman resmi tidak pernah meminta PIN atau OTP untuk 'verifikasi'",
+          "Unduh aplikasi hanya dari toko aplikasi resmi"
+        ]
+      },
+      "sumber": "Bank Indonesia — Pelindungan Konsumen",
+      "kuisTerkait": "kuis-tautan"
+    },
+    {
+      "id": "transaksi-mencurigakan",
+      "kategori": "keamanan-transaksi",
+      "judul": "Transaksi Tidak Dikenal",
+      "ringkas": "Apa yang dilakukan saat ada yang tidak beres",
+      "ikon": "lonceng",
+      "warna": "waspada",
+      "isi": {
+        "paragraf": [
+          "Menemukan transaksi yang tidak kamu lakukan adalah situasi mendesak. Semakin cepat dilaporkan, semakin besar peluang akses yang tidak sah dihentikan sebelum kerugian bertambah.",
+          "Urutan penanganannya penting: amankan akses lebih dulu, baru laporkan — dan laporkan ke penyelenggara yang kamu pakai."
+        ],
+        "poin": [
+          "Periksa mutasi secara berkala, jangan menunggu ada masalah",
+          "Amankan akun lebih dulu sebelum menyusun laporan",
+          "Siapkan bukti: waktu, nominal, dan nama penerima",
+          "Penyelenggara adalah pintu pertama, bukan Bank Indonesia"
+        ]
+      },
+      "sumber": "Bank Indonesia — Pelindungan Konsumen",
+      "kuisTerkait": "kuis-transaksi-mencurigakan"
+    },
+    {
+      "id": "perlindungan-data",
+      "kategori": "keamanan-transaksi",
+      "judul": "Perlindungan Data Pribadi",
+      "ringkas": "Data mana yang boleh dibagikan dan mana yang tidak",
+      "ikon": "perisai",
+      "warna": "waspada",
+      "isi": {
+        "paragraf": [
+          "Tidak semua data pribadi punya bobot yang sama. Nama dan nomor telepon relatif mudah didapat siapa pun. Yang benar-benar berbahaya adalah data yang bisa dipakai mengakses akunmu.",
+          "Penipu sering mengumpulkan potongan data dari berbagai tempat, lalu memakainya agar terdengar meyakinkan. Kalau seseorang menyebutkan namamu dengan benar, itu bukan bukti dia petugas resmi."
+        ],
+        "poin": [
+          "Nama dan nomor rekening bukan rahasia — PIN, password, dan OTP baru rahasia",
+          "Menyebut data pribadimu dengan benar bukan bukti keaslian seseorang",
+          "Nomor kartu, masa berlaku, dan CVV sudah cukup untuk bertransaksi daring",
+          "Cara paling aman memastikan keaslian: kamu yang menghubungi nomor resmi"
+        ]
+      },
+      "sumber": "Bank Indonesia — Pelindungan Konsumen",
+      "kuisTerkait": "kuis-perlindungan-data"
+    },
+    {
+      "id": "peka",
+      "kategori": "keamanan-transaksi",
+      "judul": "PeKA: Peduli, Kenali, Adukan",
+      "ringkas": "Pendekatan edukasi pelindungan konsumen Bank Indonesia",
+      "ikon": "peka",
+      "warna": "peduli",
+      "isi": {
+        "paragraf": [
+          "PeKA adalah salah satu pendekatan edukasi pelindungan konsumen yang digunakan Bank Indonesia. Isinya merangkum sikap yang perlu dimiliki konsumen dalam bertransaksi — dan cocok dipakai sebagai pengingat singkat atas materi-materi keamanan lainnya.",
+          "Peduli terhadap manfaat, risiko, dan keamanan transaksi pembayaran. Kenali penyelenggara dan gunakan saluran resmi dalam bertransaksi. Adukan permasalahan kepada penyelenggara, dan kepada Bank Indonesia apabila diperlukan tindak lanjut."
+        ],
+        "poin": [
+          "Peduli — periksa sebelum membayar, bukan sesudah",
+          "Kenali — pastikan penyelenggara dan saluran yang kamu pakai resmi",
+          "Adukan — ketahui langkah dan kanal yang tepat sesuai jenis masalah"
+        ]
+      },
+      "sumber": "Bank Indonesia — Modul Edukasi Keuangan Digital",
+      "kuisTerkait": "kuis-peka"
+    }
+  ]
+}

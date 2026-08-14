@@ -1,7 +1,0 @@
-[
-  { "id": "merchant", "teks": "Pastikan merchant benar" },
-  { "id": "nominal", "teks": "Periksa nominal" },
-  { "id": "penerima", "teks": "Periksa nama penerima" },
-  { "id": "pin", "teks": "Jangan berikan PIN/OTP", "waspada": true },
-  { "id": "kanal", "teks": "Pastikan menggunakan kanal resmi" }
-]

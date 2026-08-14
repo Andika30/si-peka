@@ -1,73 +1,76 @@
 /**
- * Progres, skor, poin, dan lencana.
+ * Progres belajar dan hasil kuis.
  *
- * Semua di perangkat pengguna (localStorage). Tidak ada nama, nomor telepon,
- * atau data transaksi yang disimpan — hanya ID sesi acak, skor, dan progres.
- * Ini konsekuensi langsung dari batasan proyek: aplikasi tidak menerima
- * laporan dan tidak menyimpan data aduan.
+ * Sesuai blok konsep penelitian, yang dicatat hanya apa yang dibutuhkan untuk
+ * belajar dan berlatih. Beberapa hal sengaja TIDAK ada:
+ *
+ *  - Tidak ada poin, lencana, ranking, atau sertifikat.
+ *  - Tidak ada pretest-posttest maupun N-Gain. Website ini media pendukung
+ *    edukasi, bukan alat untuk membuktikan peningkatan literasi.
+ *  - Tidak ada data pribadi. Semua tersimpan di peramban perangkat pengguna.
+ *
+ * Yang tersisa: progres materi, hasil kuis beserta rekomendasi materi, riwayat
+ * simulasi, dan penilaian usability aplikasi.
  */
-import {
-  checklist,
-  kasus,
-  lencana,
-  modul,
-  nilaiPoin,
-  skenario,
-  soal,
-  sus,
-  type Dimensi,
-  type Lencana,
-} from "./konten";
+import type { ButirSus, RingkasKonten, Warna } from "./tipe";
 
-const KUNCI = "peka.sesi.v2";
+/* Berkas ini hidup di peramban, jadi ia TIDAK boleh menyentuh basis data.
+   Isi yang dibutuhkan — daftar materi, kuis, dan jumlah skenario — dikirim
+   halaman server sebagai argumen. Itu sebabnya beberapa fungsi di bawah
+   meminta `konten`, bukan mengimpornya sendiri. */
 
-export type Fase = "awal" | "akhir";
+const KUNCI = "peka.sesi.v3";
 
-export type HasilModul = {
-  /** Persentase benar pada kuis modul. */
+export type HasilKuis = {
   skor: number;
   benar: number;
   total: number;
+  /** ID soal yang dijawab keliru — dasar pembahasan dan rekomendasi materi. */
+  keliru: number[];
   tanggal: string;
 };
 
 export type Sesi = {
   id: string;
   mulai: string;
-  setuju: boolean;
   nama: string;
-  /** Materi modul yang sudah dibuka sampai habis. */
+  /** Topik materi yang sudah dibaca sampai habis. */
   materiSelesai: string[];
-  /** Hasil kuis per modul. */
-  kuis: Record<string, HasilModul>;
+  /** Hasil kuis per ID kuis. */
+  kuis: Record<string, HasilKuis>;
   /** Nomor skenario simulasi yang sudah dituntaskan. */
   simulasi: number[];
-  /** Jenis kasus Adukan yang sudah ditelusuri sampai halaman hasil. */
-  kasusDilihat: string[];
-  checklist: string[];
-  jawaban: Partial<Record<Fase, Record<string, number>>>;
+  /** Penilaian usability aplikasi (System Usability Scale). */
   sus?: Record<number, number>;
 };
 
+/**
+ * Sesi kosong harus DETERMINISTIK.
+ *
+ * Bentuk ini dipakai sebagai snapshot server, dan React memakai snapshot server
+ * itu juga untuk render hidrasi pertama di klien. Kalau ID atau waktu mulainya
+ * diacak di sini, server memancarkan satu nilai dan klien menghitung nilai
+ * lain — persis penyebab peringatan hydration mismatch. ID dan waktu mulai
+ * baru dibuat saat ada yang pertama kali disimpan, di `tulis()`.
+ */
 const kosong = (): Sesi => ({
-  id: (globalThis.crypto?.randomUUID?.() ?? String(Date.now())).slice(0, 8).toUpperCase(),
-  mulai: new Date().toISOString(),
-  setuju: false,
-  nama: "Peserta PeKA",
+  id: "",
+  mulai: "",
+  nama: "Pengguna",
   materiSelesai: [],
   kuis: {},
   simulasi: [],
-  kasusDilihat: [],
-  checklist: [],
-  jawaban: {},
 });
+
+const idBaru = () =>
+  (globalThis.crypto?.randomUUID?.() ?? String(Date.now())).slice(0, 8).toUpperCase();
 
 export function baca(): Sesi {
   if (typeof window === "undefined") return kosong();
   try {
     const mentah = window.localStorage.getItem(KUNCI);
     if (!mentah) return kosong();
-    // Gabung dengan bentuk kosong supaya sesi lama tanpa medan baru tetap jalan.
+    // Digabung dengan bentuk kosong supaya sesi lama tanpa medan baru tetap jalan.
     return { ...kosong(), ...(JSON.parse(mentah) as Partial<Sesi>) } as Sesi;
   } catch {
     return kosong();
@@ -75,7 +78,11 @@ export function baca(): Sesi {
 }
 
 export function tulis(ubah: (s: Sesi) => Sesi): Sesi {
-  const berikutnya = ubah(baca());
+  const kini = baca();
+  // Sesi baru diberi identitas di sini — saat ada yang benar-benar disimpan,
+  // dan hanya di klien. Membuatnya lebih awal akan merusak hidrasi.
+  const dasar = kini.id ? kini : { ...kini, id: idBaru(), mulai: new Date().toISOString() };
+  const berikutnya = ubah(dasar);
   try {
     window.localStorage.setItem(KUNCI, JSON.stringify(berikutnya));
   } catch {
@@ -113,8 +120,6 @@ export const snapshotServer = (): Sesi => SESI_SERVER;
 
 /* ── Aksi ─────────────────────────────────────────────────────────────────── */
 
-export const setujui = () => tulis((s) => ({ ...s, setuju: true }));
-
 export const gantiNama = (nama: string) => tulis((s) => ({ ...s, nama: nama.trim() || s.nama }));
 
 export const tandaiMateri = (id: string) =>
@@ -122,14 +127,15 @@ export const tandaiMateri = (id: string) =>
     s.materiSelesai.includes(id) ? s : { ...s, materiSelesai: [...s.materiSelesai, id] },
   );
 
-export const simpanKuis = (idModul: string, benar: number, total: number) =>
+export const simpanKuis = (idKuis: string, benar: number, total: number, keliru: number[]) =>
   tulis((s) => ({
     ...s,
     kuis: {
       ...s.kuis,
-      [idModul]: {
+      [idKuis]: {
         benar,
         total,
+        keliru,
         skor: Math.round((benar / total) * 100),
         tanggal: new Date().toISOString(),
       },
@@ -138,20 +144,6 @@ export const simpanKuis = (idModul: string, benar: number, total: number) =>
 
 export const tandaiSimulasi = (nomor: number) =>
   tulis((s) => (s.simulasi.includes(nomor) ? s : { ...s, simulasi: [...s.simulasi, nomor] }));
-
-export const tandaiKasus = (id: string) =>
-  tulis((s) =>
-    s.kasusDilihat.includes(id) ? s : { ...s, kasusDilihat: [...s.kasusDilihat, id] },
-  );
-
-export const simpanChecklist = (dicentang: string[]) =>
-  tulis((s) => ({ ...s, checklist: dicentang }));
-
-export const simpanJawaban = (fase: Fase, idSoal: string, pilihan: number) =>
-  tulis((s) => ({
-    ...s,
-    jawaban: { ...s.jawaban, [fase]: { ...(s.jawaban[fase] ?? {}), [idSoal]: pilihan } },
-  }));
 
 export const simpanSus = (nomor: number, nilai: number) =>
   tulis((s) => ({ ...s, sus: { ...(s.sus ?? {}), [nomor]: nilai } }));
@@ -168,24 +160,17 @@ export const hapusSesi = () => {
 
 /* ── Turunan ──────────────────────────────────────────────────────────────── */
 
-/** Progres satu modul: separuh dari membaca materi, separuh dari kuis. */
-export function progresModul(sesi: Sesi, id: string): number {
-  const materi = sesi.materiSelesai.includes(id) ? 50 : 0;
-  const kuis = sesi.kuis[id] ? 50 : 0;
-  return materi + kuis;
+export const sudahBaca = (sesi: Sesi, idTopik: string) => sesi.materiSelesai.includes(idTopik);
+
+export const materiSelesai = (sesi: Sesi) => sesi.materiSelesai.length;
+
+export const progresMateri = (sesi: Sesi, jumlahTopik: number) =>
+  jumlahTopik === 0 ? 0 : Math.round((sesi.materiSelesai.length / jumlahTopik) * 100);
+
+/** Topik pertama yang belum dibaca — dipakai kartu "Lanjutkan materi". */
+export function topikBerikutnya<T extends { id: string }>(sesi: Sesi, topik: T[]): T | undefined {
+  return topik.find((t) => !sesi.materiSelesai.includes(t.id)) ?? topik[0];
 }
-
-export const modulSelesai = (sesi: Sesi) =>
-  modul.filter((m) => progresModul(sesi, m.id) === 100).length;
-
-export function progresKeseluruhan(sesi: Sesi): number {
-  const total = modul.reduce((j, m) => j + progresModul(sesi, m.id), 0);
-  return Math.round(total / modul.length);
-}
-
-/** Modul pertama yang belum tuntas — dipakai kartu "Lanjutkan Materi". */
-export const modulBerikutnya = (sesi: Sesi) =>
-  modul.find((m) => progresModul(sesi, m.id) < 100) ?? modul[0];
 
 export function rerataKuis(sesi: Sesi): number {
   const nilai = Object.values(sesi.kuis);
@@ -193,127 +178,73 @@ export function rerataKuis(sesi: Sesi): number {
   return Math.round(nilai.reduce((j, h) => j + h.skor, 0) / nilai.length);
 }
 
-export function totalPoin(sesi: Sesi): number {
-  const dariModul = sesi.materiSelesai.length * nilaiPoin.modulSelesai;
-  const dariKuis = Object.values(sesi.kuis).filter((h) => h.skor >= 60).length * nilaiPoin.kuisLulus;
-  const dariSimulasi = sesi.simulasi.length * nilaiPoin.simulasiSelesai;
-  const dariChecklist =
-    sesi.checklist.length === checklist.length ? nilaiPoin.checklistPenuh : 0;
-  return dariModul + dariKuis + dariSimulasi + dariChecklist;
-}
-
-export function lencanaDidapat(sesi: Sesi, l: Lencana): boolean {
-  switch (l.jenis) {
-    case "modul":
-      return modulSelesai(sesi) >= l.ambang;
-    case "simulasi":
-      return sesi.simulasi.length >= l.ambang;
-    case "skor":
-      return rerataKuis(sesi) >= l.ambang;
-    case "checklist":
-      return sesi.checklist.length >= l.ambang;
-    case "kasus":
-      return sesi.kasusDilihat.length >= l.ambang;
-  }
-}
-
-export const jumlahLencana = (sesi: Sesi) =>
-  lencana.filter((l) => lencanaDidapat(sesi, l)).length;
+export const kuisDikerjakan = (sesi: Sesi) => Object.keys(sesi.kuis).length;
 
 export type ButirRiwayat = {
-  jenis: "modul" | "simulasi" | "pengukuran";
+  jenis: "materi" | "kuis" | "simulasi";
   judul: string;
   ringkas: string;
   nilai: string;
   tanggal: string;
-  warna: string;
+  warna: Warna;
+  href: string;
 };
 
 /** Riwayat digabung dan diurutkan terbaru dulu. */
-export function riwayat(sesi: Sesi): ButirRiwayat[] {
-  const dariModul: ButirRiwayat[] = Object.entries(sesi.kuis).map(([id, h]) => {
-    const m = modul.find((x) => x.id === id);
+export function riwayat(sesi: Sesi, konten: RingkasKonten): ButirRiwayat[] {
+  const { topik, kuis, jumlahSkenario } = konten;
+
+  const dariKuis: ButirRiwayat[] = Object.entries(sesi.kuis).map(([id, h]) => {
+    const k = kuis.find((x) => x.id === id);
+    const t = topik.find((x) => x.id === k?.materiTerkait);
     return {
-      jenis: "modul" as const,
-      judul: m?.judul ?? id,
-      ringkas: `Modul ${m?.nomor ?? "—"} · ${h.benar} dari ${h.total} benar`,
+      jenis: "kuis" as const,
+      judul: k?.judul ?? id,
+      ringkas: `${h.benar} dari ${h.total} benar`,
       nilai: `${h.skor}%`,
       tanggal: h.tanggal,
-      warna: m?.warna ?? "adukan",
+      warna: t?.warna ?? "adukan",
+      href: `/kuis/${id}/hasil`,
+    };
+  });
+
+  const dariMateri: ButirRiwayat[] = sesi.materiSelesai.map((id) => {
+    const t = topik.find((x) => x.id === id);
+    return {
+      jenis: "materi" as const,
+      judul: t?.judul ?? id,
+      ringkas: t?.ringkas ?? "Materi selesai dibaca",
+      nilai: "Selesai",
+      tanggal: sesi.mulai,
+      warna: t?.warna ?? "adukan",
+      href: `/materi/${id}`,
     };
   });
 
   const dariSimulasi: ButirRiwayat[] = sesi.simulasi.map((n) => ({
     jenis: "simulasi" as const,
-    judul: `Skenario ${n} dari ${skenario.length}`,
-    ringkas: "Simulasi Kenali",
+    judul: `Skenario ${n} dari ${jumlahSkenario}`,
+    ringkas: "Simulasi transaksi",
     nilai: "Selesai",
     tanggal: sesi.mulai,
     warna: "kenali",
+    href: `/simulasi/${n}`,
   }));
 
-  const dariPengukuran: ButirRiwayat[] = (["awal", "akhir"] as Fase[])
-    .filter((f) => Object.keys(sesi.jawaban[f] ?? {}).length > 0)
-    .map((f) => {
-      const s = skorDimensi(sesi, f);
-      return {
-        jenis: "pengukuran" as const,
-        judul: f === "awal" ? "Cek Awal" : "Cek Akhir",
-        ringkas: `Peduli ${s.peduli}% · Kenali ${s.kenali}% · Adukan ${s.adukan}%`,
-        nilai: `${Math.round((s.peduli + s.kenali + s.adukan) / 3)}%`,
-        tanggal: sesi.mulai,
-        warna: "institusi",
-      };
-    });
-
-  return [...dariModul, ...dariSimulasi, ...dariPengukuran].sort((a, b) =>
+  return [...dariKuis, ...dariMateri, ...dariSimulasi].sort((a, b) =>
     b.tanggal.localeCompare(a.tanggal),
   );
 }
 
-/** Persentase benar per dimensi pada instrumen penelitian. */
-export function skorDimensi(sesi: Sesi, fase: Fase): Record<Dimensi, number> {
-  const jawab = sesi.jawaban[fase] ?? {};
-  const hasil = { peduli: 0, kenali: 0, adukan: 0 } as Record<Dimensi, number>;
-
-  (["peduli", "kenali", "adukan"] as Dimensi[]).forEach((d) => {
-    const butir = soal.filter((s) => s.dimensi === d);
-    if (butir.length === 0) return;
-    const benar = butir.filter((s) => jawab[s.id] === s.kunci).length;
-    hasil[d] = Math.round((benar / butir.length) * 100);
-  });
-
-  return hasil;
-}
-
-/** Cek awal dan akhir hanya boleh sekali. Kalau bisa diulang, orang akan
-    mengulangnya demi poin dan data N-Gain penelitian jadi tidak sahih. */
-export const sudahMengerjakan = (sesi: Sesi, fase: Fase) =>
-  Object.keys(sesi.jawaban[fase] ?? {}).length >= soal.length;
-
 /**
- * N-Gain (Hake): (akhir − awal) / (100 − awal).
- * Mengukur berapa bagian dari ruang perbaikan yang berhasil ditutup — lebih
- * adil daripada selisih mentah, karena yang skor awalnya sudah tinggi punya
- * ruang perbaikan lebih sempit.
+ * Skor SUS 0–100, dipakai untuk evaluasi usability — bukan untuk mengukur
+ * literasi. Butir positif dikurangi 1, butir negatif dikurangi dari 5, lalu
+ * totalnya dikali 2,5. Ini bukan persentase; 68 adalah rata-rata acuan.
  */
-export function nGain(awal: number, akhir: number): number | null {
-  if (awal >= 100) return null;
-  return Number(((akhir - awal) / (100 - awal)).toFixed(2));
-}
-
-export function tafsirNGain(g: number | null): string {
-  if (g === null) return "Skor awal sudah maksimal";
-  if (g >= 0.7) return "Peningkatan tinggi";
-  if (g >= 0.3) return "Peningkatan sedang";
-  return "Peningkatan rendah";
-}
-
-/**
- * Skor SUS 0–100. Butir positif dikurangi 1, butir negatif dikurangi dari 5,
- * lalu totalnya dikali 2,5. Ini bukan persentase — 68 adalah rata-rata acuan.
- */
-export function skorSus(jawaban: Record<number, number> | undefined): number | null {
+export function skorSus(
+  jawaban: Record<number, number> | undefined,
+  sus: ButirSus[],
+): number | null {
   if (!jawaban) return null;
   const terisi = sus.map((_, i) => jawaban[i]).filter((v) => typeof v === "number");
   if (terisi.length < sus.length) return null;
@@ -325,8 +256,3 @@ export function skorSus(jawaban: Record<number, number> | undefined): number | n
 
   return Math.round(total * 2.5);
 }
-
-export const dimensiTerlemah = (skor: Record<Dimensi, number>): Dimensi =>
-  (["peduli", "kenali", "adukan"] as Dimensi[]).reduce((a, b) => (skor[a] <= skor[b] ? a : b));
-
-export const totalKasus = kasus.length;

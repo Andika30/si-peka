@@ -1,119 +1,257 @@
+import "server-only";
+
+import { cache } from "react";
+import { asc, eq } from "drizzle-orm";
+import { db, skema } from "@/db";
+import type {
+  BankIndonesia,
+  ButirSus,
+  Kategori,
+  Kuis,
+  Layanan,
+  Masalah,
+  Penyelenggara,
+  RingkasKonten,
+  Skenario,
+  Topik,
+} from "./tipe";
+
 /**
  * Satu-satunya pintu ke isi aplikasi.
- * Komponen tidak pernah mengimpor JSON langsung — supaya kalau sumbernya
- * nanti pindah (mis. ke Google Sheets), hanya berkas ini yang berubah.
+ *
+ * Dulu berkas ini membaca berkas JSON; sekarang ia bertanya ke MySQL. Bentuk
+ * yang dikembalikan sengaja tidak berubah, jadi halaman tetap menerima data
+ * yang sama seperti sebelumnya.
+ *
+ * Semua fungsi dibungkus `cache()` dari React: kalau satu halaman memanggil
+ * `ambilTopik()` di beberapa tempat, kueri-nya tetap sekali per permintaan.
+ *
+ * Baris `aktif = false` disaring di sini, bukan di halaman. Menonaktifkan
+ * materi lewat admin berarti materi itu hilang dari seluruh aplikasi sekaligus
+ * — tidak ada halaman yang bisa lupa menyaringnya.
  */
-import modulJson from "@/content/modul.json";
-import skenarioJson from "@/content/skenario.json";
-import kasusJson from "@/content/kasus.json";
-import soalJson from "@/content/soal.json";
-import checklistJson from "@/content/checklist.json";
-import penyelenggaraJson from "@/content/penyelenggara.json";
-import susJson from "@/content/sus.json";
-import lencanaJson from "@/content/lencana.json";
 
-export type Dimensi = "peduli" | "kenali" | "adukan";
-export type Warna = "institusi" | "adukan" | "peduli" | "kenali" | "waspada" | "ungu" | "emas";
+/* ── Materi ──────────────────────────────────────────────────────────────── */
 
-export const DIMENSI: { id: Dimensi; label: string }[] = [
-  { id: "peduli", label: "Peduli" },
-  { id: "kenali", label: "Kenali" },
-  { id: "adukan", label: "Adukan" },
-];
+export const ambilKategori = cache(async (): Promise<Kategori[]> => {
+  const baris = await db.query.kategori.findMany({
+    where: eq(skema.kategori.aktif, true),
+    orderBy: [asc(skema.kategori.urutan)],
+  });
+  return baris.map((k) => ({
+    id: k.id,
+    nama: k.nama,
+    ringkas: k.ringkas,
+    warna: k.warna,
+    ikon: k.ikon,
+  }));
+});
 
-export type SoalModul = {
-  pertanyaan: string;
-  opsi: string[];
-  kunci: number;
-  pembahasan: string;
-};
+export const ambilTopik = cache(async (): Promise<Topik[]> => {
+  const baris = await db.query.topik.findMany({
+    where: eq(skema.topik.aktif, true),
+    orderBy: [asc(skema.topik.urutan)],
+    with: {
+      isi: { orderBy: [asc(skema.isiTopik.urutan)] },
+      kuis: { columns: { id: true }, where: eq(skema.kuis.aktif, true) },
+    },
+  });
 
-export type Modul = {
-  id: string;
-  nomor: string;
-  judul: string;
-  ringkas: string;
-  ikon: string;
-  warna: Warna;
-  dimensi: Dimensi;
-  materi: { paragraf: string[]; poin: string[]; peringatan?: string };
-  soal: SoalModul[];
-};
+  return baris.map((t) => ({
+    id: t.id,
+    kategori: t.kategoriId,
+    judul: t.judul,
+    ringkas: t.ringkas,
+    ikon: t.ikon,
+    warna: t.warna,
+    isi: {
+      paragraf: t.isi.filter((i) => i.jenis === "paragraf").map((i) => i.teks),
+      poin: t.isi.filter((i) => i.jenis === "poin").map((i) => i.teks),
+      ...(t.peringatan ? { peringatan: t.peringatan } : {}),
+    },
+    sumber: t.sumber,
+    // Satu materi punya paling banyak satu kuis; kalau belum ada, tautannya
+    // dibiarkan kosong dan halaman materi menyembunyikan tombol kuisnya.
+    kuisTerkait: t.kuis[0]?.id ?? "",
+  }));
+});
 
-export type OpsiSkenario = {
-  teks: string;
-  aman: boolean;
-  /** Hanya ada pada pilihan keliru: akibat yang diperlihatkan lebih dulu. */
-  konsekuensi?: string;
-};
+export const cariTopik = cache(async (id: string): Promise<Topik | undefined> => {
+  const semua = await ambilTopik();
+  return semua.find((t) => t.id === id);
+});
 
-export type Skenario = {
-  id: string;
-  konteks: { label: string; nilai: string }[];
-  situasi: string;
-  opsi: OpsiSkenario[];
-  alasan: string;
-};
+export const cariKategori = cache(async (id: string): Promise<Kategori | undefined> => {
+  const semua = await ambilKategori();
+  return semua.find((k) => k.id === id);
+});
 
-export type Kasus = {
-  id: string;
-  label: string;
-  ringkas: string;
-  judul: string;
-  pembuka: string;
-  segera?: string;
-  peringatanUtama?: string;
-  langkah: string[];
-  /** Hanya kasus yang sudah melewati penyelenggara yang membuka jalur BI. */
-  eskalasiBI: boolean;
-};
+export const topikPerKategori = cache(async (idKategori: string): Promise<Topik[]> => {
+  const semua = await ambilTopik();
+  return semua.filter((t) => t.kategori === idKategori);
+});
 
-export type Soal = {
-  id: string;
-  dimensi: Dimensi;
-  indikator: string;
-  /** Soal paralel: indikator sama, konteks berbeda. Menjaga N-Gain tetap sahih. */
-  awal: string;
-  akhir: string;
-  opsi: string[];
-  kunci: number;
-  pembahasan: string;
-};
+/* ── Kuis ────────────────────────────────────────────────────────────────── */
 
-export type ButirChecklist = { id: string; teks: string; waspada?: boolean };
+export const ambilKuis = cache(async (): Promise<Kuis[]> => {
+  const baris = await db.query.kuis.findMany({
+    where: eq(skema.kuis.aktif, true),
+    orderBy: [asc(skema.kuis.urutan)],
+    with: {
+      soal: {
+        orderBy: [asc(skema.soal.urutan)],
+        with: { opsi: { orderBy: [asc(skema.opsiSoal.urutan)] } },
+      },
+    },
+  });
 
-export type Penyelenggara = {
-  id: string;
-  nama: string;
-  jenis: string;
-  telepon: string;
-  aplikasi: string;
-  situs: string;
-  diverifikasi: string;
-};
+  return baris.map((k) => ({
+    id: k.id,
+    judul: k.judul,
+    materiTerkait: k.topikId,
+    soal: k.soal.map((s) => ({
+      pertanyaan: s.pertanyaan,
+      opsi: s.opsi.map((o) => o.teks),
+      kunci: s.kunci,
+      pembahasan: s.pembahasan,
+    })),
+  }));
+});
 
-export type Lencana = {
-  id: string;
-  nama: string;
-  syarat: string;
-  ikon: string;
-  warna: Warna;
-  jenis: "modul" | "simulasi" | "skor" | "checklist" | "kasus";
-  ambang: number;
-};
+export const cariKuis = cache(async (id: string): Promise<Kuis | undefined> => {
+  const semua = await ambilKuis();
+  return semua.find((k) => k.id === id);
+});
 
-export const modul = modulJson as Modul[];
-export const skenario = skenarioJson as Skenario[];
-export const kasus = kasusJson as Kasus[];
-export const soal = soalJson as Soal[];
-export const checklist = checklistJson as ButirChecklist[];
-export const layanan = penyelenggaraJson.layanan;
-export const penyelenggara = penyelenggaraJson.daftar as Penyelenggara[];
-export const bankIndonesia = penyelenggaraJson.bankIndonesia;
-export const sus = susJson.pernyataan;
-export const lencana = lencanaJson.daftar as Lencana[];
-export const nilaiPoin = lencanaJson.poin;
+export const kuisUntukTopik = cache(async (idTopik: string): Promise<Kuis | undefined> => {
+  const semua = await ambilKuis();
+  return semua.find((k) => k.materiTerkait === idTopik);
+});
 
-export const cariModul = (id: string) => modul.find((m) => m.id === id);
-export const cariKasus = (id: string) => kasus.find((k) => k.id === id);
-export const indeksModul = (id: string) => modul.findIndex((m) => m.id === id);
+/* ── Simulasi ────────────────────────────────────────────────────────────── */
+
+export const ambilSkenario = cache(async (): Promise<Skenario[]> => {
+  const baris = await db.query.skenario.findMany({
+    where: eq(skema.skenario.aktif, true),
+    orderBy: [asc(skema.skenario.urutan)],
+    with: {
+      konteks: { orderBy: [asc(skema.konteksSkenario.urutan)] },
+      opsi: { orderBy: [asc(skema.opsiSkenario.urutan)] },
+    },
+  });
+
+  return baris.map((s) => ({
+    id: s.id,
+    situasi: s.situasi,
+    alasan: s.alasan,
+    konteks: s.konteks.map((k) => ({ label: k.label, nilai: k.nilai })),
+    opsi: s.opsi.map((o) => ({
+      teks: o.teks,
+      aman: o.aman,
+      ...(o.konsekuensi ? { konsekuensi: o.konsekuensi } : {}),
+    })),
+  }));
+});
+
+/* ── Panduan pengaduan ───────────────────────────────────────────────────── */
+
+export const ambilMasalah = cache(async (): Promise<Masalah[]> => {
+  const baris = await db.query.masalah.findMany({
+    where: eq(skema.masalah.aktif, true),
+    orderBy: [asc(skema.masalah.urutan)],
+    with: { langkah: { orderBy: [asc(skema.langkahMasalah.urutan)] } },
+  });
+
+  return baris.map((m) => ({
+    id: m.id,
+    aktif: m.aktif,
+    label: m.label,
+    ringkas: m.ringkas,
+    judul: m.judul,
+    pembuka: m.pembuka,
+    ...(m.segera ? { segera: m.segera } : {}),
+    ...(m.peringatanUtama ? { peringatanUtama: m.peringatanUtama } : {}),
+    langkah: m.langkah.map((l) => l.teks),
+    pihak: m.pihak,
+    eskalasiBI: m.eskalasiBi,
+    materiTerkait: m.topikId ?? "",
+    sumber: m.sumber,
+  }));
+});
+
+export const cariMasalah = cache(async (id: string): Promise<Masalah | undefined> => {
+  const semua = await ambilMasalah();
+  return semua.find((m) => m.id === id);
+});
+
+/* ── Kanal resmi ─────────────────────────────────────────────────────────── */
+
+export const ambilLayanan = cache(async (): Promise<Layanan[]> => {
+  const baris = await db.query.layanan.findMany({
+    where: eq(skema.layanan.aktif, true),
+    orderBy: [asc(skema.layanan.urutan)],
+  });
+  return baris.map((l) => ({ id: l.id, nama: l.nama, ringkas: l.ringkas, ikon: l.ikon }));
+});
+
+export const ambilPenyelenggara = cache(async (): Promise<Penyelenggara[]> => {
+  const baris = await db.query.penyelenggara.findMany({
+    where: eq(skema.penyelenggara.aktif, true),
+    orderBy: [asc(skema.penyelenggara.urutan)],
+  });
+  return baris.map((p) => ({
+    id: p.id,
+    nama: p.nama,
+    jenis: p.jenis,
+    telepon: p.telepon,
+    aplikasi: p.aplikasi,
+    situs: p.situs,
+    diverifikasi: p.diverifikasi,
+  }));
+});
+
+export const ambilBankIndonesia = cache(async (): Promise<BankIndonesia> => {
+  const baris = await db.query.pengaturan.findFirst({
+    where: eq(skema.pengaturan.kunci, "bank_indonesia"),
+  });
+  if (!baris) {
+    throw new Error(
+      "Kanal Bank Indonesia belum ada di basis data. Jalankan `npm run db:seed`.",
+    );
+  }
+  return JSON.parse(baris.nilai) as BankIndonesia;
+});
+
+/* ── Penilaian usability ─────────────────────────────────────────────────── */
+
+export const ambilSus = cache(async (): Promise<ButirSus[]> => {
+  const baris = await db.query.sus.findMany({ orderBy: [asc(skema.sus.urutan)] });
+  return baris.map((s) => ({ teks: s.teks, positif: s.positif }));
+});
+
+/* ── Ringkasan untuk komponen klien ──────────────────────────────────────── */
+
+/**
+ * Isi seperlunya untuk menghitung progres dan menyusun riwayat di peramban.
+ * Sengaja bukan seluruh materi: paragraf dan soal tidak dibutuhkan di sana,
+ * dan mengirimkannya hanya memperbesar halaman.
+ */
+export const ambilRingkasKonten = cache(async (): Promise<RingkasKonten> => {
+  const [topik, kuis, skenario] = await Promise.all([
+    ambilTopik(),
+    ambilKuis(),
+    ambilSkenario(),
+  ]);
+
+  return {
+    topik: topik.map((t) => ({
+      id: t.id,
+      judul: t.judul,
+      ringkas: t.ringkas,
+      warna: t.warna,
+      kuisTerkait: t.kuisTerkait,
+    })),
+    kuis: kuis.map((k) => ({ id: k.id, judul: k.judul, materiTerkait: k.materiTerkait })),
+    jumlahSkenario: skenario.length,
+  };
+});

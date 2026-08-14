@@ -1,0 +1,97 @@
+{
+  "catatan": "Panduan Pengaduan — bukan sistem pengaduan. Website tidak menerima dan tidak memproses aduan; ia hanya menjawab dua pertanyaan: apa yang harus dilakukan, dan ke mana harus mengadu. Struktur tiap butir mengikuti kolom yang dikelola admin: jenis masalah, langkah, pihak yang dihubungi, kanal, sumber, dan status aktif.",
+  "masalah": [
+    {
+      "id": "transaksi-tidak-dikenal",
+      "aktif": true,
+      "label": "Transaksi tidak dikenal",
+      "ringkas": "Ada transaksi di riwayat yang tidak kamu lakukan",
+      "judul": "Hubungi penyelenggara sekarang juga",
+      "pembuka": "Kasus ini mendesak. Semakin cepat dilaporkan, semakin besar peluang akses yang tidak sah dihentikan sebelum kerugian bertambah.",
+      "segera": "Jangan tunggu sampai besok. Hubungi penyelenggara lewat kanal resmi sekarang.",
+      "langkah": [
+        "Segera hubungi penyelenggara pembayaran yang kamu gunakan melalui kanal resmi",
+        "Minta akun atau kartumu diamankan lebih dulu",
+        "Ganti PIN dan password setelah akunmu aman",
+        "Simpan bukti transaksi dan nomor tiket laporan"
+      ],
+      "pihak": "Penyelenggara jasa pembayaran yang kamu gunakan",
+      "eskalasiBI": false,
+      "materiTerkait": "transaksi-mencurigakan",
+      "sumber": "Bank Indonesia — Pelindungan Konsumen"
+    },
+    {
+      "id": "saldo-terpotong",
+      "aktif": true,
+      "label": "Saldo terpotong tapi transaksi gagal",
+      "ringkas": "Dana keluar padahal pembayaran tidak berhasil",
+      "judul": "Mulai dari penyelenggara atau merchantnya",
+      "pembuka": "Dana yang terpotong pada transaksi gagal umumnya kembali setelah proses penyelesaian antarpihak. Yang bisa menelusurinya adalah penyelenggara yang kamu pakai.",
+      "langkah": [
+        "Siapkan bukti transaksi — tangkapan layar, nominal, waktu, dan nama merchant",
+        "Hubungi penyelenggara atau merchant terkait melalui kanal pengaduan resminya",
+        "Catat nomor tiket atau laporan yang kamu terima",
+        "Tanyakan tenggat penyelesaiannya"
+      ],
+      "pihak": "Penyelenggara pembayaran, lalu merchant bila diperlukan",
+      "eskalasiBI": false,
+      "materiTerkait": "keamanan-qris",
+      "sumber": "Bank Indonesia — Pelindungan Konsumen"
+    },
+    {
+      "id": "salah-transaksi",
+      "aktif": true,
+      "label": "Salah transaksi",
+      "ringkas": "Salah nominal atau salah tujuan transfer",
+      "judul": "Identifikasi dulu penyelenggara yang kamu pakai",
+      "pembuka": "Transaksi yang sudah berhasil tidak bisa dibatalkan sendiri. Penyelesaiannya berjalan lewat penyelenggara pengirim, dan bergantung pada kesediaan penerima.",
+      "langkah": [
+        "Identifikasi penyelenggara yang kamu gunakan saat mengirim",
+        "Laporkan sesegera mungkin lewat kanal resmi penyelenggara tersebut",
+        "Siapkan bukti transfer dan data penerima yang muncul di layar",
+        "Catat nomor tiket laporanmu"
+      ],
+      "pihak": "Penyelenggara pengirim dana",
+      "eskalasiBI": false,
+      "materiTerkait": "mengenal-bifast",
+      "sumber": "Bank Indonesia — Pelindungan Konsumen"
+    },
+    {
+      "id": "dugaan-penipuan",
+      "aktif": true,
+      "label": "Dugaan penipuan",
+      "ringkas": "Tautan mencurigakan, permintaan data, atau modus lain",
+      "judul": "Amankan dulu, baru laporkan",
+      "pembuka": "Sebelum melapor, pastikan penipu tidak sedang memegang akses ke akunmu.",
+      "peringatanUtama": "Jangan memberikan PIN, password, atau OTP kepada siapa pun — termasuk yang mengaku petugas.",
+      "langkah": [
+        "Hentikan komunikasi dengan pihak tersebut dan jangan klik tautan apa pun",
+        "Ganti PIN dan password akunmu lewat aplikasi resmi",
+        "Laporkan ke penyelenggara melalui kanal resmi",
+        "Laporkan ke kepolisian bila ada dugaan tindak pidana"
+      ],
+      "pihak": "Penyelenggara pembayaran, dan kepolisian bila ada dugaan tindak pidana",
+      "eskalasiBI": false,
+      "materiTerkait": "penipuan-digital",
+      "sumber": "Bank Indonesia — Pelindungan Konsumen"
+    },
+    {
+      "id": "belum-ada-penyelesaian",
+      "aktif": true,
+      "label": "Sudah lapor tapi belum ada penyelesaian",
+      "ringkas": "Tindak lanjut laporan yang sudah kamu ajukan",
+      "judul": "Ini jalurnya kalau penyelenggara belum menyelesaikan",
+      "pembuka": "Kalau kamu sudah melapor dan tenggat penyelesaian sudah lewat, barulah jalur Bank Indonesia terbuka.",
+      "langkah": [
+        "Pastikan kamu menyimpan nomor tiket laporan sebelumnya",
+        "Pastikan tenggat penyelesaian penyelenggara sudah lewat",
+        "Siapkan kronologi dan bukti transaksi",
+        "Hubungi kanal resmi Bank Indonesia"
+      ],
+      "pihak": "Bank Indonesia, setelah penyelenggara tidak menyelesaikan",
+      "eskalasiBI": true,
+      "materiTerkait": "peka",
+      "sumber": "Bank Indonesia — Pelindungan Konsumen"
+    }
+  ]
+}
