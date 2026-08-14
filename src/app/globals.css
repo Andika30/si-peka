@@ -147,9 +147,97 @@
   justify-content: flex-start;
 }
 
+/* ── Sidebar panel pengelola ────────────────────────────────────────────────
+   Mekanismenya sama seperti di atas, tapi atribut dan kuncinya sendiri:
+   menciutkan sidebar admin tidak boleh ikut menciutkan sidebar peserta.
+
+   Di bawah 64rem sidebar berubah jadi laci melayang, dan ciut tidak berlaku
+   di sana — laci yang sudah dibuka justru harus tampil lengkap. */
+.sisi-admin {
+  width: 15rem;
+}
+.isi-admin {
+  margin-left: 0;
+}
+
+@media (width >= 64rem) {
+  .isi-admin {
+    margin-left: 15rem;
+  }
+  :root[data-sisi-admin="kuncup"] .sisi-admin {
+    width: 4.5rem;
+  }
+  :root[data-sisi-admin="kuncup"] .isi-admin {
+    margin-left: 4.5rem;
+  }
+  /* Dibatasi ke `.sisi-admin` supaya label di dalam laci tetap tampil —
+     lacinya memang tidak memakai kelas itu. */
+  :root[data-sisi-admin="kuncup"] .sisi-admin .label-admin {
+    display: none;
+  }
+  :root[data-sisi-admin="kuncup"] .sisi-admin .baris-admin {
+    justify-content: center;
+  }
+  /* Merek pakai padding lebih lega saat lebar supaya sejajar butir menu;
+     saat ciut padding itu justru menyempitkan ruang ikonnya. */
+  :root[data-sisi-admin="kuncup"] .sisi-admin .kepala-admin {
+    padding-inline: 0.75rem;
+  }
+}
+
+/* ── Batang gulir sidebar ───────────────────────────────────────────────────
+   Batang gulir bawaan sistem terlalu tebal dan berwarna keras untuk kolom
+   selebar ini — apalagi saat sidebarnya diciutkan jadi 72px.
+
+   Ia tidak dihilangkan sama sekali: batang gulir adalah satu-satunya tanda
+   bahwa masih ada menu di bawah. Yang dilakukan adalah menyembunyikannya
+   selagi diam, lalu memunculkannya begitu kursor masuk — tanda tetap ada
+   saat dibutuhkan, tanpa jadi garis mencolok saat tidak. */
+.gulir-halus {
+  --warna-gulir: rgb(11 27 51 / 0.2);
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.gulir-halus:hover,
+.gulir-halus:focus-within {
+  scrollbar-color: var(--warna-gulir) transparent;
+}
+
+.gulir-halus::-webkit-scrollbar {
+  width: 6px;
+}
+.gulir-halus::-webkit-scrollbar-track {
+  background: transparent;
+}
+.gulir-halus::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+}
+.gulir-halus:hover::-webkit-scrollbar-thumb,
+.gulir-halus:focus-within::-webkit-scrollbar-thumb {
+  background: var(--warna-gulir);
+}
+.gulir-halus::-webkit-scrollbar-thumb:hover {
+  background: rgb(11 27 51 / 0.35);
+}
+
+/* Sidebar admin berlatar gelap — tinta gelap tidak akan terlihat di sana. */
+.gulir-terang {
+  --warna-gulir: rgb(255 255 255 / 0.25);
+}
+.gulir-terang::-webkit-scrollbar-thumb:hover {
+  background: rgb(255 255 255 / 0.45);
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .gulir-halus::-webkit-scrollbar-thumb {
+    transition: background 150ms ease;
+  }
+
   .sisi,
-  .isi-sisi {
+  .isi-sisi,
+  .sisi-admin,
+  .isi-admin {
     transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1),
       margin-left 200ms cubic-bezier(0.4, 0, 0.2, 1);
   }

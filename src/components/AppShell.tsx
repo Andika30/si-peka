@@ -8,8 +8,8 @@ import {
   History,
   Home,
   LifeBuoy,
+  Menu,
   MessageSquare,
-  PanelLeft,
   User,
   type LucideIcon,
 } from "lucide-react";
@@ -59,6 +59,17 @@ const aktifkah = (path: string, href: string) =>
    keadaan berarti keadaan itu harus diketahui React — padahal ia hidup di
    atribut <html>, dan membacanya saat render akan merusak hidrasi. */
 const LABEL_TOGGLE = "Ciutkan atau bentangkan menu samping";
+
+/** Judul di bilah atas diturunkan dari alamat, jadi tiap halaman tidak perlu
+    mengirimkannya sendiri lewat props. */
+function judulDari(path: string): string {
+  for (const b of [...UTAMA, ...AKUN]) {
+    if (aktifkah(path, b.href)) return b.label;
+  }
+  if (path.startsWith("/kuis")) return "Kuis";
+  if (path.startsWith("/kuesioner")) return "Penilaian aplikasi";
+  return "PeKA";
+}
 
 /**
  * Membuka dan menutup sidebar.
@@ -128,7 +139,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
           <span className="label-sisi text-judul tracking-tight text-institusi">PeKA</span>
         </Link>
 
-        <div className="flex-1 overflow-y-auto px-3 py-5">
+        <div className="gulir-halus flex-1 overflow-y-auto px-3 py-5">
           <p className="label-sisi mb-2 px-3 font-mono text-data uppercase text-tinta-55">Belajar</p>
           <nav aria-label="Navigasi utama" className="flex flex-col gap-1">
             {UTAMA.map((b) => (
@@ -153,23 +164,27 @@ export default function AppShell({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        {/* Kaki: tombol buka-tutup. Tempat yang lazim dan tidak mengganggu —
-            ia sejajar dengan butir menu, bukan mengambang di dekat logo. */}
-        <div className="shrink-0 border-t border-garis px-3 py-3">
+      </aside>
+
+      <div className="isi-sisi flex-1">
+        {/* Bilah atas hanya ada di layar yang punya sidebar. Di ponsel
+            navigasinya sudah dipegang bilah bawah, jadi menambahkan bilah
+            atas di sana cuma memakan ruang baca. */}
+        <header className="sticky top-0 z-30 hidden h-14 items-center gap-3 border-b border-garis bg-kertas/90 px-4 backdrop-blur md:flex lg:px-6">
           <button
             aria-label={LABEL_TOGGLE}
-            className="baris-sisi flex h-11 w-full items-center gap-3 rounded-dalam px-3 text-tinta-55 transition-colors hover:bg-white hover:text-institusi"
+            className="grid size-10 shrink-0 place-content-center rounded-dalam text-tinta-55 transition-colors hover:bg-white hover:text-institusi"
             onClick={bukaTutupSisi}
             title={LABEL_TOGGLE}
             type="button"
           >
-            <PanelLeft className="size-5 shrink-0" aria-hidden />
-            <span className="label-sisi whitespace-nowrap text-sm font-bold">Ciutkan menu</span>
+            <Menu className="size-5" aria-hidden />
           </button>
-        </div>
-      </aside>
+          <span className="text-sm font-bold text-tinta">{judulDari(path)}</span>
+        </header>
 
-      <div className="isi-sisi flex-1">{children}</div>
+        {children}
+      </div>
 
       <nav
         aria-label="Navigasi utama"

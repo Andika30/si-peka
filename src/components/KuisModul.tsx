@@ -49,7 +49,9 @@ export default function KuisModul({ k, t }: { k: Kuis; t: Topik }) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-garis bg-white">
+      {/* md:top-14 supaya bilah kemajuan ini berhenti tepat di bawah bilah
+          atas aplikasi, bukan bertumpuk dengannya. */}
+      <header className="sticky top-0 z-20 border-b border-garis bg-white md:top-14">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-4 px-4 sm:px-6">
           <div className="min-w-0">
             <p className="truncate text-kecil font-bold text-tinta">{k.judul}</p>

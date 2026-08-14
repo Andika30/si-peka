@@ -60,6 +60,25 @@ const MENU: Kelompok[] = [
 const aktifkah = (path: string, href: string) =>
   href === "/admin" ? path === "/admin" : path.startsWith(href);
 
+/**
+ * Menciutkan sidebar.
+ *
+ * Keadaannya ditulis di atribut <html>, bukan di state React — sama seperti
+ * sidebar peserta. Bukan karena state akan hilang (tata letak panel bertahan
+ * antarhalaman), melainkan supaya pilihannya diingat lintas kunjungan dan
+ * lebarnya sudah benar sejak gambar pertama, tanpa lompatan tata letak.
+ */
+function ciutkanSisi() {
+  const akar = document.documentElement;
+  const berikutnya = akar.dataset.sisiAdmin === "kuncup" ? "lebar" : "kuncup";
+  akar.dataset.sisiAdmin = berikutnya;
+  try {
+    window.localStorage.setItem("peka.sisi.admin", berikutnya);
+  } catch {
+    /* mode privat menolak menulis — tetap bisa diciutkan, hanya tidak diingat */
+  }
+}
+
 /** Judul halaman diturunkan dari alamatnya, jadi tiap halaman tidak perlu
     mengirimkannya sendiri lewat props. */
 function judulDari(path: string): string {
@@ -85,7 +104,7 @@ export default function Cangkang({
 
   const sidebar = (
     <>
-      <Link className="flex items-center gap-3 px-6 py-5" href="/admin">
+      <Link className="baris-admin kepala-admin flex items-center gap-3 px-6 py-5" href="/admin">
         <span className="grid size-10 shrink-0 place-content-center rounded-dalam bg-adukan">
           <span className="grid grid-cols-2 gap-0.5" aria-hidden>
             <span className="size-1.5 bg-white" />
@@ -94,7 +113,7 @@ export default function Cangkang({
             <span className="size-1.5 bg-transparent" />
           </span>
         </span>
-        <span className="min-w-0">
+        <span className="label-admin min-w-0">
           <span className="block truncate text-sm font-extrabold tracking-tight text-white">
             PeKA
           </span>
@@ -104,11 +123,11 @@ export default function Cangkang({
         </span>
       </Link>
 
-      <nav className="flex-1 overflow-y-auto px-3 pb-4">
+      <nav className="gulir-halus gulir-terang flex-1 overflow-y-auto px-3 pb-4">
         {MENU.map((k, i) => (
           <div className={i > 0 ? "mt-6" : ""} key={k.judul ?? "utama"}>
             {k.judul ? (
-              <p className="mb-2 px-3 font-mono text-[10px] uppercase tracking-wider text-white/40">
+              <p className="label-admin mb-2 px-3 font-mono text-[10px] uppercase tracking-wider text-white/40">
                 {k.judul}
               </p>
             ) : null}
@@ -118,7 +137,7 @@ export default function Cangkang({
                 return (
                   <Link
                     aria-current={on ? "page" : undefined}
-                    className={`flex items-center gap-3 rounded-dalam px-3 py-2.5 text-sm transition-colors ${
+                    className={`baris-admin flex items-center gap-3 rounded-dalam px-3 py-2.5 text-sm transition-colors ${
                       on
                         ? "bg-adukan font-bold text-white"
                         : "text-white/70 hover:bg-white/10 hover:text-white"
@@ -126,9 +145,12 @@ export default function Cangkang({
                     href={href}
                     key={href}
                     onClick={() => setLaciTerbuka(false)}
+                    // Saat ciut labelnya tersembunyi, jadi ini satu-satunya
+                    // cara mengetahui isi menunya tanpa membentangkan lagi.
+                    title={label}
                   >
                     <Ikon className="size-[18px] shrink-0" aria-hidden />
-                    <span className="truncate">{label}</span>
+                    <span className="label-admin truncate">{label}</span>
                   </Link>
                 );
               })}
@@ -140,11 +162,12 @@ export default function Cangkang({
       <div className="border-t border-white/10 p-3">
         <form action={keluar}>
           <button
-            className="flex w-full items-center gap-3 rounded-dalam px-3 py-2.5 text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+            className="baris-admin flex w-full items-center gap-3 rounded-dalam px-3 py-2.5 text-sm font-bold text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+            title="Logout"
             type="submit"
           >
             <LogOut className="size-[18px] shrink-0" aria-hidden />
-            Logout
+            <span className="label-admin">Logout</span>
           </button>
         </form>
       </div>
@@ -154,7 +177,7 @@ export default function Cangkang({
   return (
     <div className="min-h-screen bg-kertas">
       {/* Sidebar tetap di layar lebar */}
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col bg-institusi-tua lg:flex">
+      <aside className="sisi-admin fixed inset-y-0 left-0 z-40 hidden flex-col overflow-hidden bg-institusi-tua lg:flex">
         {sidebar}
       </aside>
 
@@ -173,13 +196,25 @@ export default function Cangkang({
         </>
       ) : null}
 
-      <div className="lg:ml-60">
+      <div className="isi-admin">
         <header className="sticky top-0 z-30 border-b border-garis bg-white">
           <div className="flex h-16 items-center gap-3 px-4 sm:px-6">
+            {/* Satu tempat, dua tugas: di layar sempit membuka laci, di layar
+                lebar menciutkan sidebar. Dipisah jadi dua tombol supaya
+                perilakunya ditentukan CSS, bukan pengecekan lebar di JS. */}
             <button
               aria-label="Buka menu"
               className="grid size-10 place-content-center rounded-dalam text-tinta-55 hover:bg-kertas lg:hidden"
               onClick={() => setLaciTerbuka(true)}
+              type="button"
+            >
+              <Menu className="size-5" aria-hidden />
+            </button>
+            <button
+              aria-label="Ciutkan atau bentangkan menu samping"
+              className="hidden size-10 place-content-center rounded-dalam text-tinta-55 hover:bg-kertas hover:text-institusi lg:grid"
+              onClick={ciutkanSisi}
+              title="Ciutkan atau bentangkan menu samping"
               type="button"
             >
               <Menu className="size-5" aria-hidden />

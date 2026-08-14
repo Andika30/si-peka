@@ -39,7 +39,7 @@ export const viewport: Viewport = {
  * Kunjungan pertama belum punya pilihan tersimpan, jadi bawaannya ditentukan
  * di sini: sidebar penuh kalau layarnya memang lapang, rail kalau tidak.
  */
-const PILIHAN_SIDEBAR = `try{var r=document.documentElement,s=localStorage.getItem("peka.sisi");r.dataset.sisi=s==="lebar"||s==="kuncup"?s:matchMedia("(min-width:80rem)").matches?"lebar":"kuncup"}catch(e){}`;
+const PILIHAN_SIDEBAR = `try{var r=document.documentElement,s=localStorage.getItem("peka.sisi");r.dataset.sisi=s==="lebar"||s==="kuncup"?s:matchMedia("(min-width:80rem)").matches?"lebar":"kuncup";r.dataset.sisiAdmin=localStorage.getItem("peka.sisi.admin")==="kuncup"?"kuncup":"lebar"}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
