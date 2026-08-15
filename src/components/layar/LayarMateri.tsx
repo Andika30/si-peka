@@ -8,6 +8,7 @@ import Ilustrasi from "@/components/Ilustrasi";
 import { Anak, Berurutan, Sentuh, motion } from "@/components/gerak";
 import { ambilIkon } from "@/components/ikon";
 import { Chip, Eyebrow, Halaman, Judul, warnaTeks } from "@/components/ui";
+import SaringStatus, { type Status } from "@/components/SaringStatus";
 import type { Kategori, Topik } from "@/lib/tipe";
 import { langgan, snapshot, snapshotServer, sudahBaca } from "@/lib/skor";
 
@@ -27,8 +28,24 @@ export default function LayarMateri({
 }) {
   const sesi = useSyncExternalStore(langgan, snapshot, snapshotServer);
   const [saring, setSaring] = useState<string>("semua");
+  const [status, setStatus] = useState<Status>("semua");
 
-  const tampil = saring === "semua" ? topik : topik.filter((t) => t.kategori === saring);
+  // Kategori disaring lebih dulu, lalu status dihitung DARI hasil itu —
+  // jadi angka di penyaring status selalu mengikuti kategori yang sedang
+  // dipilih, bukan seluruh materi.
+  const perKategori = saring === "semua" ? topik : topik.filter((t) => t.kategori === saring);
+
+  const jumlah: Record<Status, number> = {
+    semua: perKategori.length,
+    belum: perKategori.filter((t) => !sudahBaca(sesi, t.id)).length,
+    selesai: perKategori.filter((t) => sudahBaca(sesi, t.id)).length,
+  };
+
+  const tampil =
+    status === "semua"
+      ? perKategori
+      : perKategori.filter((t) => sudahBaca(sesi, t.id) === (status === "selesai"));
+
   const tab = [{ id: "semua", nama: "Semua" }, ...kategori];
 
   return (
@@ -40,26 +57,30 @@ export default function LayarMateri({
           Materi &amp; Kuis
         </Judul>
 
-        <div className="mb-5 inline-flex flex-wrap rounded-tombol bg-kertas-tua p-1">
-          {tab.map((t) => (
-            <button
-              className={`relative rounded-[0.625rem] px-4 py-2 text-kecil font-bold transition-colors ${
-                saring === t.id ? "text-institusi" : "text-tinta-55 hover:text-tinta"
-              }`}
-              key={t.id}
-              onClick={() => setSaring(t.id)}
-              type="button"
-            >
-              {saring === t.id ? (
-                <motion.span
-                  className="absolute inset-0 rounded-[0.625rem] bg-white shadow-kartu"
-                  layoutId="pil-materi"
-                  transition={{ type: "spring", stiffness: 420, damping: 36 }}
-                />
-              ) : null}
-              <span className="relative z-10">{t.nama}</span>
-            </button>
-          ))}
+        <div className="mb-5 flex flex-wrap items-center gap-3">
+          <div className="inline-flex flex-wrap rounded-tombol bg-kertas-tua p-1">
+            {tab.map((t) => (
+              <button
+                className={`relative rounded-[0.625rem] px-4 py-2 text-kecil font-bold transition-colors ${
+                  saring === t.id ? "text-institusi" : "text-tinta-55 hover:text-tinta"
+                }`}
+                key={t.id}
+                onClick={() => setSaring(t.id)}
+                type="button"
+              >
+                {saring === t.id ? (
+                  <motion.span
+                    className="absolute inset-0 rounded-[0.625rem] bg-white shadow-kartu"
+                    layoutId="pil-materi"
+                    transition={{ type: "spring", stiffness: 420, damping: 36 }}
+                  />
+                ) : null}
+                <span className="relative z-10">{t.nama}</span>
+              </button>
+            ))}
+          </div>
+
+          <SaringStatus jumlah={jumlah} nilai={status} penanda="pil-status-materi" ubah={setStatus} />
         </div>
 
         {saring !== "semua" ? (
@@ -69,7 +90,7 @@ export default function LayarMateri({
         ) : null}
 
         {/* Satu kolom di ponsel, dua di tablet, tiga di desktop lebar. */}
-        <Berurutan className="grid gap-3 lg:grid-cols-2 2xl:grid-cols-3" key={saring}>
+        <Berurutan className="grid gap-3 lg:grid-cols-2 2xl:grid-cols-3" key={`${saring}-${status}`}>
           {tampil.map((t) => {
             const Ikon = ambilIkon(t.ikon);
             const selesai = sudahBaca(sesi, t.id);
@@ -115,7 +136,13 @@ export default function LayarMateri({
         {tampil.length === 0 ? (
           <div className="rounded-kartu border border-dashed border-garis p-10 text-center">
             <Ilustrasi className="mx-auto mb-2 w-44" nama="kosong" warna="adukan" />
-            <p className="text-isi text-tinta-70">Belum ada materi di kategori ini.</p>
+            <p className="text-isi text-tinta-70">
+              {status === "selesai"
+                ? "Belum ada materi yang selesai dibaca di bagian ini."
+                : status === "belum"
+                  ? "Semua materi di bagian ini sudah kamu baca."
+                  : "Belum ada materi di kategori ini."}
+            </p>
           </div>
         ) : null}
 

@@ -1,19 +1,39 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { CheckCircle2, ChevronRight, Gamepad2 } from "lucide-react";
 import AppShell from "@/components/AppShell";
 import Ilustrasi from "@/components/Ilustrasi";
 import { Anak, Berurutan, Sentuh } from "@/components/gerak";
 import { Chip, Halaman, Judul, Kartu, Tombol } from "@/components/ui";
+import SaringStatus, { type Status } from "@/components/SaringStatus";
 import type { Skenario } from "@/lib/tipe";
 import { langgan, snapshot, snapshotServer } from "@/lib/skor";
 
 export default function LayarSimulasi({ skenario }: { skenario: Skenario[] }) {
   const sesi = useSyncExternalStore(langgan, snapshot, snapshotServer);
+  const [status, setStatus] = useState<Status>("semua");
+
   const berikut = skenario.findIndex((_, i) => !sesi.simulasi.includes(i + 1));
   const lanjutKe = berikut === -1 ? 1 : berikut + 1;
+
+  const bernomor = skenario.map((s, i) => ({
+    s,
+    nomor: i + 1,
+    selesai: sesi.simulasi.includes(i + 1),
+  }));
+
+  const jumlah: Record<Status, number> = {
+    semua: bernomor.length,
+    belum: bernomor.filter((x) => !x.selesai).length,
+    selesai: bernomor.filter((x) => x.selesai).length,
+  };
+
+  const tampil =
+    status === "semua"
+      ? bernomor
+      : bernomor.filter((x) => x.selesai === (status === "selesai"));
 
   return (
     <AppShell>
@@ -40,10 +60,20 @@ export default function LayarSimulasi({ skenario }: { skenario: Skenario[] }) {
           </Tombol>
         </Kartu>
 
-        <Berurutan className="grid gap-3 lg:grid-cols-2">
-          {skenario.map((s, i) => {
-            const nomor = i + 1;
-            const selesai = sesi.simulasi.includes(nomor);
+        {/* Nomor skenario dilekatkan sebelum disaring — nomor itu dipakai di
+            alamat halaman, jadi tidak boleh ikut berubah saat daftar dipersempit. */}
+        <div className="mb-5">
+          <SaringStatus
+            jumlah={jumlah}
+            label={{ belum: "Belum dicoba", selesai: "Sudah dicoba" }}
+            nilai={status}
+            penanda="pil-status-simulasi"
+            ubah={setStatus}
+          />
+        </div>
+
+        <Berurutan className="grid gap-3 lg:grid-cols-2" key={status}>
+          {tampil.map(({ s, nomor, selesai }) => {
             return (
               <Anak key={s.id}>
               <Sentuh>
@@ -73,6 +103,16 @@ export default function LayarSimulasi({ skenario }: { skenario: Skenario[] }) {
             );
           })}
         </Berurutan>
+
+        {tampil.length === 0 ? (
+          <div className="rounded-kartu border border-dashed border-garis p-10 text-center">
+            <p className="text-isi text-tinta-70">
+              {status === "selesai"
+                ? "Belum ada skenario yang kamu coba."
+                : "Semua skenario sudah kamu coba."}
+            </p>
+          </div>
+        ) : null}
       </Halaman>
     </AppShell>
   );
