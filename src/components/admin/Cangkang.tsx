@@ -14,6 +14,7 @@ import {
   LogOut,
   Menu,
   MessageSquare,
+  Newspaper,
   ScrollText,
   Shapes,
   UserCog,
@@ -42,6 +43,10 @@ const MENU: Kelompok[] = [
       { href: "/admin/simulasi", label: "Simulasi", Ikon: Gamepad2 },
       { href: "/admin/panduan", label: "Panduan Pengaduan", Ikon: LifeBuoy },
     ],
+  },
+  {
+    judul: "Halaman publik",
+    butir: [{ href: "/admin/berita", label: "Berita", Ikon: Newspaper }],
   },
   {
     judul: "Interaksi",

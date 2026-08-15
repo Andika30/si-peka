@@ -22,6 +22,20 @@
       "when": 1786643878652,
       "tag": "0002_illegal_lord_tyger",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1786784648775,
+      "tag": "0003_flat_ego",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1786790258383,
+      "tag": "0004_safe_madame_masque",
+      "breakpoints": true
     }
   ]
 }

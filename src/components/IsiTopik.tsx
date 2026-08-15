@@ -5,7 +5,8 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, CheckCircle2, LifeBuoy } from "lucide-react";
 import { ambilIkon } from "@/components/ikon";
 import Ilustrasi, { ilustrasiModul } from "@/components/Ilustrasi";
-import { Chip, Eyebrow, Halaman, Kartu, Peringatan, Tombol, warnaTeks } from "@/components/ui";
+import { Chip, Eyebrow, Halaman, Peringatan, Tombol } from "@/components/ui";
+import IsiBlok from "@/components/IsiBlok";
 import type { Masalah, Topik } from "@/lib/tipe";
 import { langgan, snapshot, snapshotServer, tandaiMateri } from "@/lib/skor";
 import { catatMateriDibuka } from "@/app/aksi-peserta";
@@ -70,27 +71,11 @@ export default function IsiTopik({
         </div>
       </div>
 
-      <article className="mb-6 flex flex-col gap-4">
-        {t.isi.paragraf.map((p) => (
-          <p className="text-isi leading-relaxed text-tinta-70" key={p.slice(0, 24)}>
-            {p}
-          </p>
-        ))}
-      </article>
+      <div className="mb-6">
+        <IsiBlok isi={t.isi} warna={t.warna} />
+      </div>
 
-      <Kartu className="mb-6" aksen={t.warna}>
-        <h2 className="mb-4 text-subjudul text-tinta">Yang perlu diingat</h2>
-        <ul className="flex flex-col gap-3">
-          {t.isi.poin.map((p) => (
-            <li className="flex gap-3" key={p}>
-              <CheckCircle2 className={`mt-0.5 size-5 shrink-0 ${warnaTeks(t.warna)}`} aria-hidden />
-              <span className="text-isi text-tinta">{p}</span>
-            </li>
-          ))}
-        </ul>
-      </Kartu>
-
-      {t.isi.peringatan ? <Peringatan>{t.isi.peringatan}</Peringatan> : null}
+      {t.peringatan ? <Peringatan>{t.peringatan}</Peringatan> : null}
 
       <div className="mb-6 flex flex-col gap-2 sm:flex-row">
         <Tombol className="sm:flex-1" href={`/kuis/${t.kuisTerkait}`}>

@@ -11,6 +11,8 @@ import {
   Pilih,
   TombolUtama,
 } from "@/components/admin/ui";
+import EditorBlok from "@/components/admin/EditorBlok";
+import type { BlokIsi } from "@/lib/tipe";
 import { simpanTopik } from "./aksi";
 import type { HasilAksi } from "@/lib/admin/jaga";
 
@@ -52,8 +54,7 @@ export type NilaiTopik = {
   sumber: string;
   urutan: number;
   aktif: boolean;
-  paragraf: string[];
-  poin: string[];
+  isi: BlokIsi[];
 };
 
 export default function FormTopik({
@@ -116,32 +117,15 @@ export default function FormTopik({
         </div>
       </Bagian>
 
-      <Bagian
-        judul="Isi materi"
-        keterangan="Satu baris = satu paragraf atau satu poin. Baris kosong diabaikan."
-      >
-        <AreaTeks
-          baris={8}
-          label="Paragraf penjelasan"
-          nama="paragraf"
-          nilai={nilai?.paragraf.join("\n")}
-          petunjuk="Tulis satu paragraf per baris, tanpa baris kosong di antaranya."
-          wajib
-        />
-        <AreaTeks
-          baris={6}
-          label="Yang perlu diingat"
-          nama="poin"
-          nilai={nilai?.poin.join("\n")}
-          petunjuk="Poin bercentang di kartu bawah materi. Satu poin per baris."
-          wajib
-        />
+      <EditorBlok awal={nilai?.isi ?? []} />
+
+      <Bagian judul="Peringatan">
         <AreaTeks
           baris={2}
           label="Peringatan (opsional)"
           nama="peringatan"
           nilai={nilai?.peringatan}
-          petunjuk="Tampil sebagai kotak merah. Kosongkan kalau materi ini tidak memerlukannya — merah kehilangan arti kalau dipakai di mana-mana."
+          petunjuk="Tampil sebagai kotak merah di bawah isi. Kosongkan kalau materi ini tidak memerlukannya — merah kehilangan arti kalau dipakai di mana-mana."
         />
       </Bagian>
 

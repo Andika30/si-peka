@@ -81,8 +81,11 @@ export default async function SuntingMateri({
           sumber: t.sumber,
           urutan: t.urutan,
           aktif: t.aktif,
-          paragraf: t.isi.filter((i) => i.jenis === "paragraf").map((i) => i.teks),
-          poin: t.isi.filter((i) => i.jenis === "poin").map((i) => i.teks),
+          isi: t.isi.map((i) => ({
+            jenis: i.jenis,
+            teks: i.teks,
+            ...(i.keterangan ? { keterangan: i.keterangan } : {}),
+          })),
         }}
       />
 

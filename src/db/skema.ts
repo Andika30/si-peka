@@ -74,9 +74,16 @@ export const topik = mysqlTable(
 );
 
 /**
- * Paragraf dan poin materi ditaruh di tabel sendiri, bukan satu kolom teks
- * panjang. Dengan begitu admin bisa menyusun ulang atau menghapus satu poin
- * tanpa menyunting seluruh materi.
+ * Isi materi disimpan sebagai BLOK berurut, bukan satu kolom teks panjang.
+ *
+ * Ada tiga jenis blok: paragraf, poin, dan gambar. Bentuk begini dipilih
+ * daripada menyimpan HTML dari editor WYSIWYG karena tiga hal: tampilannya
+ * tetap dikendalikan aplikasi (tipografi tidak bisa dirusak tempelan dari
+ * Word), tidak ada celah HTML berbahaya yang perlu dibersihkan, dan admin
+ * bisa memindahkan satu blok tanpa menyunting seluruh materi.
+ *
+ * Untuk blok `gambar`, kolom `teks` berisi nama berkasnya dan `keterangan`
+ * berisi kalimat di bawah gambar sekaligus teks alternatifnya.
  */
 export const isiTopik = mysqlTable(
   "isi_topik",
@@ -85,11 +92,59 @@ export const isiTopik = mysqlTable(
     topikId: varchar("topik_id", { length: 64 })
       .notNull()
       .references(() => topik.id, { onDelete: "cascade" }),
-    jenis: mysqlEnum("jenis", ["paragraf", "poin"]).notNull(),
+    jenis: mysqlEnum("jenis", ["paragraf", "poin", "gambar"]).notNull(),
     teks: text("teks").notNull(),
+    keterangan: varchar("keterangan", { length: 255 }),
     urutan: int("urutan").notNull().default(0),
   },
-  (t) => [index("idx_isi_topik").on(t.topikId, t.jenis, t.urutan)],
+  (t) => [index("idx_isi_topik").on(t.topikId, t.urutan)],
+);
+
+/* ── Berita ──────────────────────────────────────────────────────────────── */
+
+/**
+ * Kabar dan pengumuman di halaman depan.
+ *
+ * Berbeda dari materi yang bertahan lama, berita terikat waktu — dan itu
+ * risikonya sendiri untuk aplikasi berlabel Bank Indonesia. Karena itu dua
+ * kolom di bawah ini tidak boleh kosong: `tanggal` supaya pembaca tahu
+ * kabarnya sudah lama atau belum, dan `sumber` supaya klaimnya bisa
+ * ditelusuri. Berita tanpa keduanya tidak lebih baik daripada tidak ada.
+ *
+ * Berita sengaja TIDAK jadi menu di dashboard peserta. Empat kelompok fitur
+ * di blok konsep tetap empat; ini komunikasi kelembagaan di halaman publik.
+ */
+export const berita = mysqlTable(
+  "berita",
+  {
+    id: varchar("id", { length: 96 }).primaryKey(),
+    judul: varchar("judul", { length: 220 }).notNull(),
+    ringkas: varchar("ringkas", { length: 300 }).notNull(),
+    /** Gambar sampul, tampil di kartu halaman depan. */
+    gambar: varchar("gambar", { length: 255 }),
+    gambarAlt: varchar("gambar_alt", { length: 255 }),
+    sumber: varchar("sumber", { length: 255 }).notNull(),
+    /** Bentuk YYYY-MM-DD. Urutan tampil ditentukan ini, bukan waktu sisip. */
+    tanggal: varchar("tanggal", { length: 10 }).notNull(),
+    aktif: boolean("aktif").notNull().default(true),
+  },
+  (t) => [index("idx_berita_tanggal").on(t.tanggal)],
+);
+
+/** Isi berita memakai bentuk blok yang sama dengan materi. */
+export const isiBerita = mysqlTable(
+  "isi_berita",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    beritaId: varchar("berita_id", { length: 96 })
+      .notNull()
+      .references(() => berita.id, { onDelete: "cascade" }),
+    jenis: mysqlEnum("jenis", ["paragraf", "poin", "gambar"]).notNull(),
+    teks: text("teks").notNull(),
+    keterangan: varchar("keterangan", { length: 255 }),
+    urutan: int("urutan").notNull().default(0),
+  },
+  (t) => [index("idx_isi_berita").on(t.beritaId, t.urutan)],
 );
 
 /* ── Kuis ────────────────────────────────────────────────────────────────── */
@@ -145,6 +200,13 @@ export const skenario = mysqlTable("skenario", {
   situasi: text("situasi").notNull(),
   /** Penjelasan langkah yang aman — bagian yang paling menentukan. */
   alasan: text("alasan").notNull(),
+  /**
+   * Tangkapan layar situasinya — misalnya layar konfirmasi QRIS atau pesan
+   * masuk yang mencurigakan. Satu gambar per skenario, tampil di atas kartu
+   * konteks. Kosong berarti skenarionya cukup dijelaskan dengan teks.
+   */
+  gambar: varchar("gambar", { length: 255 }),
+  gambarAlt: varchar("gambar_alt", { length: 255 }),
   urutan: int("urutan").notNull().default(0),
   aktif: boolean("aktif").notNull().default(true),
 });
@@ -415,6 +477,14 @@ export const relasiTopik = relations(topik, ({ one, many }) => ({
 
 export const relasiIsiTopik = relations(isiTopik, ({ one }) => ({
   topik: one(topik, { fields: [isiTopik.topikId], references: [topik.id] }),
+}));
+
+export const relasiBerita = relations(berita, ({ many }) => ({
+  isi: many(isiBerita),
+}));
+
+export const relasiIsiBerita = relations(isiBerita, ({ one }) => ({
+  berita: one(berita, { fields: [isiBerita.beritaId], references: [berita.id] }),
 }));
 
 export const relasiKuis = relations(kuis, ({ one, many }) => ({

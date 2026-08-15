@@ -1,10 +1,11 @@
 import "server-only";
 
 import { cache } from "react";
-import { asc, eq } from "drizzle-orm";
+import { asc, desc, eq } from "drizzle-orm";
 import { db, skema } from "@/db";
 import type {
   BankIndonesia,
+  Berita,
   ButirSus,
   Kategori,
   Kuis,
@@ -64,11 +65,12 @@ export const ambilTopik = cache(async (): Promise<Topik[]> => {
     ringkas: t.ringkas,
     ikon: t.ikon,
     warna: t.warna,
-    isi: {
-      paragraf: t.isi.filter((i) => i.jenis === "paragraf").map((i) => i.teks),
-      poin: t.isi.filter((i) => i.jenis === "poin").map((i) => i.teks),
-      ...(t.peringatan ? { peringatan: t.peringatan } : {}),
-    },
+    isi: t.isi.map((i) => ({
+      jenis: i.jenis,
+      teks: i.teks,
+      ...(i.keterangan ? { keterangan: i.keterangan } : {}),
+    })),
+    ...(t.peringatan ? { peringatan: t.peringatan } : {}),
     sumber: t.sumber,
     // Satu materi punya paling banyak satu kuis; kalau belum ada, tautannya
     // dibiarkan kosong dan halaman materi menyembunyikan tombol kuisnya.
@@ -89,6 +91,38 @@ export const cariKategori = cache(async (id: string): Promise<Kategori | undefin
 export const topikPerKategori = cache(async (idKategori: string): Promise<Topik[]> => {
   const semua = await ambilTopik();
   return semua.filter((t) => t.kategori === idKategori);
+});
+
+/* ── Berita ──────────────────────────────────────────────────────────────── */
+
+/** Terbaru lebih dulu — urutannya ditentukan tanggal, bukan waktu sisip. */
+export const ambilBerita = cache(async (batas?: number): Promise<Berita[]> => {
+  const baris = await db.query.berita.findMany({
+    where: eq(skema.berita.aktif, true),
+    orderBy: [desc(skema.berita.tanggal)],
+    ...(batas ? { limit: batas } : {}),
+    with: { isi: { orderBy: [asc(skema.isiBerita.urutan)] } },
+  });
+
+  return baris.map((b) => ({
+    id: b.id,
+    judul: b.judul,
+    ringkas: b.ringkas,
+    ...(b.gambar ? { gambar: b.gambar } : {}),
+    ...(b.gambarAlt ? { gambarAlt: b.gambarAlt } : {}),
+    sumber: b.sumber,
+    tanggal: b.tanggal,
+    isi: b.isi.map((i) => ({
+      jenis: i.jenis,
+      teks: i.teks,
+      ...(i.keterangan ? { keterangan: i.keterangan } : {}),
+    })),
+  }));
+});
+
+export const cariBerita = cache(async (id: string): Promise<Berita | undefined> => {
+  const semua = await ambilBerita();
+  return semua.find((b) => b.id === id);
 });
 
 /* ── Kuis ────────────────────────────────────────────────────────────────── */
@@ -144,6 +178,8 @@ export const ambilSkenario = cache(async (): Promise<Skenario[]> => {
     id: s.id,
     situasi: s.situasi,
     alasan: s.alasan,
+    ...(s.gambar ? { gambar: s.gambar } : {}),
+    ...(s.gambarAlt ? { gambarAlt: s.gambarAlt } : {}),
     konteks: s.konteks.map((k) => ({ label: k.label, nilai: k.nilai })),
     opsi: s.opsi.map((o) => ({
       teks: o.teks,

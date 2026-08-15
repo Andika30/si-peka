@@ -5,7 +5,6 @@ import { asc, eq, max } from "drizzle-orm";
 import { db, skema } from "@/db";
 import {
   angka,
-  baris,
   centang,
   jadikanId,
   segarkanPublik,
@@ -14,21 +13,36 @@ import {
   type HasilAksi,
 } from "@/lib/admin/jaga";
 import { catatLog } from "@/lib/admin/log";
+import { bacaBlok, bersihkanGambarYatim, type BlokMasuk } from "@/lib/admin/blok";
 
 type Warna = (typeof skema.WARNA)[number];
 
 const warnaSah = (nilai: string): Warna =>
   (skema.WARNA as readonly string[]).includes(nilai) ? (nilai as Warna) : "adukan";
 
-/** Menulis ulang paragraf dan poin sebuah materi. */
-async function tulisIsi(topikId: string, paragraf: string[], poin: string[]) {
+/** Menulis ulang seluruh blok isi sebuah materi. */
+async function tulisIsi(topikId: string, blok: BlokMasuk[]) {
   await db.delete(skema.isiTopik).where(eq(skema.isiTopik.topikId, topikId));
+  if (blok.length === 0) return;
 
-  const semua = [
-    ...paragraf.map((teks, urutan) => ({ topikId, jenis: "paragraf" as const, teks, urutan })),
-    ...poin.map((teks, urutan) => ({ topikId, jenis: "poin" as const, teks, urutan })),
-  ];
-  if (semua.length > 0) await db.insert(skema.isiTopik).values(semua);
+  await db.insert(skema.isiTopik).values(
+    blok.map((b, urutan) => ({
+      topikId,
+      jenis: b.jenis,
+      teks: b.teks,
+      keterangan: b.keterangan,
+      urutan,
+    })),
+  );
+}
+
+/** Membaca blok lama sebuah materi, untuk membandingkan gambar mana yang
+    sudah tidak dipakai lagi. */
+async function blokLama(topikId: string) {
+  return db.query.isiTopik.findMany({
+    where: eq(skema.isiTopik.topikId, topikId),
+    columns: { jenis: true, teks: true },
+  });
 }
 
 export async function simpanTopik(_sebelum: HasilAksi, form: FormData): Promise<HasilAksi> {
@@ -37,13 +51,16 @@ export async function simpanTopik(_sebelum: HasilAksi, form: FormData): Promise<
   const idLama = teks(form, "idLama");
   const judul = teks(form, "judul");
   const kategoriId = teks(form, "kategoriId");
-  const paragraf = baris(form, "paragraf");
-  const poin = baris(form, "poin");
 
   if (!judul) return { galat: "Judul materi harus diisi." };
   if (!kategoriId) return { galat: "Kategori harus dipilih." };
-  if (paragraf.length === 0) return { galat: "Isi materi minimal satu paragraf." };
-  if (poin.length === 0) return { galat: "Poin 'yang perlu diingat' minimal satu butir." };
+
+  const { blok, galat } = await bacaBlok(form);
+  if (galat) return { galat };
+  if (blok.length === 0) return { galat: "Isi materi minimal satu blok." };
+  if (!blok.some((b) => b.jenis === "paragraf")) {
+    return { galat: "Isi materi minimal satu paragraf penjelasan." };
+  }
 
   const nilai = {
     kategoriId,
@@ -59,7 +76,8 @@ export async function simpanTopik(_sebelum: HasilAksi, form: FormData): Promise<
 
   if (idLama) {
     await db.update(skema.topik).set(nilai).where(eq(skema.topik.id, idLama));
-    await tulisIsi(idLama, paragraf, poin);
+    await bersihkanGambarYatim(await blokLama(idLama), blok);
+    await tulisIsi(idLama, blok);
     await catatLog(admin, "ubah", "materi", judul);
     segarkanPublik();
     return { pesan: "Materi tersimpan." };
@@ -79,7 +97,7 @@ export async function simpanTopik(_sebelum: HasilAksi, form: FormData): Promise<
     id,
     urutan: nilai.urutan || (urutanTerakhir.n ?? 0) + 1,
   });
-  await tulisIsi(id, paragraf, poin);
+  await tulisIsi(id, blok);
   await catatLog(admin, "tambah", "materi", judul);
 
   segarkanPublik();
@@ -105,6 +123,10 @@ export async function hapusTopik(form: FormData): Promise<void> {
     ].join(", ");
     redirect(`/admin/materi/${id}?galat=${encodeURIComponent(`Masih dipakai oleh ${penghalang}.`)}`);
   }
+
+  // Baris isinya ikut terhapus lewat ON DELETE CASCADE, tapi berkas
+  // gambarnya tidak — itu di luar jangkauan basis data.
+  await bersihkanGambarYatim(await blokLama(id), []);
 
   await db.delete(skema.topik).where(eq(skema.topik.id, id));
   await catatLog(admin, "hapus", "materi", id);

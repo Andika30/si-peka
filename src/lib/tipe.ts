@@ -20,6 +20,17 @@ export type Kategori = {
   ikon: string;
 };
 
+/**
+ * Satu blok isi materi. Untuk `gambar`, `teks` berisi nama berkas dan
+ * `keterangan` kalimat di bawahnya; untuk `paragraf` dan `poin`, `teks`
+ * adalah kalimatnya sendiri.
+ */
+export type BlokIsi = {
+  jenis: "paragraf" | "poin" | "gambar";
+  teks: string;
+  keterangan?: string;
+};
+
 export type Topik = {
   id: string;
   kategori: string;
@@ -27,10 +38,30 @@ export type Topik = {
   ringkas: string;
   ikon: string;
   warna: Warna;
-  isi: { paragraf: string[]; poin: string[]; peringatan?: string };
+  /** Blok berurut — urutan di sini persis urutan tampil di halaman materi. */
+  isi: BlokIsi[];
+  peringatan?: string;
   sumber: string;
   /** Menghubungkan materi ke kuisnya: dasar rekomendasi setelah kuis. */
   kuisTerkait: string;
+};
+
+/**
+ * Kabar dan pengumuman di halaman depan.
+ *
+ * `tanggal` dan `sumber` sengaja wajib, bukan opsional: berita terikat waktu,
+ * dan tanpa keduanya pembaca tidak punya cara menilai kabarnya masih berlaku
+ * atau tidak.
+ */
+export type Berita = {
+  id: string;
+  judul: string;
+  ringkas: string;
+  gambar?: string;
+  gambarAlt?: string;
+  sumber: string;
+  tanggal: string;
+  isi: BlokIsi[];
 };
 
 export type SoalKuis = {
@@ -60,6 +91,9 @@ export type Skenario = {
   situasi: string;
   opsi: OpsiSkenario[];
   alasan: string;
+  /** Tangkapan layar situasinya. Kosong berarti cukup dijelaskan teks. */
+  gambar?: string;
+  gambarAlt?: string;
 };
 
 export type Masalah = {

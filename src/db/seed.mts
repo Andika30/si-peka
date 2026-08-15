@@ -81,20 +81,15 @@ async function seed() {
   );
   console.log(`  topik          ${materiJson.topik.length}`);
 
-  const barisIsi = materiJson.topik.flatMap((t) => [
-    ...t.isi.paragraf.map((teks, i) => ({
-      topikId: t.id,
-      jenis: "paragraf" as const,
-      teks,
-      urutan: i,
-    })),
-    ...t.isi.poin.map((teks, i) => ({
-      topikId: t.id,
-      jenis: "poin" as const,
-      teks,
-      urutan: i,
-    })),
-  ]);
+  // Blok disusun berurut: paragraf dulu, lalu poin. Isi awal belum memuat
+  // gambar — itu ditambahkan pengelola lewat panel admin.
+  const barisIsi = materiJson.topik.flatMap((t) => {
+    const blok = [
+      ...t.isi.paragraf.map((teks) => ({ jenis: "paragraf" as const, teks })),
+      ...t.isi.poin.map((teks) => ({ jenis: "poin" as const, teks })),
+    ];
+    return blok.map((b, urutan) => ({ topikId: t.id, ...b, urutan }));
+  });
   await db.insert(skema.isiTopik).values(barisIsi);
   console.log(`  isi_topik      ${barisIsi.length}`);
 

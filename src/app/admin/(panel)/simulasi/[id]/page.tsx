@@ -54,6 +54,8 @@ export default async function SuntingSkenario({ params }: { params: Promise<{ id
           alasan: s.alasan,
           urutan: s.urutan,
           aktif: s.aktif,
+          gambar: s.gambar,
+          gambarAlt: s.gambarAlt,
           konteks: s.konteks.map((k) => ({ label: k.label, nilai: k.nilai })),
           opsi: s.opsi.map((o) => ({
             teks: o.teks,

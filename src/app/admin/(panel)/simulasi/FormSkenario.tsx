@@ -14,6 +14,8 @@ export type NilaiSkenario = {
   alasan: string;
   urutan: number;
   aktif: boolean;
+  gambar: string | null;
+  gambarAlt: string | null;
   konteks: { label: string; nilai: string }[];
   opsi: { teks: string; aman: boolean; konsekuensi: string | null }[];
 };
@@ -72,6 +74,53 @@ export default function FormSkenario({ nilai }: { nilai?: NilaiSkenario }) {
           petunjuk="Akhiri dengan pertanyaan, misalnya: Apa yang kamu lakukan?"
           wajib
         />
+      </Bagian>
+
+      <Bagian
+        judul="Gambar situasi"
+        keterangan="Opsional. Tangkapan layar yang dilihat peserta — misalnya layar konfirmasi QRIS atau pesan masuk yang mencurigakan. Tampil di atas kartu konteks."
+      >
+        <input name="gambarLama" type="hidden" value={nilai?.gambar ?? ""} />
+
+        {nilai?.gambar ? (
+          <img
+            alt=""
+            className="max-h-64 rounded-dalam border border-garis"
+            src={`/gambar/${nilai.gambar}`}
+          />
+        ) : null}
+
+        <label className="block">
+          <span className="mb-1.5 block text-kecil font-bold text-tinta">
+            {nilai?.gambar ? "Ganti gambar" : "Pilih gambar"}
+          </span>
+          <input
+            accept="image/jpeg,image/png,image/webp"
+            className="block w-full text-kecil text-tinta-70 file:mr-3 file:rounded-tombol file:border-0 file:bg-adukan-lembut file:px-4 file:py-2 file:text-kecil file:font-bold file:text-adukan"
+            name="gambar"
+            type="file"
+          />
+          <span className="mt-1 block text-kecil text-tinta-55">
+            JPG, PNG, atau WEBP. Maksimal 2 MB.
+            {nilai?.gambar ? " Biarkan kosong kalau gambarnya tidak diganti." : ""}
+          </span>
+        </label>
+
+        <Medan
+          label="Teks alternatif"
+          maks={255}
+          nama="gambarAlt"
+          nilai={nilai?.gambarAlt}
+          petunjuk="Menjelaskan isi gambar untuk pembaca layar dan saat gambarnya gagal dimuat."
+        />
+
+        {nilai?.gambar ? (
+          <Centang
+            label="Hapus gambar ini"
+            nama="hapusGambar"
+            petunjuk="Skenario kembali tampil tanpa gambar."
+          />
+        ) : null}
       </Bagian>
 
       <Bagian

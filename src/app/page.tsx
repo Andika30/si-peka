@@ -3,7 +3,15 @@ import { ArrowRight, Ban, BookOpen, Gamepad2, LifeBuoy, LogIn } from "lucide-rea
 import Ilustrasi from "@/components/Ilustrasi";
 import { Anak, Berurutan, Muncul } from "@/components/gerak";
 import { Chip, Finder } from "@/components/ui";
-import { ambilKategori, ambilKuis, ambilMasalah, ambilSkenario, ambilTopik } from "@/lib/konten";
+import KartuBerita from "@/components/KartuBerita";
+import {
+  ambilBerita,
+  ambilKategori,
+  ambilKuis,
+  ambilMasalah,
+  ambilSkenario,
+  ambilTopik,
+} from "@/lib/konten";
 
 /* Urutannya adalah alur belajar yang disarankan — tahu dulu, latih, lalu tahu
    ke mana kalau benar-benar kejadian. Kuis tidak berdiri sendiri di sini
@@ -77,12 +85,13 @@ const TIDAK = [
 ];
 
 export default async function Depan() {
-  const [kategori, topik, kuis, skenario, masalah] = await Promise.all([
+  const [kategori, topik, kuis, skenario, masalah, berita] = await Promise.all([
     ambilKategori(),
     ambilTopik(),
     ambilKuis(),
     ambilSkenario(),
     ambilMasalah(),
+    ambilBerita(3),
   ]);
 
   // Angka nyata, diambil dari basis data — bukan klaim pemasaran.
@@ -326,6 +335,42 @@ export default async function Depan() {
           </div>
         </div>
       </section>
+
+      {/* ─── Berita ──────────────────────────────────────────────────────────
+          Muncul hanya kalau memang ada isinya. Bagian kosong bertuliskan
+          "belum ada berita" di halaman depan justru membuat aplikasinya
+          tampak terbengkalai. */}
+      {berita.length > 0 ? (
+        <section className="border-t border-garis bg-kertas-tua/40">
+          <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">
+            <Muncul className="mb-8 flex flex-wrap items-end justify-between gap-4">
+              <div className="max-w-2xl">
+                <span className="font-mono text-data uppercase text-tinta-55">Kabar terbaru</span>
+                <h2 className="mt-2 text-display text-tinta">Berita &amp; pengumuman</h2>
+                <p className="mt-3 text-isi text-tinta-70">
+                  Modus penipuan berubah, begitu juga aturan dan kanal resminya. Kabar di sini
+                  selalu mencantumkan tanggal dan sumbernya.
+                </p>
+              </div>
+              <Link
+                className="inline-flex items-center gap-2 text-kecil font-bold text-adukan"
+                href="/berita"
+              >
+                Semua berita
+                <ArrowRight className="size-4" aria-hidden />
+              </Link>
+            </Muncul>
+
+            <Berurutan className="grid gap-4 md:grid-cols-3">
+              {berita.map((b) => (
+                <Anak key={b.id}>
+                  <KartuBerita b={b} />
+                </Anak>
+              ))}
+            </Berurutan>
+          </div>
+        </section>
+      ) : null}
 
       {/* ─── Ajakan penutup ──────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-20">

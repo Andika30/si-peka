@@ -45,8 +45,10 @@ export default function Simulasi({
     void catatSimulasiSelesai(skenario.id, skenario.opsi[i].aman);
   }
 
-  const terakhir = nomor === total;
-  const berikutnya = terakhir ? "/simulasi" : `/simulasi/${nomor + 1}`;
+  // Tiap skenario berdiri sendiri: selesai satu berarti kembali ke daftar,
+  // bukan terseret ke skenario berikutnya. Peserta yang datang karena satu
+  // situasi tertentu tidak seharusnya dipaksa menjalani sisanya.
+  const sudahDijawab = dipilih !== null;
 
   return (
     <>
@@ -69,10 +71,10 @@ export default function Simulasi({
           </Link>
         </div>
         <div className="mx-auto max-w-3xl px-4 pb-3 sm:px-6">
-          <BarProgres
-            nilai={((nomor - 1 + (dipilih === null ? 0 : 1)) / total) * 100}
-            warna="kenali"
-          />
+          {/* Kemajuan skenario INI, bukan kemajuan seluruh rangkaian —
+              skenarionya berdiri sendiri, jadi bar yang mengisi sedikit demi
+              sedikit sepanjang empat skenario akan menyesatkan. */}
+          <BarProgres nilai={sudahDijawab ? 100 : 0} warna="kenali" />
         </div>
       </header>
 
@@ -81,6 +83,16 @@ export default function Simulasi({
             Tidak ada bagian yang diberi warna merah: menyadari sendiri
             kejanggalannya justru yang sedang diuji. */}
         <div className="mb-6 rounded-kartu border border-garis bg-white p-5 shadow-kartu sm:p-6">
+          {/* Tangkapan layar situasinya, kalau ada — ditaruh paling atas
+              supaya terbaca sebagai "inilah yang kamu lihat di ponselmu". */}
+          {skenario.gambar ? (
+            <img
+              alt={skenario.gambarAlt ?? "Tangkapan layar situasi"}
+              className="mb-5 w-full rounded-tombol border border-garis"
+              src={`/gambar/${skenario.gambar}`}
+            />
+          ) : null}
+
           <div className="mb-5 rounded-tombol border border-garis bg-kertas p-4">
             {skenario.konteks.map((k, i) => (
               <div key={k.label}>
@@ -151,8 +163,8 @@ export default function Simulasi({
             {/* Penjelasannya yang penting, bukan vonisnya —
                 "benar/salah" tidak mengajarkan apa pun. */}
             <p className="mb-4 text-isi text-tinta">{skenario.alasan}</p>
-            <Tombol className="w-full sm:w-auto" href={berikutnya}>
-              {terakhir ? "Selesai, kembali ke daftar" : "Skenario berikutnya"}
+            <Tombol className="w-full sm:w-auto" href="/simulasi">
+              Selesai, kembali ke daftar skenario
               <ArrowRight className="size-4" aria-hidden />
             </Tombol>
           </Muncul>

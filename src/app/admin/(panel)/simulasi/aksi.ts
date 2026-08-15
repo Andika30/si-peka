@@ -13,6 +13,7 @@ import {
   type HasilAksi,
 } from "@/lib/admin/jaga";
 import { catatLog } from "@/lib/admin/log";
+import { hapusGambar, simpanGambar } from "@/lib/admin/gambar";
 
 /**
  * Satu skenario disimpan sekaligus dengan konteks dan pilihannya — sama
@@ -75,7 +76,28 @@ export async function simpanSkenario(_sebelum: HasilAksi, form: FormData): Promi
     };
   }
 
-  const nilai = { situasi, alasan, urutan: angka(form, "urutan"), aktif: centang(form, "aktif") };
+  // Gambar baru menggantikan yang lama; kalau tidak ada berkas yang dipilih,
+  // yang lama dipertahankan apa adanya.
+  const berkas = form.get("gambar");
+  const gambarLama = teks(form, "gambarLama") || null;
+  let gambar = gambarLama;
+
+  if (berkas instanceof File && berkas.size > 0) {
+    const hasil = await simpanGambar(berkas);
+    if (hasil.galat) return { galat: hasil.galat };
+    gambar = hasil.nama!;
+  } else if (centang(form, "hapusGambar")) {
+    gambar = null;
+  }
+
+  const nilai = {
+    situasi,
+    alasan,
+    gambar,
+    gambarAlt: teks(form, "gambarAlt") || null,
+    urutan: angka(form, "urutan"),
+    aktif: centang(form, "aktif"),
+  };
 
   const id = idLama || jadikanId(teks(form, "nama") || situasi.slice(0, 40));
   if (!id) return { galat: "Nama skenario tidak bisa dijadikan alamat." };
@@ -108,6 +130,9 @@ export async function simpanSkenario(_sebelum: HasilAksi, form: FormData): Promi
     })),
   );
 
+  // Berkas lama dibuang hanya setelah penggantinya benar-benar tersimpan.
+  if (gambarLama && gambarLama !== gambar) await hapusGambar(gambarLama);
+
   await catatLog(admin, idLama ? "ubah" : "tambah", "simulasi", situasi.slice(0, 80));
 
   segarkanPublik();
@@ -118,6 +143,13 @@ export async function simpanSkenario(_sebelum: HasilAksi, form: FormData): Promi
 export async function hapusSkenario(form: FormData): Promise<void> {
   const admin = await wajibAdmin();
   const id = teks(form, "id");
+
+  const s = await db.query.skenario.findFirst({
+    where: eq(skema.skenario.id, id),
+    columns: { gambar: true },
+  });
+  await hapusGambar(s?.gambar);
+
   await db.delete(skema.skenario).where(eq(skema.skenario.id, id));
   await catatLog(admin, "hapus", "simulasi", id);
   segarkanPublik();
