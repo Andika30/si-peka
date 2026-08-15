@@ -1,0 +1,1 @@
+ALTER TABLE `isi_topik` MODIFY COLUMN `jenis` enum('subjudul','paragraf','poin','gambar') NOT NULL;

@@ -14,7 +14,7 @@ import { hapusGambar, simpanGambar } from "./gambar";
  * di kolom `teks`.
  */
 
-export type JenisBlok = "paragraf" | "poin" | "gambar";
+export type JenisBlok = "subjudul" | "paragraf" | "poin" | "gambar";
 
 export type BlokMasuk = {
   jenis: JenisBlok;

@@ -92,7 +92,7 @@ export const isiTopik = mysqlTable(
     topikId: varchar("topik_id", { length: 64 })
       .notNull()
       .references(() => topik.id, { onDelete: "cascade" }),
-    jenis: mysqlEnum("jenis", ["paragraf", "poin", "gambar"]).notNull(),
+    jenis: mysqlEnum("jenis", ["subjudul", "paragraf", "poin", "gambar"]).notNull(),
     teks: text("teks").notNull(),
     keterangan: varchar("keterangan", { length: 255 }),
     urutan: int("urutan").notNull().default(0),

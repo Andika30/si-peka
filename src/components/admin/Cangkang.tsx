@@ -15,6 +15,7 @@ import {
   Menu,
   MessageSquare,
   Newspaper,
+  Radio,
   ScrollText,
   Shapes,
   UserCog,
@@ -55,7 +56,8 @@ const MENU: Kelompok[] = [
   {
     judul: "Pengaturan",
     butir: [
-      { href: "/admin/kanal", label: "Kanal & Kategori", Ikon: Shapes },
+      { href: "/admin/kanal", label: "Kanal Pengaduan", Ikon: Radio },
+      { href: "/admin/kategori", label: "Kategori Materi", Ikon: Shapes },
       { href: "/admin/akun", label: "Pengaturan Akun", Ikon: UserCog },
       { href: "/admin/log", label: "Log Aktivitas", Ikon: ScrollText },
     ],

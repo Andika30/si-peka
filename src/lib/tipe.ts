@@ -26,7 +26,7 @@ export type Kategori = {
  * adalah kalimatnya sendiri.
  */
 export type BlokIsi = {
-  jenis: "paragraf" | "poin" | "gambar";
+  jenis: "subjudul" | "paragraf" | "poin" | "gambar";
   teks: string;
   keterangan?: string;
 };

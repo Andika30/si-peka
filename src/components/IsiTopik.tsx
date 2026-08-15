@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, LifeBuoy } from "lucide-react";
 import { ambilIkon } from "@/components/ikon";
 import Ilustrasi, { ilustrasiModul } from "@/components/Ilustrasi";
 import { Chip, Eyebrow, Halaman, Peringatan, Tombol } from "@/components/ui";
-import IsiBlok from "@/components/IsiBlok";
+import BacaBertahap from "@/components/BacaBertahap";
 import type { Masalah, Topik } from "@/lib/tipe";
 import { langgan, snapshot, snapshotServer, tandaiMateri } from "@/lib/skor";
 import { catatMateriDibuka } from "@/app/aksi-peserta";
@@ -19,14 +19,10 @@ import { catatMateriDibuka } from "@/app/aksi-peserta";
 export default function IsiTopik({
   t,
   kategori,
-  sebelum,
-  sesudah,
   panduan,
 }: {
   t: Topik;
   kategori?: string;
-  sebelum?: { id: string; judul: string };
-  sesudah?: { id: string; judul: string };
   /** Panduan pengaduan yang relevan — jembatan dari "tahu" ke "kalau kena". */
   panduan?: Pick<Masalah, "id" | "label">;
 }) {
@@ -71,13 +67,13 @@ export default function IsiTopik({
         </div>
       </div>
 
-      <div className="mb-6">
-        <IsiBlok isi={t.isi} warna={t.warna} />
-      </div>
+      <BacaBertahap
+        isi={t.isi}
+        selesai={
+          <>
+            {t.peringatan ? <Peringatan>{t.peringatan}</Peringatan> : null}
 
-      {t.peringatan ? <Peringatan>{t.peringatan}</Peringatan> : null}
-
-      <div className="mb-6 flex flex-col gap-2 sm:flex-row">
+            <div className="mb-6 flex flex-col gap-2 sm:flex-row">
         <Tombol className="sm:flex-1" href={`/kuis/${t.kuisTerkait}`}>
           {hasil ? "Ulangi kuis materi ini" : "Uji pemahaman"}
           <ArrowRight className="size-4" aria-hidden />
@@ -108,32 +104,18 @@ export default function IsiTopik({
         </Link>
       ) : null}
 
-      <p className="mb-6 font-mono text-data uppercase text-tinta-55">Sumber: {t.sumber}</p>
+            <p className="mb-6 font-mono text-data uppercase text-tinta-55">
+              Sumber: {t.sumber}
+            </p>
+          </>
+        }
+        warna={t.warna}
+      />
 
-      <nav className="flex items-center justify-between gap-3 border-t border-garis pt-5">
-        {sebelum ? (
-          <Link
-            className="flex min-w-0 items-center gap-2 text-kecil text-tinta-70 hover:text-institusi"
-            href={`/materi/${sebelum.id}`}
-          >
-            <ArrowLeft className="size-4 shrink-0" aria-hidden />
-            <span className="truncate">{sebelum.judul}</span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {sesudah ? (
-          <Link
-            className="flex min-w-0 items-center gap-2 text-right text-kecil text-tinta-70 hover:text-institusi"
-            href={`/materi/${sesudah.id}`}
-          >
-            <span className="truncate">{sesudah.judul}</span>
-            <ArrowRight className="size-4 shrink-0" aria-hidden />
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
+      {/* Tidak ada tautan ke materi sebelumnya atau berikutnya. Tiap materi
+          berdiri sendiri — orang datang karena satu pertanyaan tertentu, dan
+          tidak seharusnya terseret ke materi lain begitu selesai. Kembali ke
+          daftar sudah tersedia di tautan atas. */}
     </Halaman>
   );
 }

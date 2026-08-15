@@ -39,9 +39,6 @@ export default async function PengaturanAkun() {
         <Panel>
           {semua.map((a) => (
             <div className="flex items-center gap-4 border-b border-garis p-4 last:border-b-0" key={a.id}>
-              <span className="grid size-9 shrink-0 place-content-center rounded-full bg-adukan-lembut text-sm font-bold text-adukan">
-                {a.nama.slice(0, 1).toUpperCase()}
-              </span>
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-isi font-bold text-tinta">
                   {a.nama}

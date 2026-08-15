@@ -17,6 +17,9 @@ export function kelompokkan(isi: BlokIsi[]): Tampil[] {
   const hasil: Tampil[] = [];
 
   for (const b of isi) {
+    // Subjudul sudah dipakai memecah bagian sebelum sampai ke sini, jadi
+    // kalaupun lolos ia diabaikan daripada dirender sebagai paragraf biasa.
+    if (b.jenis === "subjudul") continue;
     if (b.jenis !== "poin") {
       hasil.push({ jenis: b.jenis, teks: b.teks, keterangan: b.keterangan });
       continue;

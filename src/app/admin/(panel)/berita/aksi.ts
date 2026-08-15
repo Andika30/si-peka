@@ -20,9 +20,11 @@ async function tulisIsi(beritaId: string, blok: BlokMasuk[]) {
   if (blok.length === 0) return;
 
   await db.insert(skema.isiBerita).values(
+    // Berita dibaca sekali jalan, tidak dipecah per bagian — subjudul yang
+    // terlanjur dibuat diperlakukan sebagai paragraf biasa.
     blok.map((b, urutan) => ({
       beritaId,
-      jenis: b.jenis,
+      jenis: b.jenis === "subjudul" ? ("paragraf" as const) : b.jenis,
       teks: b.teks,
       keterangan: b.keterangan,
       urutan,

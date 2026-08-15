@@ -1,7 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { ChevronDown, ChevronUp, ImagePlus, ListChecks, Pilcrow, Trash2 } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  Heading,
+  ImagePlus,
+  ListChecks,
+  Pilcrow,
+  Trash2,
+} from "lucide-react";
 import type { BlokIsi } from "@/lib/tipe";
 
 /**
@@ -31,8 +39,19 @@ type Baris = {
   pratinjau?: string;
 };
 
-const IKON = { paragraf: Pilcrow, poin: ListChecks, gambar: ImagePlus } as const;
-const NAMA = { paragraf: "Paragraf", poin: "Poin", gambar: "Gambar" } as const;
+const IKON = {
+  subjudul: Heading,
+  paragraf: Pilcrow,
+  poin: ListChecks,
+  gambar: ImagePlus,
+} as const;
+
+const NAMA = {
+  subjudul: "Sub materi",
+  paragraf: "Paragraf",
+  poin: "Poin",
+  gambar: "Gambar",
+} as const;
 
 export default function EditorBlok({ awal }: { awal: BlokIsi[] }) {
   const [baris, setBaris] = useState<Baris[]>(() =>
@@ -175,7 +194,7 @@ export default function EditorBlok({ awal }: { awal: BlokIsi[] }) {
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {(["paragraf", "poin", "gambar"] as const).map((j) => {
+        {(["subjudul", "paragraf", "poin", "gambar"] as const).map((j) => {
           const Ikon = IKON[j];
           return (
             <button

@@ -19,8 +19,6 @@ export default async function HalamanMateri({ params }: { params: Promise<{ id: 
       <IsiTopik
         kategori={kategori?.nama}
         panduan={panduan && { id: panduan.id, label: panduan.label }}
-        sebelum={topik[i - 1] && { id: topik[i - 1].id, judul: topik[i - 1].judul }}
-        sesudah={topik[i + 1] && { id: topik[i + 1].id, judul: topik[i + 1].judul }}
         t={t}
       />
     </AppShell>
