@@ -167,20 +167,42 @@ export default function AppShell({ children }: { children: ReactNode }) {
       </aside>
 
       <div className="isi-sisi flex-1">
-        {/* Bilah atas hanya ada di layar yang punya sidebar. Di ponsel
-            navigasinya sudah dipegang bilah bawah, jadi menambahkan bilah
-            atas di sana cuma memakan ruang baca. */}
-        <header className="sticky top-0 z-30 hidden h-14 items-center gap-3 border-b border-garis bg-kertas/90 px-4 backdrop-blur md:flex lg:px-6">
+        {/* Bilah atas ada di semua ukuran, tapi isinya berbeda. Di ponsel
+            tidak ada sidebar untuk diciutkan dan tiap halaman sudah punya
+            judul besarnya sendiri — jadi yang tersisa hanya merek di kiri
+            dan jalan kembali ke halaman depan di kanan. */}
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-garis bg-kertas/90 px-4 backdrop-blur lg:px-6">
           <button
             aria-label={LABEL_TOGGLE}
-            className="grid size-10 shrink-0 place-content-center rounded-dalam text-tinta-55 transition-colors hover:bg-white hover:text-institusi"
+            className="hidden size-10 shrink-0 place-content-center rounded-dalam text-tinta-55 transition-colors hover:bg-white hover:text-institusi md:grid"
             onClick={bukaTutupSisi}
             title={LABEL_TOGGLE}
             type="button"
           >
             <Menu className="size-5" aria-hidden />
           </button>
-          <span className="text-sm font-bold text-tinta">{judulDari(path)}</span>
+
+          <Link aria-label="Halaman depan" className="flex items-center gap-2 md:hidden" href="/">
+            <span className="grid size-8 shrink-0 place-content-center rounded-dalam gradien-merek">
+              <span className="grid grid-cols-2 gap-0.5" aria-hidden>
+                <span className="size-1 bg-white" />
+                <span className="size-1 bg-white/70" />
+                <span className="size-1 bg-white/70" />
+                <span className="size-1 bg-transparent" />
+              </span>
+            </span>
+            <span className="text-sm font-extrabold tracking-tight text-institusi">PeKA</span>
+          </Link>
+
+          <span className="hidden text-sm font-bold text-tinta md:inline">{judulDari(path)}</span>
+
+          <Link
+            className="ml-auto flex items-center gap-2 rounded-tombol px-3 py-2 text-kecil font-bold text-tinta-55 transition-colors hover:bg-white hover:text-institusi"
+            href="/"
+          >
+            <Home className="size-4" aria-hidden />
+            Halaman depan
+          </Link>
         </header>
 
         {children}

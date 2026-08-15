@@ -11,6 +11,7 @@ import {
   TombolUtama,
 } from "@/components/admin/ui";
 import EditorBlok from "@/components/admin/EditorBlok";
+import PratinjauBerita from "@/components/admin/PratinjauBerita";
 import type { BlokIsi } from "@/lib/tipe";
 import { simpanBerita } from "./aksi";
 import type { HasilAksi } from "@/lib/admin/jaga";
@@ -34,7 +35,7 @@ export default function FormBerita({ nilai }: { nilai?: NilaiBerita }) {
   const hariIni = new Date().toISOString().slice(0, 10);
 
   return (
-    <form action={kirim}>
+    <form action={kirim} id="form-berita">
       <GalatKotak pesan={hasil.galat} />
       {hasil.pesan ? (
         <p className="mb-5 rounded-dalam border border-peduli/30 bg-peduli-lembut p-3 text-kecil font-bold text-peduli">
@@ -141,10 +142,13 @@ export default function FormBerita({ nilai }: { nilai?: NilaiBerita }) {
         />
       </Bagian>
 
-      <TombolUtama sedang={sedang}>
-        <Save className="size-4" aria-hidden />
-        {sedang ? "Menyimpan…" : "Simpan berita"}
-      </TombolUtama>
+      <div className="flex flex-wrap gap-2">
+        <TombolUtama sedang={sedang}>
+          <Save className="size-4" aria-hidden />
+          {sedang ? "Menyimpan…" : "Simpan berita"}
+        </TombolUtama>
+        <PratinjauBerita formId="form-berita" />
+      </div>
     </form>
   );
 }

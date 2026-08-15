@@ -32,14 +32,20 @@ export function kelompokkan(isi: BlokIsi[]): Tampil[] {
   return hasil;
 }
 
+/** Nama berkas jadi alamat. Bisa diganti oleh pratinjau, yang gambarnya
+    masih berupa blob di peramban dan belum punya nama di server. */
+const alamatBawaan = (nama: string) => `/gambar/${nama}`;
+
 export default function IsiBlok({
   isi,
   warna = "adukan",
   judulPoin = "Yang perlu diingat",
+  alamatGambar = alamatBawaan,
 }: {
   isi: BlokIsi[];
   warna?: Warna;
   judulPoin?: string;
+  alamatGambar?: (nama: string) => string;
 }) {
   return (
     <article className="flex flex-col gap-4">
@@ -67,7 +73,7 @@ export default function IsiBlok({
               alt={blok.keterangan ?? ""}
               className="w-full rounded-kartu border border-garis bg-white"
               loading="lazy"
-              src={`/gambar/${blok.teks}`}
+              src={alamatGambar(blok.teks)}
             />
             {blok.keterangan ? (
               <figcaption className="mt-2 text-kecil text-tinta-55">{blok.keterangan}</figcaption>
