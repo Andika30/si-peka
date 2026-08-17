@@ -117,7 +117,7 @@ export default function FormMasalah({
 
       <Bagian
         judul="Langkah sebelum jawaban"
-        keterangan="Yang ditanyakan ke peserta sebelum jawabannya muncul. Matikan yang tidak menentukan apa-apa untuk masalah ini — pertanyaan yang tidak mengubah jawaban hanya menunda orang yang sedang panik."
+        keterangan="Yang ditanyakan ke peserta sebelum jawabannya muncul. Matikan yang tidak menentukan apa-apa untuk masalah ini."
       >
         <Centang
           label="Tanyakan jenis layanan"

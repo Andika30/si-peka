@@ -39,26 +39,8 @@ export default function LayarSimulasi({ skenario }: { skenario: Skenario[] }) {
     <AppShell>
       <Halaman>
         <Judul sub="Hadapi situasi yang benar-benar terjadi. Pilihan yang keliru tidak langsung divonis — kamu akan melihat akibatnya lebih dulu.">
-          Simulasi Kenali
+          Simulasi
         </Judul>
-
-        <Kartu aksen="kenali" className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Ilustrasi className="hidden w-32 shrink-0 sm:block" nama="simulasi" warna="kenali" />
-          <span className="sm:hidden">
-            <Chip Ikon={Gamepad2} besar warna="kenali" />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className="text-subjudul text-tinta">
-              {sesi.simulasi.length} dari {skenario.length} skenario selesai
-            </p>
-            <p className="mt-0.5 text-kecil text-tinta-70">
-              Setiap skenario memakan waktu kurang dari satu menit.
-            </p>
-          </div>
-          <Tombol className="shrink-0" href={`/simulasi/${lanjutKe}`}>
-            {sesi.simulasi.length === 0 ? "Mulai simulasi" : "Lanjutkan"}
-          </Tombol>
-        </Kartu>
 
         {/* Nomor skenario dilekatkan sebelum disaring — nomor itu dipakai di
             alamat halaman, jadi tidak boleh ikut berubah saat daftar dipersempit. */}

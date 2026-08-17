@@ -155,13 +155,6 @@ export default function AppShell({ children }: { children: ReactNode }) {
               <TautanSisi aktif={aktifkah(path, b.href)} butir={b} key={b.href} />
             ))}
           </nav>
-
-          <div className="label-sisi mt-8 rounded-dalam bg-white p-4">
-            <p className="text-kecil font-bold text-institusi">Media pendukung edukasi</p>
-            <p className="mt-1 text-kecil text-tinta-55">
-              Kantor Perwakilan Bank Indonesia Provinsi Sulawesi Tenggara.
-            </p>
-          </div>
         </div>
 
       </aside>

@@ -121,20 +121,6 @@ export default function Masuk() {
           </Tombol>
         </Kartu>
 
-        <Kartu nada="adukan">
-          <div className="flex items-start gap-3">
-            <ShieldCheck className="mt-0.5 size-5 shrink-0 text-adukan" aria-hidden />
-            <div>
-              <p className="text-subjudul text-tinta">Kenapa tidak ada kata sandi?</p>
-              <p className="mt-1 text-kecil leading-relaxed text-tinta-70">
-                Aplikasi ini tidak menyimpan data siapa pun di server. Tidak ada akun berarti tidak ada
-                yang bisa bocor — dan itu memang batasan yang dipegang aplikasi ini sejak awal.
-                Seluruh progres tersimpan di peramban perangkat ini saja.
-              </p>
-            </div>
-          </div>
-        </Kartu>
-
         <div className="mt-4 flex items-start gap-3 rounded-dalam border border-garis bg-white p-4">
           <Info className="mt-0.5 size-5 shrink-0 text-tinta-55" aria-hidden />
           <p className="text-kecil text-tinta-70">
