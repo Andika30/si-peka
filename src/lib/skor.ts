@@ -9,10 +9,10 @@
  *    edukasi, bukan alat untuk membuktikan peningkatan literasi.
  *  - Tidak ada data pribadi. Semua tersimpan di peramban perangkat pengguna.
  *
- * Yang tersisa: progres materi, hasil kuis beserta rekomendasi materi, riwayat
- * simulasi, dan penilaian usability aplikasi.
+ * Yang tersisa: progres materi, hasil kuis beserta rekomendasi materi, dan
+ * riwayat simulasi.
  */
-import type { ButirSus, RingkasKonten, Warna } from "./tipe";
+import type { RingkasKonten, Warna } from "./tipe";
 
 /* Berkas ini hidup di peramban, jadi ia TIDAK boleh menyentuh basis data.
    Isi yang dibutuhkan — daftar materi, kuis, dan jumlah skenario — dikirim
@@ -40,8 +40,6 @@ export type Sesi = {
   kuis: Record<string, HasilKuis>;
   /** Nomor skenario simulasi yang sudah dituntaskan. */
   simulasi: number[];
-  /** Penilaian usability aplikasi (System Usability Scale). */
-  sus?: Record<number, number>;
 };
 
 /**
@@ -145,9 +143,6 @@ export const simpanKuis = (idKuis: string, benar: number, total: number, keliru:
 export const tandaiSimulasi = (nomor: number) =>
   tulis((s) => (s.simulasi.includes(nomor) ? s : { ...s, simulasi: [...s.simulasi, nomor] }));
 
-export const simpanSus = (nomor: number, nilai: number) =>
-  tulis((s) => ({ ...s, sus: { ...(s.sus ?? {}), [nomor]: nilai } }));
-
 export const hapusSesi = () => {
   try {
     window.localStorage.removeItem(KUNCI);
@@ -234,25 +229,4 @@ export function riwayat(sesi: Sesi, konten: RingkasKonten): ButirRiwayat[] {
   return [...dariKuis, ...dariMateri, ...dariSimulasi].sort((a, b) =>
     b.tanggal.localeCompare(a.tanggal),
   );
-}
-
-/**
- * Skor SUS 0–100, dipakai untuk evaluasi usability — bukan untuk mengukur
- * literasi. Butir positif dikurangi 1, butir negatif dikurangi dari 5, lalu
- * totalnya dikali 2,5. Ini bukan persentase; 68 adalah rata-rata acuan.
- */
-export function skorSus(
-  jawaban: Record<number, number> | undefined,
-  sus: ButirSus[],
-): number | null {
-  if (!jawaban) return null;
-  const terisi = sus.map((_, i) => jawaban[i]).filter((v) => typeof v === "number");
-  if (terisi.length < sus.length) return null;
-
-  const total = sus.reduce((jml, butir, i) => {
-    const nilai = jawaban[i];
-    return jml + (butir.positif ? nilai - 1 : 5 - nilai);
-  }, 0);
-
-  return Math.round(total * 2.5);
 }

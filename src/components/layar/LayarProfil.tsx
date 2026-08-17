@@ -2,15 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import {
-  ChevronRight,
-  ClipboardCheck,
-  History,
-  LifeBuoy,
-  MessageSquare,
-  Trash2,
-  UserRound,
-} from "lucide-react";
+import { ChevronRight, History, LifeBuoy, MessageSquare, Trash2, UserRound } from "lucide-react";
 import AppShell from "@/components/AppShell";
 import { Halaman, Judul, Kartu, KotakStat, Tombol } from "@/components/ui";
 import type { RingkasKonten } from "@/lib/tipe";
@@ -27,7 +19,6 @@ import {
 const TAUTAN = [
   { href: "/riwayat", label: "Riwayat belajar", Ikon: History },
   { href: "/panduan", label: "Panduan pengaduan", Ikon: LifeBuoy },
-  { href: "/kuesioner", label: "Nilai kemudahan aplikasi", Ikon: ClipboardCheck },
   { href: "/feedback", label: "Feedback", Ikon: MessageSquare },
 ];
 

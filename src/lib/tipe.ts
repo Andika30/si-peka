@@ -156,8 +156,6 @@ export type BankIndonesia = {
   diverifikasi: string;
 };
 
-export type ButirSus = { teks: string; positif: boolean };
-
 /**
  * Ringkasan isi yang dibutuhkan komponen klien untuk menghitung progres dan
  * menyusun riwayat. Dikirim dari halaman server sebagai props — supaya

@@ -6,7 +6,6 @@ import { db, skema } from "@/db";
 import type {
   BankIndonesia,
   Berita,
-  ButirSus,
   InfoAwal,
   Kategori,
   Kuis,
@@ -269,13 +268,6 @@ export const ambilBankIndonesia = cache(async (): Promise<BankIndonesia> => {
     );
   }
   return JSON.parse(baris.nilai) as BankIndonesia;
-});
-
-/* ── Penilaian usability ─────────────────────────────────────────────────── */
-
-export const ambilSus = cache(async (): Promise<ButirSus[]> => {
-  const baris = await db.query.sus.findMany({ orderBy: [asc(skema.sus.urutan)] });
-  return baris.map((s) => ({ teks: s.teks, positif: s.positif }));
 });
 
 /* ── Ringkasan untuk komponen klien ──────────────────────────────────────── */

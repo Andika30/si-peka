@@ -27,7 +27,6 @@ import kuisJson from "../content/kuis.json";
 import skenarioJson from "../content/skenario.json";
 import panduanJson from "../content/panduan.json";
 import penyelenggaraJson from "../content/penyelenggara.json";
-import susJson from "../content/sus.json";
 
 type Warna = (typeof skema.WARNA)[number];
 
@@ -49,7 +48,6 @@ async function seed() {
   await db.delete(skema.penyelenggara);
   await db.delete(skema.layanan);
   await db.delete(skema.pengaturan);
-  await db.delete(skema.sus);
 
   /* ── Materi ─────────────────────────────────────────────────────────── */
 
@@ -236,17 +234,6 @@ async function seed() {
     kunci: "bank_indonesia",
     nilai: JSON.stringify(penyelenggaraJson.bankIndonesia),
   });
-
-  /* ── Penilaian usability ────────────────────────────────────────────── */
-
-  await db.insert(skema.sus).values(
-    susJson.pernyataan.map((s, i) => ({
-      urutan: i,
-      teks: s.teks,
-      positif: s.positif,
-    })),
-  );
-  console.log(`  sus            ${susJson.pernyataan.length}`);
 
   console.log("\nSelesai.");
 }

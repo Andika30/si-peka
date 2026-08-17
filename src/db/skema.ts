@@ -508,19 +508,6 @@ export const admin = mysqlTable("admin", {
   terakhirMasuk: varchar("terakhir_masuk", { length: 32 }),
 });
 
-/* ── Penilaian usability ─────────────────────────────────────────────────── */
-
-/**
- * Sepuluh pernyataan System Usability Scale. `positif` menentukan cara
- * menghitungnya: butir positif dikurangi 1, butir negatif dikurangi dari 5.
- * Ini menilai kemudahan aplikasinya — bukan literasi penggunanya.
- */
-export const sus = mysqlTable("sus", {
-  urutan: int("urutan").primaryKey(),
-  teks: varchar("teks", { length: 500 }).notNull(),
-  positif: boolean("positif").notNull(),
-});
-
 /* ── Relasi ──────────────────────────────────────────────────────────────── */
 
 export const relasiKategori = relations(kategori, ({ many }) => ({

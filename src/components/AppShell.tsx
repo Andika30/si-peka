@@ -67,7 +67,6 @@ function judulDari(path: string): string {
     if (aktifkah(path, b.href)) return b.label;
   }
   if (path.startsWith("/kuis")) return "Kuis";
-  if (path.startsWith("/kuesioner")) return "Penilaian aplikasi";
   return "Kalosara";
 }
 
