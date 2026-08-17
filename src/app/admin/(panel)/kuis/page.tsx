@@ -14,10 +14,9 @@ export default async function DaftarKuisAdmin() {
     <>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-display text-tinta">Kuis</h1>
+          <h1 className="text-display text-tinta">Kelola Kuis</h1>
           <p className="mt-1 text-isi text-tinta-70">
-            Setiap kuis menempel pada satu materi — itu dasar rekomendasi &ldquo;baca ulang&rdquo;
-            di halaman hasil.
+            Setiap kuis menempel pada satu materi
           </p>
         </div>
         <Link
@@ -25,7 +24,7 @@ export default async function DaftarKuisAdmin() {
           href="/admin/kuis/baru"
         >
           <Plus className="size-4" aria-hidden />
-          Kuis baru
+          TambahKuis
         </Link>
       </div>
 
@@ -35,7 +34,7 @@ export default async function DaftarKuisAdmin() {
             aktif={k.aktif}
             href={`/admin/kuis/${k.id}`}
             key={k.id}
-            meta={`${k.soal.length} soal · materi: ${k.topik?.judul ?? k.topikId}`}
+            meta={`${k.soal.length} soal`}
             judul={k.judul}
           />
         ))}

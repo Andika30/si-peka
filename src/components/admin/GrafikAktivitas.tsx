@@ -16,7 +16,7 @@ import type { DeretHarian } from "@/lib/statistik";
  * oranye aplikasi (#d98a0b) yang kontrasnya hanya 2,69:1 di atas putih.
  */
 const DERET = [
-  { kunci: "materi" as const, label: "Materi dibuka", warna: "#1d6fe0" },
+  { kunci: "materi" as const, label: "Materi diakses", warna: "#1d6fe0" },
   { kunci: "kuis" as const, label: "Kuis selesai", warna: "#0f8a6a" },
   { kunci: "simulasi" as const, label: "Simulasi selesai", warna: "#b56b06" },
 ];
