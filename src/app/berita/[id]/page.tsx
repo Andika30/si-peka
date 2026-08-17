@@ -55,7 +55,7 @@ export default async function HalamanBerita({ params }: { params: Promise<{ id: 
           ) : null}
 
           <div className="mt-6">
-            <IsiBlok isi={b.isi} judulPoin="Ringkasnya" warna="adukan" />
+            <IsiBlok className="text-justify" isi={b.isi} judulPoin="Ringkasnya" warna="adukan" />
           </div>
         </article>
 

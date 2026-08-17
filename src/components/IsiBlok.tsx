@@ -43,14 +43,18 @@ export default function IsiBlok({
   warna = "adukan",
   judulPoin = "Yang perlu diingat",
   alamatGambar = alamatBawaan,
+  className = "",
 }: {
   isi: BlokIsi[];
   warna?: Warna;
   judulPoin?: string;
   alamatGambar?: (nama: string) => string;
+  /** Mis. `"text-justify"` — dipakai berita supaya paragrafnya rata
+      kiri-kanan tanpa mengubah materi, yang tetap rata kiri biasa. */
+  className?: string;
 }) {
   return (
-    <article className="flex flex-col gap-4">
+    <article className={`flex flex-col gap-4 ${className}`}>
       {kelompokkan(isi).map((blok, i) =>
         blok.jenis === "poin" ? (
           <Kartu aksen={warna} key={i}>

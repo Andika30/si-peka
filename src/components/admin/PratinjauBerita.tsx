@@ -196,6 +196,7 @@ export default function PratinjauBerita({ formId }: { formId: string }) {
                   <div className="mt-6">
                     <IsiBlok
                       alamatGambar={(u) => u}
+                      className="text-justify"
                       isi={isi.blok}
                       judulPoin="Ringkasnya"
                       warna="adukan"
