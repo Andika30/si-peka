@@ -1,34 +1,47 @@
 import { ChevronRight, HelpCircle, Info } from "lucide-react";
 import AppShell from "@/components/AppShell";
 import { Eyebrow, Halaman, KartuPilihan } from "@/components/ui";
-import { ambilMasalah, ambilPenyelenggara, cariMasalah } from "@/lib/konten";
+import { notFound } from "next/navigation";
+import { ambilLayanan, ambilPenyelenggara, cariMasalah } from "@/lib/konten";
+import { jumlahLangkah, penyelenggaraUntuk } from "@/lib/panduan";
 
 export default async function PanduanLangkah3({
   searchParams,
 }: {
-  searchParams: Promise<{ masalah?: string }>;
+  searchParams: Promise<{ masalah?: string; layanan?: string }>;
 }) {
-  const { masalah: idMasalah } = await searchParams;
-  const [terpilih, semuaMasalah, penyelenggara] = await Promise.all([
+  const { masalah: idMasalah, layanan: idLayanan } = await searchParams;
+  const [m, semuaPenyelenggara, semuaLayanan] = await Promise.all([
     cariMasalah(idMasalah ?? ""),
-    ambilMasalah(),
     ambilPenyelenggara(),
+    ambilLayanan(),
   ]);
-  const m = terpilih ?? semuaMasalah[0];
+  if (!m) notFound();
+
+  // Daftar menyempit sesuai jenis layanan yang dipilih di langkah sebelumnya.
+  const { daftar: penyelenggara, disaring } = penyelenggaraUntuk(semuaPenyelenggara, idLayanan);
+  const namaLayanan = semuaLayanan.find((l) => l.id === idLayanan)?.nama;
+  const lanjut = (idPjp: string) =>
+    `/panduan/hasil/${m.id}?pjp=${idPjp}${idLayanan ? `&layanan=${idLayanan}` : ""}`;
 
   return (
     <AppShell>
       <Halaman>
         <div className="mb-2">
-          <Eyebrow warna="adukan">Panduan &middot; Langkah 3 dari 3</Eyebrow>
+          <Eyebrow warna="adukan">
+            Panduan &middot; Langkah {jumlahLangkah(m)} dari {jumlahLangkah(m)}
+          </Eyebrow>
         </div>
         <h1 className="mb-2 text-display text-tinta">Penyelenggara mana yang kamu gunakan?</h1>
         <p className="mb-6 text-isi text-tinta-70">
-          Pilih tempat kamu bertransaksi. Kanal resminya akan ditampilkan di langkah berikutnya.
+          Terkait: {m.label}. Pilih tempat kamu bertransaksi — kanal resminya yang akan
+          ditampilkan.
         </p>
 
         <span className="mb-3 block font-mono text-data uppercase text-tinta-55">
-          Daftar contoh &middot; diisi dari daftar PJP berizin BI
+          {disaring && namaLayanan
+            ? `Penyelenggara yang melayani ${namaLayanan}`
+            : "Daftar penyelenggara berizin"}
         </span>
 
         {/* Bank Indonesia sengaja TIDAK ada di daftar ini: BI bukan
@@ -36,7 +49,7 @@ export default async function PanduanLangkah3({
             Jalur ke BI hanya terbuka lewat layar eskalasi. */}
         <div className="mb-6 grid gap-2 md:grid-cols-2">
           {penyelenggara.map((p) => (
-            <KartuPilihan href={`/panduan/hasil/${m.id}?pjp=${p.id}`} key={p.id}>
+            <KartuPilihan href={lanjut(p.id)} key={p.id}>
               <span className="flex items-center gap-4">
                 <span
                   aria-hidden

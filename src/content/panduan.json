@@ -1,5 +1,32 @@
 {
   "catatan": "Panduan Pengaduan — bukan sistem pengaduan. Website tidak menerima dan tidak memproses aduan; ia hanya menjawab dua pertanyaan: apa yang harus dilakukan, dan ke mana harus mengadu. Struktur tiap butir mengikuti kolom yang dikelola admin: jenis masalah, langkah, pihak yang dihubungi, kanal, sumber, dan status aktif.",
+  "infoAwal": [
+    {
+      "id": "tenang-dan-kenali",
+      "judul": "Tenang dan kenali permasalahan transaksimu",
+      "keterangan": "Panik membuat langkah berikutnya gampang salah — kenali dulu jenis masalahnya sebelum bertindak."
+    },
+    {
+      "id": "periksa-status",
+      "judul": "Periksa status transaksi",
+      "keterangan": "Cek di aplikasi atau mutasi rekening. Jangan mengulang transaksi sebelum statusnya benar-benar jelas."
+    },
+    {
+      "id": "simpan-bukti",
+      "judul": "Simpan bukti transaksi",
+      "keterangan": "Nominal, waktu transaksi, ID/nomor referensi, dan bukti pembayaran — semua ini yang akan diminta penyelenggara."
+    },
+    {
+      "id": "kenali-penyelenggara",
+      "judul": "Kenali penyelenggara yang terkait",
+      "keterangan": "Bank, e-wallet, atau merchant tempat transaksimu berlangsung."
+    },
+    {
+      "id": "hubungi-kanal-resmi",
+      "judul": "Hubungi kanal pengaduan resmi penyelenggara",
+      "keterangan": "Bukan nomor atau tautan hasil pencarian — pakai kanal yang memang terverifikasi resmi."
+    }
+  ],
   "masalah": [
     {
       "id": "transaksi-tidak-dikenal",

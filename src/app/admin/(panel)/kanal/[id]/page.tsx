@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Trash2 } from "lucide-react";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { db, skema } from "@/db";
 import FormPenyelenggara from "../FormPenyelenggara";
 import { hapusPenyelenggara } from "../aksi";
@@ -12,9 +12,13 @@ export default async function SuntingPenyelenggara({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const p = await db.query.penyelenggara.findFirst({
-    where: eq(skema.penyelenggara.id, id),
-  });
+  const [p, layanan] = await Promise.all([
+    db.query.penyelenggara.findFirst({
+      where: eq(skema.penyelenggara.id, id),
+      with: { layanan: { columns: { layananId: true } } },
+    }),
+    db.query.layanan.findMany({ orderBy: [asc(skema.layanan.urutan)] }),
+  ]);
   if (!p) notFound();
 
   return (
@@ -28,7 +32,10 @@ export default async function SuntingPenyelenggara({
       </Link>
       <h2 className="mb-6 text-display text-tinta">{p.nama}</h2>
 
-      <FormPenyelenggara nilai={p} />
+      <FormPenyelenggara
+        layanan={layanan}
+        nilai={{ ...p, layanan: p.layanan.map((l) => l.layananId) }}
+      />
 
       <div className="mt-10 rounded-kartu border border-waspada/25 bg-waspada-lembut/50 p-5">
         <h3 className="text-subjudul text-tinta">Hapus permanen</h3>

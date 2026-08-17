@@ -5,8 +5,16 @@ import AppShell from "@/components/AppShell";
 import { Eyebrow, Halaman, Kartu, Peringatan, Tombol } from "@/components/ui";
 import { ambilPenyelenggara, cariMasalah, cariTopik } from "@/lib/konten";
 
-export default async function HasilPanduan({ params }: { params: Promise<{ id: string }> }) {
+export default async function HasilPanduan({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ pjp?: string; layanan?: string }>;
+}) {
   const { id } = await params;
+  const { pjp: idPjp, layanan: idLayanan } = await searchParams;
+
   const m = await cariMasalah(id);
   if (!m) notFound();
 
@@ -14,7 +22,12 @@ export default async function HasilPanduan({ params }: { params: Promise<{ id: s
     ambilPenyelenggara(),
     cariTopik(m.materiTerkait),
   ]);
-  const pjp = daftarPjp[0];
+
+  // Penyelenggara yang benar-benar dipilih peserta. Kalau alur masalah ini
+  // memang tidak menanyakannya — misalnya kasus yang berujung ke Bank
+  // Indonesia — tidak ada kartu kanal penyelenggara yang ditampilkan sama
+  // sekali, daripada menampilkan penyelenggara acak yang tidak dia pakai.
+  const pjp = idPjp ? daftarPjp.find((p) => p.id === idPjp) : undefined;
 
   return (
     <AppShell>
@@ -83,34 +96,48 @@ export default async function HasilPanduan({ params }: { params: Promise<{ id: s
           </div>
 
           <div className="lg:col-span-2">
-            <Kartu aksen="adukan" className="mb-6">
-              <span className="font-mono text-data uppercase text-tinta-55">
-                Kanal resmi penyelenggara
-              </span>
-              <h2 className="mb-4 mt-2 text-judul text-tinta">{pjp.nama}</h2>
-              <div className="flex flex-col">
-                {[
-                  { Ikon: Phone, teks: pjp.telepon },
-                  { Ikon: Smartphone, teks: pjp.aplikasi },
-                  { Ikon: Globe, teks: pjp.situs },
-                ].map(({ Ikon, teks }, i) => (
-                  <span
-                    className={`flex items-center gap-4 py-4 ${i < 2 ? "border-b border-garis" : ""}`}
-                    key={teks}
-                  >
-                    <Ikon className="size-5 text-adukan" aria-hidden />
-                    <span className="text-isi text-tinta">{teks}</span>
-                  </span>
-                ))}
-              </div>
-              <div className="mt-4 border-t border-garis pt-4">
-                {/* Nomor dan tautan kanal resmi berubah. Kolom ini yang
-                    membuat kebasian datanya terlihat, bukan tersembunyi. */}
+            {pjp ? (
+              <Kartu aksen="adukan" className="mb-6">
                 <span className="font-mono text-data uppercase text-tinta-55">
-                  Diverifikasi terakhir {pjp.diverifikasi}
+                  Kanal resmi penyelenggara
                 </span>
-              </div>
-            </Kartu>
+                <h2 className="mb-4 mt-2 text-judul text-tinta">{pjp.nama}</h2>
+                <div className="flex flex-col">
+                  {[
+                    { Ikon: Phone, teks: pjp.telepon },
+                    { Ikon: Smartphone, teks: pjp.aplikasi },
+                    { Ikon: Globe, teks: pjp.situs },
+                  ].map(({ Ikon, teks }, i) => (
+                    <span
+                      className={`flex items-center gap-4 py-4 ${i < 2 ? "border-b border-garis" : ""}`}
+                      key={teks}
+                    >
+                      <Ikon className="size-5 text-adukan" aria-hidden />
+                      <span className="text-isi text-tinta">{teks}</span>
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-4 border-t border-garis pt-4">
+                  {/* Nomor dan tautan kanal resmi berubah. Kolom ini yang
+                      membuat kebasian datanya terlihat, bukan tersembunyi. */}
+                  <span className="font-mono text-data uppercase text-tinta-55">
+                    Diverifikasi terakhir {pjp.diverifikasi}
+                  </span>
+                </div>
+              </Kartu>
+            ) : m.perluPenyelenggara ? (
+              // Alurnya menanyakan penyelenggara, tapi jawabannya tidak
+              // terbawa — misalnya alamat halaman ini dibuka langsung.
+              <Kartu className="mb-6" nada="adukan">
+                <h2 className="text-subjudul text-tinta">Penyelenggara belum dipilih</h2>
+                <p className="mb-4 mt-1 text-kecil text-tinta-70">
+                  Kanal resmi berbeda-beda tiap penyelenggara, jadi pilih dulu yang kamu pakai.
+                </p>
+                <Tombol href={`/panduan/penyelenggara?masalah=${m.id}`}>
+                  Pilih penyelenggara
+                </Tombol>
+              </Kartu>
+            ) : null}
 
             {!m.peringatanUtama ? (
               <Peringatan>
@@ -136,7 +163,10 @@ export default async function HasilPanduan({ params }: { params: Promise<{ id: s
             ) : null}
 
             <div className="flex flex-col gap-2">
-              <Tombol href="/panduan/penyelenggara" jenis="garis">
+              <Tombol
+                href={`/panduan/penyelenggara?masalah=${m.id}${idLayanan ? `&layanan=${idLayanan}` : ""}`}
+                jenis="garis"
+              >
                 Lihat penyelenggara berizin
               </Tombol>
               <Tombol href="/panduan/kanal" jenis="garis">

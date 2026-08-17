@@ -25,6 +25,8 @@ export type NilaiMasalah = {
   segera: string | null;
   peringatanUtama: string | null;
   pihak: string;
+  perluLayanan: boolean;
+  perluPenyelenggara: boolean;
   eskalasiBI: boolean;
   topikId: string | null;
   sumber: string;
@@ -110,6 +112,24 @@ export default function FormMasalah({
           nama="peringatanUtama"
           nilai={nilai?.peringatanUtama}
           petunjuk="Tampil sebagai kotak merah SEBELUM langkah. Untuk kasus yang penipunya mungkin masih memegang akses."
+        />
+      </Bagian>
+
+      <Bagian
+        judul="Langkah sebelum jawaban"
+        keterangan="Yang ditanyakan ke peserta sebelum jawabannya muncul. Matikan yang tidak menentukan apa-apa untuk masalah ini — pertanyaan yang tidak mengubah jawaban hanya menunda orang yang sedang panik."
+      >
+        <Centang
+          label="Tanyakan jenis layanan"
+          nama="perluLayanan"
+          nilai={nilai?.perluLayanan ?? true}
+          petunjuk="Berguna kalau jawabannya bergantung layanan yang dipakai. Jawabannya juga menyempitkan daftar penyelenggara di langkah berikutnya."
+        />
+        <Centang
+          label="Tanyakan penyelenggara"
+          nama="perluPenyelenggara"
+          nilai={nilai?.perluPenyelenggara ?? true}
+          petunjuk="Matikan kalau kanal yang ditampilkan tidak bergantung penyelenggara — misalnya kasus yang berujung ke Bank Indonesia."
         />
       </Bagian>
 

@@ -107,6 +107,12 @@ export type Masalah = {
   peringatanUtama?: string;
   langkah: string[];
   pihak: string;
+  /**
+   * Langkah yang ditanyakan sebelum jawaban muncul. Tidak semua masalah butuh
+   * keduanya — menanyakan hal yang tidak menentukan apa-apa hanya menunda.
+   */
+  perluLayanan: boolean;
+  perluPenyelenggara: boolean;
   /** Hanya masalah yang sudah melewati penyelenggara yang membuka jalur BI. */
   eskalasiBI: boolean;
   materiTerkait: string;
@@ -120,6 +126,12 @@ export type Layanan = {
   ikon: string;
 };
 
+export type InfoAwal = {
+  id: string;
+  judul: string;
+  keterangan: string | null;
+};
+
 export type Penyelenggara = {
   id: string;
   nama: string;
@@ -128,6 +140,9 @@ export type Penyelenggara = {
   aplikasi: string;
   situs: string;
   diverifikasi: string;
+  /** ID jenis layanan yang ditangani penyelenggara ini — dasar penyaringan
+      daftar setelah peserta memilih layanan yang dipakainya. */
+  layanan: string[];
 };
 
 export type BankIndonesia = {

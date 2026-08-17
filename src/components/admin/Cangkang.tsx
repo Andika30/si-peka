@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   BookOpen,
   ChevronDown,
+  ClipboardList,
   ExternalLink,
   Gamepad2,
   LayoutGrid,
@@ -43,6 +44,7 @@ const MENU: Kelompok[] = [
       { href: "/admin/kuis", label: "Kuis", Ikon: ListChecks },
       { href: "/admin/simulasi", label: "Simulasi", Ikon: Gamepad2 },
       { href: "/admin/panduan", label: "Panduan Pengaduan", Ikon: LifeBuoy },
+      { href: "/admin/awal", label: "Info Penanganan Awal", Ikon: ClipboardList },
     ],
   },
   {

@@ -258,6 +258,18 @@ export const masalah = mysqlTable("masalah", {
   /** Kasus penipuan: peringatan keamanan yang muncul SEBELUM langkah. */
   peringatanUtama: varchar("peringatan_utama", { length: 500 }),
   pihak: varchar("pihak", { length: 255 }).notNull(),
+  /**
+   * Langkah yang ditanyakan sebelum jawaban muncul. Tidak semua masalah butuh
+   * keduanya, dan menanyakan hal yang tidak menentukan apa-apa hanya menunda
+   * orang yang sedang panik:
+   *
+   *  - Kasus mendesak melewati pertanyaan jenis layanan, langsung ke
+   *    penyelenggara mana yang dipakai.
+   *  - Kasus yang berujung ke Bank Indonesia tidak butuh keduanya — kanalnya
+   *    sudah pasti, bukan penyelenggara mana pun.
+   */
+  perluLayanan: boolean("perlu_layanan").notNull().default(true),
+  perluPenyelenggara: boolean("perlu_penyelenggara").notNull().default(true),
   /** Hanya masalah yang sudah melewati penyelenggara yang membuka jalur BI. */
   eskalasiBi: boolean("eskalasi_bi").notNull().default(false),
   topikId: varchar("topik_id", { length: 64 }).references(() => topik.id),
@@ -277,6 +289,20 @@ export const langkahMasalah = mysqlTable(
   },
   (t) => [primaryKey({ columns: [t.masalahId, t.urutan] })],
 );
+
+/**
+ * Checklist singkat yang tampil sebelum peserta memilih jenis masalah —
+ * tenang dulu, periksa status, simpan bukti — sebelum masuk ke langkah yang
+ * spesifik ke masalahnya. Sengaja tabel sendiri, bukan teks tetap di
+ * halaman, supaya admin bisa menambah/mengurangi/mengurutkan tanpa deploy.
+ */
+export const infoAwal = mysqlTable("info_awal", {
+  id: varchar("id", { length: 64 }).primaryKey(),
+  judul: varchar("judul", { length: 160 }).notNull(),
+  keterangan: varchar("keterangan", { length: 500 }),
+  urutan: int("urutan").notNull().default(0),
+  aktif: boolean("aktif").notNull().default(true),
+});
 
 /* ── Kanal resmi ─────────────────────────────────────────────────────────── */
 
@@ -311,6 +337,26 @@ export const penyelenggara = mysqlTable("penyelenggara", {
  * syarat eskalasi, nama instansi. Disimpan sebagai pasangan kunci–nilai
  * supaya admin bisa memperbaruinya tanpa perlu tabel baru untuk tiap kalimat.
  */
+/**
+ * Layanan apa saja yang ditangani sebuah penyelenggara.
+ *
+ * Ini yang membuat pertanyaan "kamu memakai layanan apa?" berguna: jawabannya
+ * menyempitkan daftar penyelenggara yang ditawarkan. Tanpa tabel ini,
+ * pertanyaannya cuma satu layar tambahan yang tidak mengubah apa pun.
+ */
+export const penyelenggaraLayanan = mysqlTable(
+  "penyelenggara_layanan",
+  {
+    penyelenggaraId: varchar("penyelenggara_id", { length: 64 })
+      .notNull()
+      .references(() => penyelenggara.id, { onDelete: "cascade" }),
+    layananId: varchar("layanan_id", { length: 64 })
+      .notNull()
+      .references(() => layanan.id, { onDelete: "cascade" }),
+  },
+  (t) => [primaryKey({ columns: [t.penyelenggaraId, t.layananId] })],
+);
+
 export const pengaturan = mysqlTable("pengaturan", {
   kunci: varchar("kunci", { length: 96 }).primaryKey(),
   nilai: text("nilai").notNull(),
@@ -517,6 +563,25 @@ export const relasiOpsiSkenario = relations(opsiSkenario, ({ one }) => ({
   skenario: one(skenario, {
     fields: [opsiSkenario.skenarioId],
     references: [skenario.id],
+  }),
+}));
+
+export const relasiPenyelenggara = relations(penyelenggara, ({ many }) => ({
+  layanan: many(penyelenggaraLayanan),
+}));
+
+export const relasiLayanan = relations(layanan, ({ many }) => ({
+  penyelenggara: many(penyelenggaraLayanan),
+}));
+
+export const relasiPenyelenggaraLayanan = relations(penyelenggaraLayanan, ({ one }) => ({
+  penyelenggara: one(penyelenggara, {
+    fields: [penyelenggaraLayanan.penyelenggaraId],
+    references: [penyelenggara.id],
+  }),
+  layanan: one(layanan, {
+    fields: [penyelenggaraLayanan.layananId],
+    references: [layanan.id],
   }),
 }));
 

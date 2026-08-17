@@ -18,9 +18,16 @@ export type NilaiPenyelenggara = {
   diverifikasi: string;
   urutan: number;
   aktif: boolean;
+  layanan: string[];
 };
 
-export default function FormPenyelenggara({ nilai }: { nilai?: NilaiPenyelenggara }) {
+export default function FormPenyelenggara({
+  nilai,
+  layanan,
+}: {
+  nilai?: NilaiPenyelenggara;
+  layanan: { id: string; nama: string; ringkas: string }[];
+}) {
   const [hasil, kirim, sedang] = useActionState(simpanPenyelenggara, AWAL);
 
   return (
@@ -66,6 +73,23 @@ export default function FormPenyelenggara({ nilai }: { nilai?: NilaiPenyelenggar
           petunjuk="Misalnya: Menu Bantuan di aplikasi resminya."
         />
         <Medan label="Situs" maks={255} nama="situs" nilai={nilai?.situs} />
+      </Bagian>
+
+      <Bagian
+        judul="Layanan yang ditangani"
+        keterangan="Menentukan penyelenggara ini muncul atau tidak setelah peserta memilih jenis layanan yang dipakainya. Tanpa satu pun dicentang, ia tampil di semua pilihan."
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          {layanan.map((l) => (
+            <Centang
+              key={l.id}
+              label={l.nama}
+              nama={`layanan.${l.id}`}
+              nilai={nilai?.layanan.includes(l.id) ?? false}
+              petunjuk={l.ringkas}
+            />
+          ))}
+        </div>
       </Bagian>
 
       <Bagian judul="Verifikasi & status">

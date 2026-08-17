@@ -50,6 +50,8 @@ export async function simpanMasalah(_sebelum: HasilAksi, form: FormData): Promis
     segera: teks(form, "segera") || null,
     peringatanUtama: teks(form, "peringatanUtama") || null,
     pihak,
+    perluLayanan: centang(form, "perluLayanan"),
+    perluPenyelenggara: centang(form, "perluPenyelenggara"),
     eskalasiBi: eskalasiBI,
     topikId,
     sumber: teks(form, "sumber") || "Bank Indonesia — Pelindungan Konsumen",

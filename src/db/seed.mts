@@ -39,6 +39,7 @@ async function seed() {
   await db.delete(skema.kuis);
   await db.delete(skema.langkahMasalah);
   await db.delete(skema.masalah);
+  await db.delete(skema.infoAwal);
   await db.delete(skema.opsiSkenario);
   await db.delete(skema.konteksSkenario);
   await db.delete(skema.skenario);
@@ -190,6 +191,17 @@ async function seed() {
     ),
   );
   console.log(`  masalah        ${panduanJson.masalah.length}`);
+
+  await db.insert(skema.infoAwal).values(
+    panduanJson.infoAwal.map((i, urutan) => ({
+      id: i.id,
+      judul: i.judul,
+      keterangan: i.keterangan,
+      urutan,
+      aktif: true,
+    })),
+  );
+  console.log(`  info_awal      ${panduanJson.infoAwal.length}`);
 
   /* ── Kanal resmi ────────────────────────────────────────────────────── */
 

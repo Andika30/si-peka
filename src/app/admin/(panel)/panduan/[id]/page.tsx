@@ -55,6 +55,8 @@ export default async function SuntingMasalah({ params }: { params: Promise<{ id:
           segera: m.segera,
           peringatanUtama: m.peringatanUtama,
           pihak: m.pihak,
+          perluLayanan: m.perluLayanan,
+          perluPenyelenggara: m.perluPenyelenggara,
           eskalasiBI: m.eskalasiBi,
           topikId: m.topikId,
           sumber: m.sumber,

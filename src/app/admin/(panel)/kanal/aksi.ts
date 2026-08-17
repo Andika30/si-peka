@@ -14,6 +14,24 @@ import {
 } from "@/lib/admin/jaga";
 import { catatLog } from "@/lib/admin/log";
 
+/** Menulis ulang kaitan penyelenggara ke jenis layanan. */
+async function tulisLayanan(penyelenggaraId: string, form: FormData) {
+  await db
+    .delete(skema.penyelenggaraLayanan)
+    .where(eq(skema.penyelenggaraLayanan.penyelenggaraId, penyelenggaraId));
+
+  const dipilih: string[] = [];
+  for (const k of form.keys()) {
+    const cocok = /^layanan\.(.+)$/.exec(k);
+    if (cocok) dipilih.push(cocok[1]);
+  }
+  if (dipilih.length === 0) return;
+
+  await db
+    .insert(skema.penyelenggaraLayanan)
+    .values(dipilih.map((layananId) => ({ penyelenggaraId, layananId })));
+}
+
 /**
  * Kanal resmi penyelenggara jasa pembayaran.
  *
@@ -58,6 +76,7 @@ export async function simpanPenyelenggara(
       .update(skema.penyelenggara)
       .set(nilai)
       .where(eq(skema.penyelenggara.id, idLama));
+    await tulisLayanan(idLama, form);
     await catatLog(admin, "ubah", "kanal", nama);
     segarkanPublik();
     return { pesan: `${nama} tersimpan.` };
@@ -77,6 +96,7 @@ export async function simpanPenyelenggara(
   await db
     .insert(skema.penyelenggara)
     .values({ ...nilai, id, urutan: nilai.urutan || (terakhir.n ?? 0) + 1 });
+  await tulisLayanan(id, form);
 
   await catatLog(admin, "tambah", "kanal", nama);
   segarkanPublik();

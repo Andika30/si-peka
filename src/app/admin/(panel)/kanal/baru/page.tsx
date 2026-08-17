@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { asc } from "drizzle-orm";
+import { db, skema } from "@/db";
 import FormPenyelenggara from "../FormPenyelenggara";
 
-export default function PenyelenggaraBaru() {
+export default async function PenyelenggaraBaru() {
+  const layanan = await db.query.layanan.findMany({ orderBy: [asc(skema.layanan.urutan)] });
+
   return (
     <>
       <Link
@@ -13,7 +17,7 @@ export default function PenyelenggaraBaru() {
         Kanal pengaduan
       </Link>
       <h2 className="mb-6 text-display text-tinta">Penyelenggara baru</h2>
-      <FormPenyelenggara />
+      <FormPenyelenggara layanan={layanan} />
     </>
   );
 }

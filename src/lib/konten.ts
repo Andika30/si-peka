@@ -7,6 +7,7 @@ import type {
   BankIndonesia,
   Berita,
   ButirSus,
+  InfoAwal,
   Kategori,
   Kuis,
   Layanan,
@@ -209,6 +210,8 @@ export const ambilMasalah = cache(async (): Promise<Masalah[]> => {
     ...(m.peringatanUtama ? { peringatanUtama: m.peringatanUtama } : {}),
     langkah: m.langkah.map((l) => l.teks),
     pihak: m.pihak,
+    perluLayanan: m.perluLayanan,
+    perluPenyelenggara: m.perluPenyelenggara,
     eskalasiBI: m.eskalasiBi,
     materiTerkait: m.topikId ?? "",
     sumber: m.sumber,
@@ -230,10 +233,19 @@ export const ambilLayanan = cache(async (): Promise<Layanan[]> => {
   return baris.map((l) => ({ id: l.id, nama: l.nama, ringkas: l.ringkas, ikon: l.ikon }));
 });
 
+export const ambilInfoAwal = cache(async (): Promise<InfoAwal[]> => {
+  const baris = await db.query.infoAwal.findMany({
+    where: eq(skema.infoAwal.aktif, true),
+    orderBy: [asc(skema.infoAwal.urutan)],
+  });
+  return baris.map((i) => ({ id: i.id, judul: i.judul, keterangan: i.keterangan }));
+});
+
 export const ambilPenyelenggara = cache(async (): Promise<Penyelenggara[]> => {
   const baris = await db.query.penyelenggara.findMany({
     where: eq(skema.penyelenggara.aktif, true),
     orderBy: [asc(skema.penyelenggara.urutan)],
+    with: { layanan: { columns: { layananId: true } } },
   });
   return baris.map((p) => ({
     id: p.id,
@@ -243,6 +255,7 @@ export const ambilPenyelenggara = cache(async (): Promise<Penyelenggara[]> => {
     aplikasi: p.aplikasi,
     situs: p.situs,
     diverifikasi: p.diverifikasi,
+    layanan: p.layanan.map((l) => l.layananId),
   }));
 });
 
