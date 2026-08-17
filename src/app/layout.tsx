@@ -20,9 +20,9 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PeKA — Peduli, Kenali, Adukan",
+  title: "Kalosara — Keamanan dan Literasi Online Sulawesi Tenggara",
   description:
-    "Media edukasi dan simulasi keamanan pembayaran digital untuk masyarakat Sulawesi Tenggara. Peduli, Kenali, Adukan.",
+    "Media edukasi dan simulasi keamanan pembayaran digital untuk masyarakat Sulawesi Tenggara.",
 };
 
 export const viewport: Viewport = {

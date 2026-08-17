@@ -61,7 +61,7 @@ export function Chip({
   );
 }
 
-/** Signature PeKA — kotak bersudut tajam, meniru finder pattern kode QR. */
+/** Signature Kalosara — kotak bersudut tajam, meniru finder pattern kode QR. */
 export function Finder({
   warna,
   status = "selesai",

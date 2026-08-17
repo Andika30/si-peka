@@ -4,7 +4,7 @@ import { AnimatePresence, animate, motion, useInView, useReducedMotion } from "m
 import { useEffect, useRef, type ReactNode } from "react";
 
 /**
- * Primitif gerak PeKA.
+ * Primitif gerak Kalosara.
  *
  * Aturannya tiga:
  *  1. Gerak melayani orientasi dan umpan balik, bukan hiasan. Kalau sebuah

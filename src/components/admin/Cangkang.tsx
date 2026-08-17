@@ -124,7 +124,7 @@ export default function Cangkang({
         </span>
         <span className="label-admin min-w-0">
           <span className="block truncate text-sm font-extrabold tracking-tight text-white">
-            PeKA
+            Kalosara
           </span>
           <span className="block truncate text-[11px] text-white/50">
             Edukasi Pembayaran Digital

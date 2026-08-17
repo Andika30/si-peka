@@ -11,7 +11,7 @@ import {
 } from "drizzle-orm/mysql-core";
 
 /**
- * Skema basis data PeKA.
+ * Skema basis data Kalosara.
  *
  * Seluruh isi aplikasi tinggal di sini — materi, kuis, skenario simulasi, dan
  * panduan pengaduan. Tidak ada satu pun tabel untuk data pengguna: progres

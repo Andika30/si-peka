@@ -62,7 +62,7 @@ export default function Masuk() {
           </span>
         </span>
         <div>
-          <h1 className="text-display text-tinta">Masuk ke PeKA</h1>
+          <h1 className="text-display text-tinta">Masuk ke Kalosara</h1>
           <p className="mt-2 text-isi text-tinta-70">
             Tidak ada kata sandi dan tidak ada pendaftaran. Cukup nama panggilan supaya progres
             belajarmu punya nama.

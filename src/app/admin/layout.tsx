@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Pengelolaan Konten — PeKA",
+  title: "Pengelolaan Konten — Kalosara",
   // Panel admin tidak punya urusan dengan mesin pencari.
   robots: { index: false, follow: false },
 };

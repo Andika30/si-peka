@@ -61,7 +61,7 @@ export default async function Tentang() {
                 <span className="size-2.5" />
               </span>
             </span>
-            <span className="text-subjudul text-institusi">PeKA</span>
+            <span className="text-subjudul text-institusi">Kalosara</span>
           </Link>
           <Link
             className="flex items-center gap-2 text-kecil font-bold text-tinta-55 transition-colors hover:text-institusi"
@@ -78,7 +78,7 @@ export default async function Tentang() {
           <Ilustrasi className="w-40 shrink-0 sm:w-44" nama="merek" warna="adukan" />
           <div>
             <span className="font-mono text-data uppercase text-tinta-55">Tentang aplikasi</span>
-            <h1 className="mt-1 text-display text-tinta">PeKA</h1>
+            <h1 className="mt-1 text-display text-tinta">Kalosara</h1>
             <p className="mt-2 text-isi text-tinta-70">
               Media edukasi dan simulasi keamanan pembayaran digital untuk masyarakat Sulawesi
               Tenggara.

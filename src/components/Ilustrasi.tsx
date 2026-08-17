@@ -1,7 +1,7 @@
 import type { Warna } from "@/lib/tipe";
 
 /**
- * Ilustrasi PeKA — SVG inline, digambar sendiri.
+ * Ilustrasi Kalosara — SVG inline, digambar sendiri.
  *
  * Tidak memakai pustaka ilustrasi luar: aplikasi ini berlabel Bank Indonesia,
  * jadi seluruh aset harus jelas asal-usulnya. Keuntungan lain: warnanya ikut

@@ -130,7 +130,7 @@ export default async function Depan() {
                     <span className="size-3" />
                   </span>
                 </span>
-                <span className="text-judul text-white">PeKA</span>
+                <span className="text-judul text-white">Kalosara</span>
               </div>
 
               <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 font-mono text-data uppercase text-white/80 ring-1 ring-white/20">

@@ -68,7 +68,7 @@ function judulDari(path: string): string {
   }
   if (path.startsWith("/kuis")) return "Kuis";
   if (path.startsWith("/kuesioner")) return "Penilaian aplikasi";
-  return "PeKA";
+  return "Kalosara";
 }
 
 /**
@@ -136,7 +136,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
               <span className="size-1.5 bg-transparent" />
             </span>
           </span>
-          <span className="label-sisi text-judul tracking-tight text-institusi">PeKA</span>
+          <span className="label-sisi text-judul tracking-tight text-institusi">Kalosara</span>
         </Link>
 
         <div className="gulir-halus flex-1 overflow-y-auto px-3 py-5">
@@ -184,7 +184,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 <span className="size-1 bg-transparent" />
               </span>
             </span>
-            <span className="text-sm font-extrabold tracking-tight text-institusi">PeKA</span>
+            <span className="text-sm font-extrabold tracking-tight text-institusi">Kalosara</span>
           </Link>
 
           <span className="hidden text-sm font-bold text-tinta md:inline">{judulDari(path)}</span>

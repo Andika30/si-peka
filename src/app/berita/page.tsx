@@ -28,7 +28,7 @@ export default async function DaftarBerita() {
                 <span className="size-2.5" />
               </span>
             </span>
-            <span className="text-subjudul text-institusi">PeKA</span>
+            <span className="text-subjudul text-institusi">Kalosara</span>
           </Link>
           <Link
             className="flex items-center gap-2 text-kecil font-bold text-tinta-55 transition-colors hover:text-institusi"

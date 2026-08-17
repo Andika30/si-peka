@@ -1,4 +1,4 @@
-# PeKA — Peduli, Kenali, Adukan
+# Kalosara — Keamanan dan Literasi Online Sulawesi Tenggara
 
 Media edukasi dan simulasi keamanan pembayaran digital untuk masyarakat Sulawesi
 Tenggara. Dikembangkan pada kegiatan magang di Kantor Perwakilan Bank Indonesia
