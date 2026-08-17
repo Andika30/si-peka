@@ -1,4 +1,4 @@
-import { MessageSquare } from "lucide-react";
+import { ChevronDown, MessageSquare } from "lucide-react";
 import { desc, eq, sql } from "drizzle-orm";
 import { db, skema } from "@/db";
 import { Panel } from "@/components/admin/ui";
@@ -55,34 +55,62 @@ export default async function DaftarFeedback() {
         </div>
       ) : null}
 
+      {/* Disusun seperti daftar pesan: sebaris per masukan, isinya dibuka saat
+          diklik. Memakai <details> bawaan peramban — tidak perlu JavaScript,
+          dan tetap bisa dibuka walau skripnya gagal dimuat. */}
       <Panel>
         {daftar.map((f) => (
-          <div className="flex gap-4 border-b border-garis p-5 last:border-b-0" key={f.id}>
-            <span
-              className={`mt-1 size-2 shrink-0 rounded-full ${f.dibaca ? "bg-transparent" : "bg-adukan"}`}
-              aria-hidden
-            />
-            <div className="min-w-0 flex-1">
-              <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-ungu-lembut px-2.5 py-1 font-mono text-data uppercase text-ungu">
-                  {f.jenis}
-                </span>
-                <span className="font-mono text-data text-tinta-55">{waktuID(f.dibuat)}</span>
-              </div>
+          <details className="group border-b border-garis last:border-b-0" key={f.id}>
+            <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-3.5 transition-colors hover:bg-kertas [&::-webkit-details-marker]:hidden">
+              <span
+                aria-hidden
+                className={`size-2 shrink-0 rounded-full ${f.dibaca ? "bg-transparent" : "bg-adukan"}`}
+              />
+              <span className="w-24 shrink-0 truncate rounded-full bg-ungu-lembut px-2.5 py-1 text-center font-mono text-data uppercase text-ungu">
+                {f.jenis}
+              </span>
+
+              {/* Sebaris cuplikan supaya bisa disaring dengan mata sebelum
+                  dibuka. Utuhnya menunggu sampai memang dibutuhkan. */}
+              <span
+                className={`min-w-0 flex-1 truncate text-isi ${
+                  f.dibaca ? "text-tinta-70" : "font-bold text-tinta"
+                }`}
+              >
+                {f.komentar}
+              </span>
+
+              <span className="hidden shrink-0 font-mono text-data text-tinta-55 sm:inline">
+                {waktuID(f.dibuat)}
+              </span>
+              <ChevronDown
+                aria-hidden
+                className="size-4 shrink-0 text-tinta-55 transition-transform group-open:rotate-180"
+              />
+            </summary>
+
+            <div className="border-t border-garis bg-kertas/60 px-4 py-4 pl-[4.75rem]">
               <p className="whitespace-pre-line text-isi text-tinta">{f.komentar}</p>
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <span className="font-mono text-data text-tinta-55 sm:hidden">
+                  {waktuID(f.dibuat)}
+                </span>
+                {!f.dibaca ? (
+                  <form action={tandaiDibaca}>
+                    <input name="id" type="hidden" value={f.id} />
+                    <button
+                      className="h-9 rounded-tombol border border-garis bg-white px-3 text-kecil font-bold text-tinta-55 hover:bg-kertas hover:text-institusi"
+                      type="submit"
+                    >
+                      Tandai dibaca
+                    </button>
+                  </form>
+                ) : (
+                  <span className="font-mono text-data uppercase text-peduli">Sudah dibaca</span>
+                )}
+              </div>
             </div>
-            {!f.dibaca ? (
-              <form action={tandaiDibaca}>
-                <input name="id" type="hidden" value={f.id} />
-                <button
-                  className="h-9 shrink-0 rounded-tombol border border-garis bg-white px-3 text-kecil font-bold text-tinta-55 hover:bg-kertas hover:text-institusi"
-                  type="submit"
-                >
-                  Tandai dibaca
-                </button>
-              </form>
-            ) : null}
-          </div>
+          </details>
         ))}
 
         {daftar.length === 0 ? (
