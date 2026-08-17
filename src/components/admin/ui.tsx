@@ -53,6 +53,7 @@ export function AreaTeks({
   petunjuk,
   baris = 4,
   wajib,
+  maks,
 }: {
   label: string;
   nama: string;
@@ -60,6 +61,9 @@ export function AreaTeks({
   petunjuk?: string;
   baris?: number;
   wajib?: boolean;
+  /** Kolomnya `varchar`, bukan `text` — batasi di sini supaya penyimpanan
+      gagal dengan pesan jelas di layar, bukan galat SQL mentah dari server. */
+  maks?: number;
 }) {
   return (
     <label className="block">
@@ -70,6 +74,7 @@ export function AreaTeks({
       <textarea
         className="w-full rounded-dalam border border-garis bg-white p-3 text-isi leading-relaxed text-tinta"
         defaultValue={nilai ?? ""}
+        maxLength={maks}
         name={nama}
         required={wajib}
         rows={baris}

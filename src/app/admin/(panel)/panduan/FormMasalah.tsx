@@ -102,6 +102,7 @@ export default function FormMasalah({
         <AreaTeks
           baris={2}
           label="Kalimat mendesak"
+          maks={500}
           nama="segera"
           nilai={nilai?.segera}
           petunjuk="Tampil paling atas dengan ikon jam. Hanya untuk kasus yang benar-benar tidak boleh ditunda."
@@ -109,6 +110,7 @@ export default function FormMasalah({
         <AreaTeks
           baris={2}
           label="Peringatan keamanan"
+          maks={500}
           nama="peringatanUtama"
           nilai={nilai?.peringatanUtama}
           petunjuk="Tampil sebagai kotak merah SEBELUM langkah. Untuk kasus yang penipunya mungkin masih memegang akses."

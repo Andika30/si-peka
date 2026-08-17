@@ -54,15 +54,25 @@ export async function catatHasilKuis(
         },
       });
 
-    const keliru = new Set(idSoalKeliru);
-    for (const soalId of idSoalDijawab) {
+    // Satu INSERT untuk semua soal sekaligus, bukan satu per soal — VALUES()
+    // di UPDATE merujuk nilai yang baru saja dikirim untuk baris itu, jadi
+    // tiap baris tetap naik dengan angka `keliru`-nya masing-masing walau
+    // pernyataan SET-nya sama untuk semua baris.
+    if (idSoalDijawab.length > 0) {
+      const keliru = new Set(idSoalKeliru);
       await db
         .insert(skema.statistikSoal)
-        .values({ soalId, dijawab: 1, keliru: keliru.has(soalId) ? 1 : 0 })
+        .values(
+          idSoalDijawab.map((soalId) => ({
+            soalId,
+            dijawab: 1,
+            keliru: keliru.has(soalId) ? 1 : 0,
+          })),
+        )
         .onDuplicateKeyUpdate({
           set: {
             dijawab: sql`${skema.statistikSoal.dijawab} + 1`,
-            keliru: sql`${skema.statistikSoal.keliru} + ${keliru.has(soalId) ? 1 : 0}`,
+            keliru: sql`${skema.statistikSoal.keliru} + VALUES(${skema.statistikSoal.keliru})`,
           },
         });
     }

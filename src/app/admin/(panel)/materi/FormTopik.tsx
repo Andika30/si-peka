@@ -126,6 +126,7 @@ export default function FormTopik({
         <AreaTeks
           baris={2}
           label="Peringatan (opsional)"
+          maks={500}
           nama="peringatan"
           nilai={nilai?.peringatan}
           petunjuk="Tampil sebagai kotak merah di bawah isi. Kosongkan kalau materi ini tidak memerlukannya — merah kehilangan arti kalau dipakai di mana-mana."

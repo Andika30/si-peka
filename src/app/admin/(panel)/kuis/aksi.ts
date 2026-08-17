@@ -69,18 +69,24 @@ function periksaSoal(daftar: SoalMasuk[]): string | null {
 async function tulisSoal(kuisId: string, daftar: SoalMasuk[]) {
   await db.delete(skema.soal).where(eq(skema.soal.kuisId, kuisId));
 
-  for (const [urutan, s] of daftar.entries()) {
-    const [hasil] = await db.insert(skema.soal).values({
-      kuisId,
-      pertanyaan: s.pertanyaan,
-      kunci: s.kunci,
-      pembahasan: s.pembahasan,
-      urutan,
-    });
-    await db
-      .insert(skema.opsiSoal)
-      .values(s.opsi.map((teks, i) => ({ soalId: hasil.insertId, urutan: i, teks })));
-  }
+  // Tiap soal butuh insertId-nya sendiri sebelum opsinya bisa disimpan —
+  // itu sebabnya bukan satu INSERT borongan. Tapi antar-soal tidak saling
+  // bergantung, jadi rantai insert-soal-lalu-opsi tiap soal jalan bersamaan
+  // lewat Promise.all, bukan menunggu satu-satu.
+  await Promise.all(
+    daftar.map(async (s, urutan) => {
+      const [hasil] = await db.insert(skema.soal).values({
+        kuisId,
+        pertanyaan: s.pertanyaan,
+        kunci: s.kunci,
+        pembahasan: s.pembahasan,
+        urutan,
+      });
+      await db
+        .insert(skema.opsiSoal)
+        .values(s.opsi.map((teks, i) => ({ soalId: hasil.insertId, urutan: i, teks })));
+    }),
+  );
 }
 
 export async function simpanKuis(_sebelum: HasilAksi, form: FormData): Promise<HasilAksi> {

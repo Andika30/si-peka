@@ -19,6 +19,10 @@ export type HasilMasuk = { galat?: string };
 const percobaan = new Map<string, { jumlah: number; sampai: number }>();
 const BATAS = 5;
 const KUNCI_MENIT = 10;
+// Dikunci per nama pengguna, dan nama penggunanya bebas dari pengirim
+// formulir — tanpa batas ini, mengirim ribuan nama acak akan membuat Map ini
+// tumbuh tanpa henti selama proses hidup.
+const BATAS_PETA = 5000;
 
 function terkunci(pengguna: string): number | null {
   const c = percobaan.get(pengguna);
@@ -34,6 +38,9 @@ function catatGagal(pengguna: string): void {
   const c = percobaan.get(pengguna) ?? { jumlah: 0, sampai: 0 };
   c.jumlah += 1;
   c.sampai = Date.now() + KUNCI_MENIT * 60 * 1000;
+  // ponytail: reset kasar, bukan LRU — cukup untuk mencegah pertumbuhan
+  // tanpa batas dari nama pengguna acak.
+  if (percobaan.size >= BATAS_PETA) percobaan.clear();
   percobaan.set(pengguna, c);
 }
 

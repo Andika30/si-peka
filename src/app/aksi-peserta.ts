@@ -2,7 +2,9 @@
 
 import { asc, eq } from "drizzle-orm";
 import { db, skema } from "@/db";
+import { cariMasalah, cariTopik } from "@/lib/konten";
 import { catat, catatHasilKuis, catatSimulasi } from "@/lib/statistik";
+import { terlaluSering } from "@/lib/batasLaju";
 
 /**
  * Yang dikirim halaman peserta ke server.
@@ -12,13 +14,21 @@ import { catat, catatHasilKuis, catatSimulasi } from "@/lib/statistik";
  * hanya menaikkan penghitung. Progres belajar tetap di peramban masing-masing
  * — yang dikirim ke sini cuma "ada satu orang membuka materi X", tanpa cara
  * mengetahui apakah itu orang yang sama dengan panggilan sebelumnya.
+ *
+ * Setiap aksi di sini dibatasi laju per-IP dan memvalidasi id-nya beneran
+ * ada — tanpa itu, tabel `peristiwa` bisa dibanjiri baris palsu (id acak,
+ * satu baris baru per nilai berbeda) yang ikut membesarkan angka di dasbor.
  */
 
 export async function catatMateriDibuka(idTopik: string): Promise<void> {
+  if (await terlaluSering("materi_dibuka", 60, 10)) return;
+  if (!(await cariTopik(idTopik))) return;
   await catat("materi_dibuka", idTopik);
 }
 
 export async function catatPanduanDibuka(idMasalah: string): Promise<void> {
+  if (await terlaluSering("panduan_dibuka", 60, 10)) return;
+  if (!(await cariMasalah(idMasalah))) return;
   await catat("panduan_dibuka", idMasalah);
 }
 
@@ -32,6 +42,8 @@ export async function catatKuisSelesai(
   skor: number,
   urutanKeliru: number[],
 ): Promise<void> {
+  if (await terlaluSering("kuis_selesai", 30, 10)) return;
+
   const daftarSoal = await db.query.soal.findMany({
     where: eq(skema.soal.kuisId, idKuis),
     orderBy: [asc(skema.soal.urutan)],
@@ -49,6 +61,7 @@ export async function catatKuisSelesai(
 }
 
 export async function catatSimulasiSelesai(idSkenario: string, aman: boolean): Promise<void> {
+  if (await terlaluSering("simulasi_selesai", 30, 10)) return;
   await catatSimulasi(idSkenario, aman);
 }
 
@@ -65,6 +78,9 @@ export async function kirimFeedback(
 
   if (komentar.length < 5) return { galat: "Tulis masukanmu lebih dulu." };
   if (komentar.length > 500) return { galat: "Masukan maksimal 500 karakter." };
+  if (await terlaluSering("feedback", 5, 10)) {
+    return { galat: "Terlalu banyak masukan dalam waktu singkat. Coba lagi nanti." };
+  }
 
   await db.insert(skema.feedback).values({
     jenis: JENIS_SAH.includes(jenis) ? jenis : "lainnya",

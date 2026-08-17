@@ -42,6 +42,7 @@ export default function FormInfoAwal({ nilai }: { nilai?: NilaiInfoAwal }) {
         <AreaTeks
           baris={3}
           label="Keterangan"
+          maks={500}
           nama="keterangan"
           nilai={nilai?.keterangan}
           petunjuk="Opsional. Penjelasan singkat di bawah judul — kalau ada beberapa hal yang perlu disiapkan, gabungkan jadi satu kalimat."

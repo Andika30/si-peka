@@ -50,6 +50,7 @@ export default function FormBerita({ nilai }: { nilai?: NilaiBerita }) {
         <AreaTeks
           baris={3}
           label="Ringkasan"
+          maks={300}
           nama="ringkas"
           nilai={nilai?.ringkas}
           petunjuk="Dua sampai tiga kalimat. Ini yang dibaca orang sebelum memutuskan membuka beritanya."
