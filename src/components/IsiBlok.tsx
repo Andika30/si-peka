@@ -1,5 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
-import { Kartu, warnaIsi, warnaTeks } from "@/components/ui";
+import KartuFlipKonten from "@/components/KartuFlipKonten";
+import { Kartu, warnaTeks } from "@/components/ui";
 import type { BlokIsi, Warna } from "@/lib/tipe";
 
 /**
@@ -81,26 +82,10 @@ export default function IsiBlok({
             ) : null}
           </figure>
         ) : blok.jenis === "kartu-flip" ? (
-          // Muka untuk dipindai, belakang untuk detailnya — sama seperti
-          // kartu di daftar materi. Di layar tanpa hover (sentuh) baliknya
-          // tidak pernah kejadian, jadi `kartu-flip--konten` di globals.css
-          // menumpuk dua sisinya jadi satu panel biasa alih-alih menyembunyikan
-          // sisi belakang selamanya.
-          <div className="kartu-flip kartu-flip--konten block" key={i}>
-            <div className="kartu-flip__dalam block">
-              <div className="kartu-flip__muka flex min-h-32 flex-col justify-center gap-1.5 rounded-kartu border border-garis bg-white p-5 shadow-kartu">
-                <span className={`hanya-hover font-mono text-data uppercase ${warnaTeks(warna)}`}>
-                  Arahkan kursor untuk detailnya
-                </span>
-                <span className="text-subjudul text-tinta">{blok.teks}</span>
-              </div>
-              <div
-                className={`kartu-flip__belakang flex min-h-32 flex-col justify-center gap-1.5 rounded-kartu p-5 text-white shadow-angkat ${warnaIsi(warna)}`}
-              >
-                <span className="text-isi leading-relaxed">{blok.keterangan}</span>
-              </div>
-            </div>
-          </div>
+          // Muka untuk dipindai, belakang untuk detailnya. Di HP gak ada
+          // hover buat memicu balik otomatis, jadi KartuFlipKonten jadiin
+          // ketukan sebagai pemicunya — lihat komponennya buat detail.
+          <KartuFlipKonten key={i} keterangan={blok.keterangan} teks={blok.teks} warna={warna} />
         ) : blok.jenis === "video" ? (
           <figure key={i}>
             {/* `teks` sudah berupa ID 11 karakter yang divalidasi server saat

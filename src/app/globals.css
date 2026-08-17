@@ -450,25 +450,29 @@
 
 /* Varian dipakai untuk blok kartu-flip DI DALAM isi materi (bukan kartu
    navigasi daftar). Bedanya: isi belakangnya ditulis admin dan bisa saja
-   satu-satunya tempat sebuah info muncul — jadi kalau perangkatnya tidak
-   punya hover sama sekali, baliknya tidak boleh hilang begitu saja. Sisi
-   belakang dikembalikan ke alur dokumen biasa dan ditumpuk di bawah muka. */
+   satu-satunya tempat sebuah info muncul — jadi di layar tanpa hover
+   sungguhan, kartunya jadi tombol lewat JS (KartuFlipKonten.tsx): ketuk
+   menambah/mencabut `--aktif`, kelas ini yang memicu baliknya. */
 @media (hover: none) {
-  .kartu-flip--konten .kartu-flip__belakang {
-    position: static;
-    transform: none;
-    margin-top: 0.75rem;
+  .kartu-flip--konten.kartu-flip--aktif .kartu-flip__dalam {
+    transform: rotateY(180deg);
   }
 }
 
-/* Petunjuk yang hanya berarti kalau perangkatnya punya hover sungguhan — di
-   layar sentuh sisi belakang sudah langsung terlihat, jadi ajakan "arahkan
-   kursor" di situ hanya akan membingungkan. */
+/* Petunjuk yang berbeda tergantung cara memicu baliknya. */
 .hanya-hover {
   display: none;
 }
 @media (hover: hover) {
   .hanya-hover {
+    display: inline;
+  }
+}
+.hanya-sentuh {
+  display: none;
+}
+@media (hover: none) {
+  .hanya-sentuh {
     display: inline;
   }
 }
