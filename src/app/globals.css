@@ -415,6 +415,64 @@
   animation: peka-rayakan 620ms cubic-bezier(0.2, 0, 0, 1) both;
 }
 
+/* ── Kartu terbalik (flip card) ──────────────────────────────────────────────
+   Dipakai di daftar materi. Muka untuk memindai cepat; sisi belakang baru
+   terlihat begitu kursor benar-benar berhenti di atasnya, menambah sedikit
+   detail dan ajakan bertindak tanpa membebani tampilan awal.
+
+   Baliknya dibatasi ke perangkat yang punya hover sungguhan (mouse). Di
+   layar sentuh tidak ada "kursor berhenti", jadi yang tampil cukup muka —
+   ketukan langsung membuka materinya seperti kartu biasa. */
+.kartu-flip {
+  perspective: 1600px;
+}
+.kartu-flip__dalam {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 550ms cubic-bezier(0.2, 0, 0, 1);
+}
+@media (hover: hover) {
+  .kartu-flip:hover .kartu-flip__dalam,
+  .kartu-flip:focus-visible .kartu-flip__dalam {
+    transform: rotateY(180deg);
+  }
+}
+.kartu-flip__muka,
+.kartu-flip__belakang {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.kartu-flip__belakang {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+/* Varian dipakai untuk blok kartu-flip DI DALAM isi materi (bukan kartu
+   navigasi daftar). Bedanya: isi belakangnya ditulis admin dan bisa saja
+   satu-satunya tempat sebuah info muncul — jadi kalau perangkatnya tidak
+   punya hover sama sekali, baliknya tidak boleh hilang begitu saja. Sisi
+   belakang dikembalikan ke alur dokumen biasa dan ditumpuk di bawah muka. */
+@media (hover: none) {
+  .kartu-flip--konten .kartu-flip__belakang {
+    position: static;
+    transform: none;
+    margin-top: 0.75rem;
+  }
+}
+
+/* Petunjuk yang hanya berarti kalau perangkatnya punya hover sungguhan — di
+   layar sentuh sisi belakang sudah langsung terlihat, jadi ajakan "arahkan
+   kursor" di situ hanya akan membingungkan. */
+.hanya-hover {
+  display: none;
+}
+@media (hover: hover) {
+  .hanya-hover {
+    display: inline;
+  }
+}
+
 /* ── Bar progres ─────────────────────────────────────────────────────────── */
 
 .progres {

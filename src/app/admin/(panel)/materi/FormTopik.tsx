@@ -117,7 +117,10 @@ export default function FormTopik({
         </div>
       </Bagian>
 
-      <EditorBlok awal={nilai?.isi ?? []} />
+      <EditorBlok
+        awal={nilai?.isi ?? []}
+        jenisTersedia={["subjudul", "paragraf", "poin", "gambar", "kartu-flip", "video"]}
+      />
 
       <Bagian judul="Peringatan">
         <AreaTeks

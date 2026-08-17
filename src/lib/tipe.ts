@@ -26,8 +26,11 @@ export type Kategori = {
  * adalah kalimatnya sendiri.
  */
 export type BlokIsi = {
-  jenis: "subjudul" | "paragraf" | "poin" | "gambar";
+  jenis: "subjudul" | "paragraf" | "poin" | "gambar" | "kartu-flip" | "video";
+  /** Untuk `kartu-flip`: teks sisi depan. Untuk `video`: ID video YouTube. */
   teks: string;
+  /** Untuk `gambar`: keterangan/alt. Untuk `kartu-flip`: teks sisi belakang.
+      Untuk `video`: keterangan di bawah video. */
   keterangan?: string;
 };
 

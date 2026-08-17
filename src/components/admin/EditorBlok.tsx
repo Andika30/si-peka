@@ -6,9 +6,11 @@ import {
   ChevronUp,
   Heading,
   ImagePlus,
+  Layers,
   ListChecks,
   Pilcrow,
   Trash2,
+  Video,
 } from "lucide-react";
 import type { BlokIsi } from "@/lib/tipe";
 
@@ -44,6 +46,8 @@ const IKON = {
   paragraf: Pilcrow,
   poin: ListChecks,
   gambar: ImagePlus,
+  "kartu-flip": Layers,
+  video: Video,
 } as const;
 
 const NAMA = {
@@ -51,9 +55,22 @@ const NAMA = {
   paragraf: "Paragraf",
   poin: "Poin",
   gambar: "Gambar",
+  "kartu-flip": "Kartu terbalik",
+  video: "Video YouTube",
 } as const;
 
-export default function EditorBlok({ awal }: { awal: BlokIsi[] }) {
+const JENIS_BAWAAN = ["subjudul", "paragraf", "poin", "gambar"] as const;
+
+export default function EditorBlok({
+  awal,
+  jenisTersedia = JENIS_BAWAAN,
+}: {
+  awal: BlokIsi[];
+  /** Berita tidak mendukung `kartu-flip` maupun `subjudul` di skemanya —
+      jadi jenis blok yang bisa ditambahkan dibatasi per pemakai, bukan
+      dipukul rata untuk semua penyunting blok. */
+  jenisTersedia?: readonly BlokIsi["jenis"][];
+}) {
   const [baris, setBaris] = useState<Baris[]>(() =>
     (awal.length > 0 ? awal : [{ jenis: "paragraf" as const, teks: "" }]).map((b, i) => ({
       kunci: i,
@@ -175,6 +192,50 @@ export default function EditorBlok({ awal }: { awal: BlokIsi[] }) {
                     type="text"
                   />
                 </>
+              ) : b.jenis === "kartu-flip" ? (
+                <>
+                  <textarea
+                    className="w-full rounded-dalam border border-garis bg-kertas p-3 text-isi leading-relaxed text-tinta"
+                    defaultValue={b.teks}
+                    maxLength={120}
+                    name={`blok.${b.kunci}.teks`}
+                    placeholder="Sisi depan — judul singkat atau pertanyaan"
+                    rows={2}
+                  />
+                  <textarea
+                    className="mt-3 w-full rounded-dalam border border-garis bg-kertas p-3 text-isi leading-relaxed text-tinta"
+                    defaultValue={b.keterangan}
+                    maxLength={255}
+                    name={`blok.${b.kunci}.keterangan`}
+                    placeholder="Sisi belakang — terlihat saat kartu diarahkan kursor atau diketuk"
+                    rows={3}
+                  />
+                  <p className="mt-1 text-kecil text-tinta-55">
+                    Muncul di antara paragraf sebagai kartu yang bisa dibalik. Sisi belakang
+                    maksimal 255 karakter — dipakai untuk detail singkat, bukan penjelasan panjang.
+                  </p>
+                </>
+              ) : b.jenis === "video" ? (
+                <>
+                  <input
+                    className="h-11 w-full rounded-dalam border border-garis bg-kertas px-3 text-isi text-tinta"
+                    defaultValue={b.teks}
+                    name={`blok.${b.kunci}.teks`}
+                    placeholder="Tempel tautan YouTube, mis. https://youtu.be/dQw4w9WgXcQ"
+                    type="text"
+                  />
+                  <input
+                    className="mt-3 h-11 w-full rounded-dalam border border-garis bg-kertas px-3 text-isi text-tinta"
+                    defaultValue={b.keterangan}
+                    name={`blok.${b.kunci}.keterangan`}
+                    placeholder="Keterangan di bawah video (opsional)"
+                    type="text"
+                  />
+                  <p className="mt-1 text-kecil text-tinta-55">
+                    Videonya tetap di YouTube — cuma ditampilkan (embed) di halaman materi.
+                    Tersimpan setelah dicek benar tautan YouTube saat disimpan.
+                  </p>
+                </>
               ) : (
                 <textarea
                   className="w-full rounded-dalam border border-garis bg-kertas p-3 text-isi leading-relaxed text-tinta"
@@ -194,7 +255,7 @@ export default function EditorBlok({ awal }: { awal: BlokIsi[] }) {
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {(["subjudul", "paragraf", "poin", "gambar"] as const).map((j) => {
+        {jenisTersedia.map((j) => {
           const Ikon = IKON[j];
           return (
             <button

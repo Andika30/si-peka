@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Gambar unggahan admin — isi, bukan kode
+# Gambar unggahan admin - isi, bukan kode
 /unggahan
+
+# Dokumen kerja (mis. hasil pengujian) - bukan kode
+/dokumen
 

@@ -1,6 +1,7 @@
 import "server-only";
 
 import { hapusGambar, simpanGambar } from "./gambar";
+import { idYoutube } from "./youtube";
 
 /**
  * Membaca isi berblok dari form — dipakai materi dan berita.
@@ -14,7 +15,7 @@ import { hapusGambar, simpanGambar } from "./gambar";
  * di kolom `teks`.
  */
 
-export type JenisBlok = "subjudul" | "paragraf" | "poin" | "gambar";
+export type JenisBlok = "subjudul" | "paragraf" | "poin" | "gambar" | "kartu-flip" | "video";
 
 export type BlokMasuk = {
   jenis: JenisBlok;
@@ -57,8 +58,26 @@ export async function bacaBlok(
       continue;
     }
 
+    if (jenis === "video") {
+      const tautan = String(form.get(`blok.${k}.teks`) ?? "").trim();
+      if (!tautan) continue; // blok ditambahkan lalu tidak jadi diisi — bukan galat
+      const id = idYoutube(tautan);
+      if (!id) {
+        return {
+          blok: [],
+          galat: `Tautan video tidak dikenali sebagai YouTube: "${tautan}".`,
+        };
+      }
+      blok.push({ jenis, teks: id, keterangan, urutan });
+      continue;
+    }
+
     const teks = String(form.get(`blok.${k}.teks`) ?? "").trim();
-    if (teks) blok.push({ jenis, teks, keterangan: null, urutan });
+    // `keterangan` cuma berarti untuk gambar (ditangani di atas) dan
+    // kartu-flip (teks sisi belakang) — jenis lain memang tidak memakainya.
+    if (teks) {
+      blok.push({ jenis, teks, keterangan: jenis === "kartu-flip" ? keterangan : null, urutan });
+    }
   }
 
   return { blok: blok.sort((a, b) => a.urutan - b.urutan) };

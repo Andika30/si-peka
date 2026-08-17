@@ -92,8 +92,21 @@ export const isiTopik = mysqlTable(
     topikId: varchar("topik_id", { length: 64 })
       .notNull()
       .references(() => topik.id, { onDelete: "cascade" }),
-    jenis: mysqlEnum("jenis", ["subjudul", "paragraf", "poin", "gambar"]).notNull(),
+    jenis: mysqlEnum("jenis", [
+      "subjudul",
+      "paragraf",
+      "poin",
+      "gambar",
+      "kartu-flip",
+      "video",
+    ]).notNull(),
+    /** Untuk `video`: ID video YouTube (11 karakter) — bukan tautan mentah.
+        Diekstrak dan divalidasi di server sebelum tersimpan, supaya alamat
+        `<iframe>` yang dirender tidak pernah datang langsung dari isian
+        admin apa adanya. */
     teks: text("teks").notNull(),
+    /** Untuk `gambar`: keterangan/alt. Untuk `kartu-flip`: teks sisi belakang.
+        Untuk `video`: keterangan di bawah video. */
     keterangan: varchar("keterangan", { length: 255 }),
     urutan: int("urutan").notNull().default(0),
   },
