@@ -14,7 +14,7 @@ export default async function DaftarSkenarioAdmin() {
     <>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-display text-tinta">Skenario simulasi</h1>
+          <h1 className="text-display text-tinta">Kelola Simulasi</h1>
           <p className="mt-1 text-isi text-tinta-70">
             Urutan di sini menentukan nomor skenario yang dilihat peserta.
           </p>
@@ -24,7 +24,7 @@ export default async function DaftarSkenarioAdmin() {
           href="/admin/simulasi/baru"
         >
           <Plus className="size-4" aria-hidden />
-          Skenario baru
+          TambahSkenario
         </Link>
       </div>
 

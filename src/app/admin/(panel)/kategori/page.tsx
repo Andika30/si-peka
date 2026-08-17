@@ -29,7 +29,7 @@ export default async function KelolaKategori() {
           href="/admin/kategori/baru"
         >
           <Plus className="size-4" aria-hidden />
-          Kategori baru
+          Tambah Kategori
         </Link>
       </div>
 

@@ -42,14 +42,6 @@ export default async function DaftarFeedback() {
         </p>
       </div>
 
-      <div className="mb-6 flex items-start gap-3 rounded-kartu border border-garis bg-white p-4">
-        <MessageSquare className="mt-0.5 size-5 shrink-0 text-ungu" aria-hidden />
-        <p className="text-kecil text-tinta-70">
-          Halaman feedback tidak menanyakan nama maupun kontak, jadi masukan di sini tidak bisa
-          dibalas dan tidak bisa ditelusuri ke orangnya. Yang tersimpan hanya tulisannya.
-        </p>
-      </div>
-
       {ringkas.length > 0 ? (
         <div className="mb-6 flex flex-wrap gap-2">
           {ringkas.map((r) => (

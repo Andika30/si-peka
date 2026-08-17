@@ -42,9 +42,6 @@ export default async function PengaturanAkun() {
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-isi font-bold text-tinta">
                   {a.nama}
-                  {a.id === saya?.id ? (
-                    <span className="ml-2 font-mono text-data uppercase text-tinta-55">kamu</span>
-                  ) : null}
                 </span>
                 <span className="block truncate text-kecil text-tinta-55">
                   {a.pengguna} &middot; terakhir masuk {waktuID(a.terakhirMasuk)}
@@ -54,22 +51,6 @@ export default async function PengaturanAkun() {
             </div>
           ))}
         </Panel>
-      </div>
-
-      {/* Menambah pengelola lewat terminal, bukan lewat panel. Panel yang bisa
-          membuat akun sendiri berarti satu akun bocor = seluruh sistem bocor. */}
-      <div className="flex items-start gap-3 rounded-kartu border border-garis bg-white p-5">
-        <Terminal className="mt-0.5 size-5 shrink-0 text-tinta-55" aria-hidden />
-        <div className="min-w-0">
-          <p className="text-kecil font-bold text-tinta">Menambah atau mengatur ulang pengelola</p>
-          <p className="mt-1 text-kecil text-tinta-70">
-            Dilakukan dari terminal, bukan dari panel ini — supaya satu akun yang bocor tidak bisa
-            dipakai membuat akun-akun baru.
-          </p>
-          <code className="mt-2 block overflow-x-auto rounded-dalam bg-kertas p-3 font-mono text-kecil text-tinta">
-            npm run db:admin -- &lt;pengguna&gt; &quot;&lt;Nama Lengkap&gt;&quot; &lt;kata-sandi&gt;
-          </code>
-        </div>
       </div>
     </>
   );

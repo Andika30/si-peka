@@ -20,7 +20,7 @@ export default async function DaftarTopikAdmin() {
     <>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-display text-tinta">Materi</h1>
+          <h1 className="text-display text-tinta">Kelola Materi</h1>
           <p className="mt-1 text-isi text-tinta-70">
             {topik.length} materi. Urutan di sini menentukan urutan tampil di aplikasi.
           </p>
@@ -30,7 +30,7 @@ export default async function DaftarTopikAdmin() {
           href="/admin/materi/baru"
         >
           <Plus className="size-4" aria-hidden />
-          Materi baru
+          Tambah Materi
         </Link>
       </div>
 

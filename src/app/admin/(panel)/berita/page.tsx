@@ -34,7 +34,7 @@ export default async function DaftarBeritaAdmin() {
           href="/admin/berita/baru"
         >
           <Plus className="size-4" aria-hidden />
-          Berita baru
+          Tambah Berita 
         </Link>
       </div>
 

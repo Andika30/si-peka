@@ -41,7 +41,7 @@ const FITUR = [
     warna: "ungu" as const,
     kelasTeks: "text-ungu",
     kelasIsi: "bg-ungu",
-    isi: "Apa yang harus dilakukan dan ke mana harus mengadu — lengkap dengan kanal resminya.",
+    isi: "Cari tahu langkah solusi dan saluran lapor yang tepat",
     kapan: "Kalau sudah terjadi",
   },
 ];
@@ -139,11 +139,11 @@ export default async function Depan() {
               </span>
 
               <h1 className="mt-5 max-w-2xl text-[2.25rem] font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Aman bertransaksi
+                Cerdas dan Aman 
                 <br />
-                dimulai dari{" "}
+                Bertransaksi di {" "}
                 <span className="relative whitespace-nowrap">
-                  tahu
+                  Era Digital
                   <span
                     aria-hidden
                     className="absolute inset-x-0 -bottom-1 h-1.5 rounded-full bg-white/40"
@@ -152,9 +152,8 @@ export default async function Depan() {
               </h1>
 
               <p className="mt-6 max-w-lg text-base leading-relaxed text-white/85 sm:text-lg">
-                Media edukasi dan simulasi keamanan pembayaran digital untuk masyarakat Sulawesi
-                Tenggara — memahami layanannya, mengenali risikonya, berlatih lewat skenario nyata,
-                dan tahu persis ke mana harus mengadu.
+                Platform edukasi dan simulasi keamanan pembayaran digital untuk masyarakat Sulawesi Tenggara. 
+                Pahami layanannya, kenali risiko penipuan, dan ketahui saluran pengaduan yang tepat
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -163,7 +162,7 @@ export default async function Depan() {
                   href="/masuk"
                 >
                   <LogIn className="size-4" aria-hidden />
-                  Masuk untuk mulai
+                  Mulai Belajar
                 </Link>
                 <Link
                   className="inline-flex h-13 items-center justify-center gap-2 rounded-tombol px-8 py-3.5 text-sm font-bold text-white ring-1 ring-white/30 transition-colors hover:bg-white/10"
@@ -173,11 +172,6 @@ export default async function Depan() {
                   <ArrowRight className="size-4" aria-hidden />
                 </Link>
               </div>
-
-              <p className="mt-5 max-w-lg text-xs leading-relaxed text-white/60">
-                Tanpa kata sandi dan tanpa data pribadi — cukup nama panggilan yang tersimpan di
-                perangkatmu sendiri.
-              </p>
             </div>
 
             <div className="relative shrink-0 lg:w-[26rem]">
@@ -202,11 +196,9 @@ export default async function Depan() {
       {/* ─── Tiga pilar ──────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-24">
         <Muncul className="mb-10 max-w-2xl">
-          <span className="font-mono text-data uppercase text-tinta-55">Tiga kelompok fitur</span>
-          <h2 className="mt-2 text-display text-tinta">Tahu, latih, lalu tahu ke mana</h2>
+          <h2 className="mt-2 text-display text-tinta">Tiga Langkah Pintar Amankan Transaksimu</h2>
           <p className="mt-3 text-isi text-tinta-70">
-            Tidak ada urutan wajib — kamu boleh masuk dari mana saja. Tapi ketiganya memang
-            dirancang saling menyambung, dari memahami sampai tahu harus berbuat apa.
+            Jelajahi alur belajarmu sendiri. Pelajari materinya, uji dengan simulasi, dan ketahui cara penanganan masalahnya.
           </p>
         </Muncul>
 
@@ -289,50 +281,6 @@ export default async function Depan() {
               </Anak>
             ))}
           </Berurutan>
-        </div>
-      </section>
-
-      {/* ─── Batasan ─────────────────────────────────────────────────────────
-          Sengaja bidang gelap. Ini pernyataan kelembagaan paling penting di
-          halaman ini, dan pergantian nada membuatnya tidak terbaca sebagai
-          satu blok teks lagi di antara blok-blok putih. */}
-      <section className="relative overflow-hidden bg-institusi">
-        <div aria-hidden className="absolute inset-0 pola-finder opacity-60" />
-
-        <div className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 lg:py-24">
-          <div className="grid gap-10 lg:grid-cols-5 lg:items-center lg:gap-14">
-            <Muncul className="lg:col-span-2">
-              <div className="rounded-kartu bg-white/10 p-8 ring-1 ring-white/15 backdrop-blur">
-                <Ilustrasi className="mx-auto w-52" nama="perisai" warna="peduli" />
-              </div>
-            </Muncul>
-
-            <div className="lg:col-span-3">
-              <Muncul>
-                <span className="font-mono text-data uppercase text-white/60">
-                  Batasan aplikasi
-                </span>
-                <h2 className="mt-2 text-display text-white">
-                  Ini media edukasi, bukan sistem pengaduan
-                </h2>
-                <p className="mt-3 max-w-xl text-isi leading-relaxed text-white/75">
-                  Setiap alur panduan selalu berakhir di kanal resmi pihak lain. Tidak ada satu pun
-                  tombol &ldquo;kirim ke kami&rdquo;. Aplikasi ini tidak:
-                </p>
-              </Muncul>
-
-              <Berurutan className="mt-7 grid gap-2.5 sm:grid-cols-2">
-                {TIDAK.map((t) => (
-                  <Anak key={t}>
-                    <div className="flex h-full items-start gap-3 rounded-dalam bg-white/5 p-4 ring-1 ring-white/10">
-                      <Ban className="mt-0.5 size-4 shrink-0 text-white/70" aria-hidden />
-                      <span className="text-kecil text-white/85">{t}</span>
-                    </div>
-                  </Anak>
-                ))}
-              </Berurutan>
-            </div>
-          </div>
         </div>
       </section>
 

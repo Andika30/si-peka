@@ -74,21 +74,21 @@ export default async function Dasbor() {
 
   const KARTU = [
     {
-      label: "Materi aktif",
+      label: "Materi tersedia",
       nilai: jumlahMateri,
       Ikon: BookOpen,
       kelas: "bg-adukan-lembut text-adukan",
       href: "/admin/materi",
     },
     {
-      label: "Kuis aktif",
+      label: "Kuis tersedia",
       nilai: jumlahKuis,
       Ikon: ListChecks,
       kelas: "bg-peduli-lembut text-peduli",
       href: "/admin/kuis",
     },
     {
-      label: "Materi dibuka",
+      label: "Materi diakses",
       nilai: materiDibuka,
       Ikon: BookOpen,
       kelas: "bg-adukan-lembut text-adukan",
@@ -102,7 +102,7 @@ export default async function Dasbor() {
       href: "/admin/kuis",
     },
     {
-      label: "Simulasi diikuti",
+      label: "Simulasi dikerjakan",
       nilai: simulasiSelesai,
       Ikon: Gamepad2,
       kelas: "bg-kenali-lembut text-kenali",
@@ -122,24 +122,9 @@ export default async function Dasbor() {
   return (
     <>
       <div className="mb-6">
-        <h2 className="text-display text-tinta">Ringkasan</h2>
-        <p className="mt-1 text-isi text-tinta-70">
-          Isi yang dikelola dan bagaimana aplikasinya dipakai.
-        </p>
+        <h2 className="text-display text-tinta">Ringkasan Aktivitas</h2>
       </div>
 
-      {/* Batas yang dipegang aplikasi ini ditulis di layar pengelolanya
-          sendiri, supaya tidak ada yang keliru mengira angka di bawah bisa
-          ditelusuri sampai ke orangnya. */}
-      <div className="mb-6 flex items-start gap-3 rounded-kartu border border-garis bg-white p-4">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-peduli" aria-hidden />
-        <p className="text-kecil text-tinta-70">
-          Semua angka pemakaian di halaman ini <strong className="text-tinta">anonim</strong> —
-          penghitung harian tanpa id pengguna, id perangkat, maupun alamat IP. Dasbor bisa menjawab
-          materi mana yang paling dibuka, tapi tidak bisa menjawab berapa orang yang memakainya:
-          itu perlu menandai perangkat, dan aplikasi ini tidak melakukannya.
-        </p>
-      </div>
 
       {/* Enam kartu sejajar begitu layarnya muat — angka pemakaian paling
           berguna kalau bisa dibandingkan sekali lihat, bukan sambil menggulir. */}
@@ -246,7 +231,7 @@ export default async function Dasbor() {
         </div>
 
         <div className="rounded-kartu border border-garis bg-white p-5">
-          <h3 className="mb-1 text-subjudul text-tinta">Skenario simulasi</h3>
+          <h3 className="mb-1 text-subjudul text-tinta">Skenario Simulasi</h3>
           <p className="mb-4 text-kecil text-tinta-55">
             Angka rendah menandai modus yang paling belum dikenali.
           </p>
